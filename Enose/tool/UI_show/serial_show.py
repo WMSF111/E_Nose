@@ -40,6 +40,7 @@ class Action():
         self.ui.sendEdit.clear()
 
     def print(self, receive_data):
+        print(receive_data)
         self.ui.tb.insertPlainText(receive_data)
 
         # 获取到text光标,确保下次插入到内容最后

@@ -1,17 +1,6 @@
-import sys, os
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-grandparent_dir = os.path.dirname(parent_dir)
-# sys.path.append(parent_dir)
-import Enose.global_var as g_var
-from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QWidget, QFileDialog
-from PySide6.QtGui import QIcon, QTextCursor
 import serial
 import serial.tools.list_ports
 import threading
-from Enose.resource_ui.ui_pfile.Serial import Ui_Serial
 
 
 # 获取系统中所有可用的串口列表
@@ -28,8 +17,11 @@ class myserial():
     def __init__(self, port="", bund=0):
         # 初始化串口类
         self.read_flag = False  # 读取标志，用于控制读取线程
+        self.pause_flag = False  # 暂停标志，用于控制暂停和恢复
         self.port = port  # 串口名称
         self.bund = bund  # 波特率
+        self.lock = threading.Lock()  # 创建一个锁
+        self.ser = None  # 初始化串口对象
 
     def setSer(self, port: str, bund: int):
         # 设置串口名称和波特率
@@ -44,7 +36,9 @@ class myserial():
             if self.ser.is_open:
                 print("创建串口成功")
                 # 如果串口成功打开
-                self.read_flag = True  # 设置读取标志为 True
+                with self.lock:
+                    self.read_flag = True  # 设置读取标志为 True
+                    self.pause_flag = False  # 设置暂停标志为 False
                 rt = threading.Thread(target=self.loopRead, args=(fun,))  # 创建读取线程
                 rt.setDaemon(True)  # 设置为守护线程，确保主线程结束时子线程也会结束
                 rt.start()  # 启动读取线程
@@ -52,74 +46,57 @@ class myserial():
                 return 0, "打开串口%s成功,波特率%d\n" % (self.port, self.bund)  # 返回成功信息
         except Exception as e:
             # 如果打开串口失败
-            self.read_flag = False  # 设置读取标志为 False
+            with self.lock:
+                self.read_flag = False  # 设置读取标志为 False
             return 1, "打开串口%s失败\n%s\n" % (self.port, str(e))  # 返回失败信息
 
     def write(self, text):
         # 向串口写入数据
-        result = self.ser.write(text.encode('utf-8'))  # 将字符串编码为字节并写入串口
-        return result  # 返回写入的字节数
-
+        if self.ser:
+            result = self.ser.write(text.encode('utf-8'))  # 将字符串编码为字节并写入串口
+            return result  # 返回写入的字节数
+        else:
+            return 0
 
     def loopRead(self, fun):
         # 循环读取串口数据
-        while self.read_flag:
+        buffer = bytearray()  # 创建一个字节缓冲区
+        while True:
+            with self.lock:
+                if not self.read_flag:
+                    break  # 如果读取标志为 False，退出循环
+                if self.pause_flag:
+                    continue  # 如果暂停标志为 True，跳过本次循环
             try:
                 if self.ser.in_waiting:  # 检查串口是否有待读取的数据
-                    txt = self.ser.read(self.ser.in_waiting).decode("utf-8")  # 读取数据并解码为字符串
-                    fun(txt)  # 调用回调函数处理接收到的数据
-            except:
-                self.read_flag = True  # 如果读取失败，设置读取标志为 False
+                    data = self.ser.read(self.ser.in_waiting)  # 读取所有待读取的数据
+                    buffer.extend(data)  # 将读取到的数据添加到缓冲区
+                    # 检查缓冲区中是否包含自定义的换行符
+                    if b'\r\n' in buffer:  # 假设自定义换行符为 '\r\n'
+                        line, buffer = buffer.split(b'\r\n', 1)  # 分割出一行数据
+                        fun(line.decode("utf-8"))  # 解码并调用回调函数
+            except Exception as e:
+                print(f"读取串口数据时发生错误: {e}")
+                with self.lock:
+                    self.read_flag = False  # 如果读取失败，设置读取标志为 False
+                break  # 退出循环
+
+    def pause(self):
+        # 暂停串口通信
+        with self.lock:
+            self.pause_flag = True  # 设置暂停标志为 True
+        print("暂停串口通信")
+
+    def resume(self):
+        # 恢复串口通信
+        with self.lock:
+            self.pause_flag = False  # 设置暂停标志为 False
+        print("恢复串口通信")
 
     def stop(self):
         # 停止串口通信
-        self.read_flag = False  # 设置读取标志为 False
-        self.ser.close()  # 关闭串口
+        with self.lock:
+            self.read_flag = False  # 设置读取标志为 False
+        if self.ser:
+            self.ser.close()  # 关闭串口
         print("关闭串口")
-#
-#
-# class MySignals(QObject):
-#     # 定义一种信号，两个参数 类型分别是： QTextBrowser 和 字符串
-#     # 调用 emit方法 发信号时，传入参数 必须是这里指定的 参数类型
-#     print = Signal(str)
-#
-#     _serialComboBoxResetItems = Signal(list)
-#     _serialComboBoxClear = Signal()
-#     _setButtonText = Signal(str)
-#     _lineClear = Signal()
-#     print = Signal(str)
-#
-#
-# ms = MySignals()
-#
-#
-# class Action():
-#     def __init__(self, ui: QWidget) -> None:
-#         self.ui = ui
-#
-#     def _serialComboBoxResetItems(self, texts: list):
-#         self.ui.serialComboBox.clear()
-#         self.ui.serialComboBox.addItems(texts)
-#
-#     def _serialComboBoxclear(self):
-#         self.ui.serialComboBox.clear()
-#
-#     def _setButtonText(self, text: str):
-#         self.ui.connectButton.setText(text)
-#
-#     def _lineClear(self):
-#         self.ui.sendEdit.clear()
-#
-#     def print(self, receive_data):
-#         self.ui.tb.insertPlainText(receive_data)
-#
-#         # 获取到text光标,确保下次插入到内容最后
-#         textCursor = self.ui.tb.textCursor()
-#         # 滚动到底部
-#         textCursor.movePosition(QTextCursor.End)
-#         # 设置光标到text中去
-#         self.ui.tb.setTextCursor(textCursor)
-#
-#         # 确保光标可见
-#         self.ui.tb.ensureCursorVisible()
-

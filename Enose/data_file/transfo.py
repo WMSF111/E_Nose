@@ -24,7 +24,7 @@ class UI_TXT_TO():
     def unit_traintxt(script_dir):
         print("running write_traintxt")
         # 查找指定目录下所有扩展名为 .txt 的文件，并将这些文件的路径存储到 self.train_files 列表中。
-        path_folder = glob.glob(os.path.join(script_dir + "\\resource", '*.txt'))
+        path_folder = glob.glob(os.path.join(script_dir + '\\resource\\*.txt'))
         global_var.trainfile_txt_path = os.path.join(script_dir + "\\train\\trainfile.txt")  # 中间存储的.txt路径
         if os.path.exists(global_var.trainfile_txt_path): # 如果存在该路径,进行去除
             os.remove(global_var.trainfile_txt_path)
@@ -37,9 +37,10 @@ class UI_TXT_TO():
                 rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
                 table_data1 = [row.split(' ') for row in rows]  # 假设每列用空格分隔
                 data = []
-                global_var.headers_list.append("target")
-                for i in range(0, len(table_data1[0])):
-                    global_var.headers_list.append(global_var.sensors[i])
+                if(len(global_var.headers_list) == 0):
+                    global_var.headers_list.append("target")
+                    for i in range(0, len(table_data1[0])):
+                        global_var.headers_list.append(global_var.sensors[i])
             headers_str = " ".join(map(str, global_var.headers_list))
             outfile.write(headers_str + '\n')
 

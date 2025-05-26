@@ -33,39 +33,25 @@
        <property name="checkable">
         <bool>false</bool>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,4">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2,8">
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>实验名称</string>
+           <string>存储地址</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QLineEdit" name="Experiment_lineEdit"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLineEdit" name="Folder_lineEdit"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="Folder_Button">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>文件路径</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="File_lineEdit"/>
-          </item>
-          <item>
-           <widget class="QToolButton" name="toolButton">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_3">
@@ -226,7 +212,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="Cancel_Button">
+         <widget class="QPushButton" name="Save_Button">
           <property name="maximumSize">
            <size>
             <width>100</width>
@@ -234,7 +220,7 @@
            </size>
           </property>
           <property name="text">
-           <string>取消采集</string>
+           <string>保存数据</string>
           </property>
          </widget>
         </item>
