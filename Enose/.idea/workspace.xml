@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Gragh_show.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Gragh_show.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Gragh_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/running.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +35,12 @@
     &quot;assignee&quot;: &quot;WMSF111&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/WMSF111/E-Nose.git&quot;,
-    &quot;accountId&quot;: &quot;9801498e-c2d3-4ddc-bd73-47fbd8915e60&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/WMSF111/E_Nose.git",
+    "accountId": "9801498e-c2d3-4ddc-bd73-47fbd8915e60"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -52,7 +59,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -88,5 +95,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
   </component>
 </project>

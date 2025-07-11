@@ -3,7 +3,7 @@
 import Enose.tool.UI_show.serial_show as se
 from PySide6.QtWidgets import QMainWindow
 from Enose.resource_ui.ui_pfile.MianWindow import Ui_MainWindow
-from Enose.tool.UI_show.Gragh_show_setting import Gragh_show_Init
+from Enose.tool.UI_show.Gragn_show_ui import GraphShowWindow
 from Enose.resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
 from Enose.tool.UI_show.Alg_ui_show import AlgShow_Init
 
@@ -35,7 +35,7 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
         if item.text(column) == "测试阶段":
             self.clear_layout()
             # 创建并显示串口设置窗口
-            self.test_show = Gragh_show_Init()
+            self.test_show = GraphShowWindow()
             self.show_Layout.addWidget(self.test_show)
         if item.text(column) == "算法选择":
             self.clear_layout()

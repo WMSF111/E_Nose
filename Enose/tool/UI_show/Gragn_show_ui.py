@@ -1,8 +1,10 @@
 import sys, re, random
-import numpy as np
 from PySide6.QtCore import (
     Qt,QTimer
 )
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 from PySide6.QtWidgets import QApplication, QWidget, QHeaderView, QFileDialog
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
 import pyqtgraph as pg
@@ -31,19 +33,19 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Linegragh_Layout.addWidget(self.plot_widget)
         self.plot_widget.showGrid(x=True, y=True)
         self.plot_widget.setBackground('w')  # 设置绘图背景为白色
-        # self.line = pg.InfiniteLine(  # 创建一条无限线
-        #     pos=0,
-        #     pen=pg.mkPen("k", width=2),
-        #     movable=False,  # 禁止移动
-        # )
-        # # 将无限线添加到绘图窗口中
-        # self.plot_widget.addItem(self.line)
-        # self.plot_widget.getPlotItem().scene().sigMouseMoved.connect(self.mouse_move_handler)  # 连接鼠标移动信号
         self.plot_widget.setLabel('left', 'Value')
-        self.plot_widget.setLabel('bottom', 'Sample')
+        self.plot_widget.setLabel('bottom', 'Time(单位:s)')
+
+
+        self.pie_canvas = None  # 用于持有matplotlib画布引用
+
+
+        # self.plot_widget_2 = pg.PlotWidget()
+        # self.Piegragh_Layout.addWidget(self.plot_widget_2)
+        # self.plot_widget_2.setBackground('w')  # 设置绘图背景为白色
+
         self.curves = []
         self.data = [[] for _ in range(self.data_len)]
-
         self.time = 60
         self._data_lines = dict()  # 已存在的绘图线
         self._data_items = dict()  # 数据查看器的数据
@@ -69,7 +71,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Save_Button.clicked.connect(self.Save_file)
         self.Folder_Button.clicked.connect(self.savefolder)
 
-    def start_serial(self):
+    def open_serial(self):
         if not self.serial.read_flag: # 如果串口存在
             port = "COM1"
             baudrate = g_var.Bund_select
@@ -85,6 +87,35 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.serial.resume()
             self.Pause_Button.setText("暂停采集")
             print("继续采集")
+
+    def clear_data(self):
+        self.data = [[] for _ in range(self.data_len)]
+        self.time = self.Cleartime_spinBox.value()
+        # print(self.time)
+        if(self.time != 0):
+            # 设置 x 轴的固定范围
+            self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
+        self.open_serial()
+
+    def start_serial(self):
+        self.data = [[] for _ in range(self.data_len)]
+        self.time = self.Inputtime_spinBox.value()
+        if (self.time != 0):
+            # 设置 x 轴的固定范围
+            self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
+        self.open_serial()
+
+    def process_data(self, data):
+        # 解析数据
+        values = re.findall(r'\d+', data)
+        if len(values) == self.data_len:
+            values = [int(v) for v in values]
+            for i, value in enumerate(values):
+                self.data[i].append(value)
+                if len(self.data[i]) > 300:  # 限制数据长度
+                    self.data[i].pop(0)
+            self.redraw()  # 更新图表
+            self.update_table()  # 更新表格
 
 
     def Save_file(self):
@@ -124,28 +155,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     f.write(row_str + "\n")
         except Exception as e:
             print("保存失败: " + str(e))
-
-
-    def clear_data(self):
-        self.data = [[] for _ in range(self.data_len)]
-        self.time = self.Cleartime_spinBox.value()
-        # print(self.time)
-        if(self.time != 0):
-            # 设置 x 轴的固定范围
-            self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
-        self.start_serial()
-
-    def process_data(self, data):
-        # 解析数据
-        values = re.findall(r'\d+', data)
-        if len(values) == self.data_len:
-            values = [int(v) for v in values]
-            for i, value in enumerate(values):
-                self.data[i].append(value)
-                if len(self.data[i]) > 300:  # 限制数据长度
-                    self.data[i].pop(0)
-            self.redraw()  # 更新图表
-            self.update_table()  # 更新表格
 
     def check_check_state(self, item):
         """
@@ -188,17 +197,17 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if len(data_list) == self.time:
             self.stop_serial()
 
-
     def update_table(self):
         for i, sensor_name in enumerate(g_var.sensors):
             value = self.data[i][-1] if self.data[i] else 0
-            color = self.get_currency_color(sensor_name)  # 获取传感器名称的颜色
+            # color = self.get_currency_color(sensor_name)  # 获取传感器名称的颜色
 
             item_name = QStandardItem()  # 创建一个item_name对象，用于表示传感器名称
             item_name.setText(sensor_name)  # 设置传感器名称作为文本
+            # item_name.setForeground(QBrush(QColor("red")))
+            item_name.setForeground(QBrush(QColor(self.get_currency_color(sensor_name))))  # 设置传感器名称的前景色（文本颜色）
             item_name.setCheckable(True)  # 设置该传感器名称项为可复选
             item_name.setEditable(False)  # 设置传感器名称不可编辑
-            item_name.setForeground(QBrush(QColor(color)))  # 设置传感器名称的前景色（文本颜色）
             if sensor_name in self._data_visible:
                 item_name.setCheckState(Qt.CheckState.Checked)  # 如果传感器名称在默认显示列表中，则设置其复选框为选中状态
 
@@ -206,72 +215,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             item_value.setTextAlignment(
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)  # 设置传感器数据的文本对齐方式为右对齐且垂直居中
             item_value.setEditable(False)  # 设置传感器数据不可编辑
-
+            self.model.setColumnCount(2)  # 设置模型的列数为 2（货币名称和对应的值）
             self.model.setItem(i, 0, item_name)
             self.model.setItem(i, 1, item_value)
-
-
-    # def update_data_row(self, sensor_name, value):
-    #     citem, vitem = self.get_or_create_data_row(sensor_name)
-    #     if sensor_name in self._data_items:
-    #         print(citem,vitem)
-    #         if vitem is not None:
-    #             vitem.setText(f"{value}")
-    #             print(value)
-    #         else:
-    #             print("update_data_row error")
-
-    def add_data_row(self, currency):
-        """
-            向数据模型中添加一个新的数据行，用于显示指定货币的信息。
-
-            参数:
-                currency: 货币名称（字符串），例如 "USD" 或 "EUR"。
-        """
-        citem = QStandardItem() # 创建一个 QStandardItem 对象，用于表示货币名称
-        citem.setText(currency) # 设置货币名称作为文本
-        citem.setForeground(QBrush(QColor(self.get_currency_color(currency))))  # 设置货币名称的前景色（文本颜色）
-        citem.setColumnCount(2) # 设置该货币名称项的列数为 2（货币名称和对应的值）
-        citem.setCheckable(True) # 设置该货币名称项为可复选
-        # 如果该货币名称在默认显示货币列表中，则设置其复选框为选中状态
-        if currency in self.colors:
-            citem.setCheckState(Qt.CheckState.Checked)
-
-        vitem = QStandardItem() # 创建一个 QStandardItem 对象，用于表示货币的值
-
-        vitem.setTextAlignment( # 设置货币值的文本对齐方式为右对齐且垂直居中
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-        )
-        self.model.setColumnCount(2) # 设置模型的列数为 2（货币名称和对应的值）
-        self.model.appendRow([citem, vitem]) # 将货币名称项和货币值项作为一行添加到模型中
-        self.model.sort(0) # 对模型中的数据按第一列（货币名称）进行排序
-        return citem, vitem
-
-    # def get_or_create_data_row(self, sensor):
-    #     """
-    #         获取或创建一个数据行。
-    #
-    #         参数:
-    #             currency: 货币名称，用于标识数据行。
-    #     """
-    #     if sensor not in self._data_items:  # 检查 sensor 是否已经存在于 self._data_items 中
-    #         self._data_items[sensor] = self.add_data_row(sensor) # 不存在则添加到self._data_items
-    #     return self._data_items[sensor]
-
-    # def mouse_move_handler(self, pos):
-    #     pos = self.plot_widget.getViewBox().mapSceneToView(pos)  # 将场景坐标转换为视图坐标
-    #     x = int(pos.x())
-    #     if x >= 0 and x < len(self.data[0]):  # 确保索引有效
-    #         self.line.setPos(pos.x())  # 更新无限线的位置
-    #         self.update_data_viewer(x)  # 更新数据查看器
-
-    # def update_data_viewer(self, x):
-    #     for sensor_name in self._data_visible:  # 只处理选中的传感器
-    #         index = g_var.sensors.index(sensor_name)  # 获取传感器在 g_var.sensors 中的索引
-    #         data_list = self.data[index]  # 获取对应的数据列表
-    #         if data_list:
-    #             value = data_list[x] if x < len(data_list) else 0
-    #             self.update_data_row(sensor_name, value)
 
 
     def get_currency_color(self, sensor):
@@ -287,9 +233,10 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def generate_random_color_list(self, length):
         """生成一个指定长度的随机十六进制颜色代码列表"""
         return [self.generate_random_hex_color() for _ in range(length)]
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = GraphShowWindow()
-    window.show()
-    sys.exit(app.exec())
+#
+# if __name__ == "__main__":
+#     app = QApplication(sys.argv)
+#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
+#     window = GraphShowWindow()
+#     window.show()
+#     sys.exit(app.exec())

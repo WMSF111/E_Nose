@@ -1,30 +1,50 @@
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-import PySide6.QtCore as QtCore
-from resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
+from PySide6.QtWidgets import QApplication, QWidget, QTableView, QVBoxLayout, QHeaderView
+from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
+from PySide6.QtCore import Qt
 
-class AlgShow_Init(QWidget):
+class ColorTestWindow(QWidget):
     def __init__(self):
-        super(AlgShow_Init, self).__init__()
-        self.ui = Ui_Alg_show()
-        self.ui.setupUi(self)  # 设置 UI 界面
-        self.ui.Di_Re_ComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } " + self.ui.Di_Re_ComboBox.styleSheet())
-        self.ui.Di_Re_ComboBox.setIconSize(QtCore.QSize(16, 16))  # 设置合适的图标大小
+        super().__init__()
+        self.initUI()
 
-        # 绑定按钮点击事件
-        self.ui.toolButton.clicked.connect(self.select_file)
+    def initUI(self):
+        self.model = QStandardItemModel()
+        self.model.setHorizontalHeaderLabels(['Sensor', 'Value'])
 
-    def select_file(self):
-        # 弹出文件选择对话框，允许选择文件或文件夹
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
-        if not file_path:  # 如果用户取消选择
-            return
+        sensors = ["Sensor1", "Sensor2", "Sensor3"]
+        values = [10.5, 20.3, 30.7]
+        colors = ["red", "green", "blue"]  # 或使用 "#FF0000", "#00FF00", "#0000FF"
 
-        # 将选择的文件路径显示到 FilePath_lineEdit 中
-        self.ui.FilePath_lineEdit.setText(file_path)
+        for i, sensor in enumerate(sensors):
+            item_name = QStandardItem(sensor)
+            item_name.setForeground(QBrush(QColor(colors[i])))  # 设置颜色
+            item_name.setCheckable(True)
+            item_name.setEditable(False)
+            item_name.setFlags(item_name.flags() | Qt.ItemIsEnabled)  # 确保可渲染
+
+            item_value = QStandardItem(f"{values[i]:.2f}")
+            item_value.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            item_value.setEditable(False)
+
+            self.model.appendRow([item_name, item_value])
+
+        self.tableView = QTableView()
+        self.tableView.setModel(self.model)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.setStyleSheet("")  # 清空样式表
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.tableView)
+        self.setLayout(layout)
+
+        self.setWindowTitle("Color Test")
+        self.resize(400, 300)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main_window = AlgShow_Init()
-    main_window.show()
+
+
+    window = ColorTestWindow()
+    window.show()
     sys.exit(app.exec())

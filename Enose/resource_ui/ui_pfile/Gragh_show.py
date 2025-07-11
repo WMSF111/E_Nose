@@ -77,6 +77,7 @@ class Ui_Gragh_show(object):
         self.Flowtime_spinBox = QSpinBox(self.groupBox_3)
         self.Flowtime_spinBox.setObjectName(u"Flowtime_spinBox")
         self.Flowtime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Flowtime_spinBox.setValue(10)
 
         self.gridLayout_4.addWidget(self.Flowtime_spinBox, 3, 1, 1, 1)
 
@@ -89,6 +90,7 @@ class Ui_Gragh_show(object):
         self.Inputtime_spinBox = QSpinBox(self.groupBox_3)
         self.Inputtime_spinBox.setObjectName(u"Inputtime_spinBox")
         self.Inputtime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Inputtime_spinBox.setValue(60)
 
         self.gridLayout_4.addWidget(self.Inputtime_spinBox, 2, 1, 1, 1)
 
@@ -96,6 +98,7 @@ class Ui_Gragh_show(object):
         self.Cleartime_spinBox.setObjectName(u"Cleartime_spinBox")
         self.Cleartime_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Cleartime_spinBox.setValue(60)
 
         self.gridLayout_4.addWidget(self.Cleartime_spinBox, 0, 1, 1, 1)
 
@@ -173,26 +176,6 @@ class Ui_Gragh_show(object):
         self.gridLayout_5.addLayout(self.Linegragh_Layout, 0, 0, 1, 1)
 
         self.tabWidget.addTab(self.Line_Show, "")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.gridLayout_6 = QGridLayout(self.tab_2)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.Radargragh_Layout = QVBoxLayout()
-        self.Radargragh_Layout.setObjectName(u"Radargragh_Layout")
-
-        self.gridLayout_6.addLayout(self.Radargragh_Layout, 0, 0, 1, 1)
-
-        self.tabWidget.addTab(self.tab_2, "")
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.gridLayout_7 = QGridLayout(self.tab)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.Piegragh_Layout = QVBoxLayout()
-        self.Piegragh_Layout.setObjectName(u"Piegragh_Layout")
-
-        self.gridLayout_7.addLayout(self.Piegragh_Layout, 0, 0, 1, 1)
-
-        self.tabWidget.addTab(self.tab, "")
 
         self.gridLayout.addWidget(self.tabWidget, 1, 1, 1, 1)
 
@@ -204,7 +187,7 @@ class Ui_Gragh_show(object):
 
         self.retranslateUi(Gragh_show)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Gragh_show)
@@ -225,7 +208,5 @@ class Ui_Gragh_show(object):
         self.Pause_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6682\u505c\u91c7\u96c6", None))
         self.Save_Button.setText(QCoreApplication.translate("Gragh_show", u"\u4fdd\u5b58\u6570\u636e", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Line_Show), QCoreApplication.translate("Gragh_show", u"\u66f2\u7ebf\u56fe", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Gragh_show", u"\u96f7\u8fbe\u56fe", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Gragh_show", u"\u997c\u72b6\u56fe", None))
     # retranslateUi
 
