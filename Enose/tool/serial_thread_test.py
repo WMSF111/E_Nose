@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import serial, time, threading, struct
-
+import Enose.tool.serial_thread as ser
 
 # pip install pyserial
 class SerialsMng(): # 管理多线程
@@ -13,9 +13,9 @@ class SerialsMng(): # 管理多线程
         self.ser_arr = [] # 初始化一个空列表，用于存储串口设备对象。
         for x in range(0, self.ser_count):
             # 遍历配置列表，为每个串口设备创建一个 SerialOP 对象，并将其添加到 self.ser_arr 列表中。
-            idx = x * 4
-            sop = SerialOP(lst[idx], lst[idx + 1], lst[idx + 2], lst[idx + 3])
-            print(lst[idx], lst[idx + 1], lst[idx + 2], lst[idx + 3])
+            idx = x * 2
+            sop = SerialOP(lst[idx], lst[idx + 1])
+            print(lst[idx], lst[idx + 1])
             self.ser_arr.append(sop)
         print(self.ser_arr) # 打印串口设备对象列表。
 
@@ -69,7 +69,7 @@ class SerialsMng(): # 管理多线程
             self.setdataAndsend(x, data[x])
 
 
-from frame_data import FrameData
+from Enose.tool.frame_data import FrameData
 import struct
 from ctypes import create_string_buffer
 
@@ -77,7 +77,7 @@ from ctypes import create_string_buffer
 class SerialOP():
     no_error = True
 
-    def __init__(self, serialPort, baudRate, pixStyle, width=10):
+    def __init__(self, serialPort, baudRate):
         # 构造函数，打开串口，创建 FrameData 对象，并启动自动重连线程。
         # serialPort = "COM3"  # 串口
         # baudRate =250000  # 波特率
@@ -181,7 +181,7 @@ class SerialOP():
 if __name__ == "__main__":
     def main():
         # client socket
-        sop = SerialOP("COM1", 115200, 0x13, 10)
+        # sop = SerialOP("COM1", 115200, 0x13, 10)
         # 分别启动听和说线程
         # t = threading.Thread(target=sop1.thread_ssend)  # 注意当元组中只有一个元素的时候需要这样写, 否则会被认为是其原来的类型
         # t.daemon=True
@@ -193,25 +193,29 @@ if __name__ == "__main__":
         import time
 
         while 1:
-            sop.testCreateDataToSend()
+            # sop.testCreateDataToSend()
             time.sleep(1)
 
 
     # main()
-    sconfig = ["COM1", 115200, 0x13, 45, "COM2", 115200, 0x13, 45]  #
+    sconfig = ["COM1", 115200, "COM3", 9600, "COM4", 9600]  #
     # sconfig = ["COM1", 115200, 0x13, 45]  #
     smng = SerialsMng(sconfig)
-    t1 = threading.Thread(target=smng.ser_arr[1].thread_srecv)
+    # smng.ser_arr[0].open()
+    t1 = threading.Thread(target=smng.ser_arr[0].thread_srecv)
     t1.daemon=True
     t1.start()
+    t2 = threading.Thread(target=smng.ser_arr[2].thread_srecv)
+    t2.daemon = True
+    t2.start()
     while 1:
-        smng.setdataAndsend(0, ['FF', '00', '00', 'FF', '00', '00'])
+        smng.setdataAndsend(1, ['FF', '00', '00', 'FF', '00', '00'])
         time.sleep(1)
-        smng.setdataAndsend(0, ['FF', 'F0', '0F', 'FF', 'B0', '0B'])
+        smng.setdataAndsend(1, ['FF', 'F0', '0F', 'FF', 'B0', '0B'])
         time.sleep(1)
-        # smng.setdataAndsend(0, [0, 0, 0xff, 0, 0, 0xff])
-        # time.sleep(1)
-        # smng.setdataAndsend(0, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff])  # '''
-        # time.sleep(1)
-        # print('123')
-    # ser.close()
+#         # smng.setdataAndsend(0, [0, 0, 0xff, 0, 0, 0xff])
+#         # time.sleep(1)
+#         # smng.setdataAndsend(0, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff])  # '''
+#         # time.sleep(1)
+#         # print('123')
+#     # ser.close()

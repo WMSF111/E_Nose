@@ -1,7 +1,8 @@
 import serial
 import serial.tools.list_ports
 import threading
-import Enose.tool.frame_data as FrameDate
+import frame_data as FrameDate
+
 
 # 获取系统中所有可用的串口列表
 def getPortList():
@@ -88,7 +89,6 @@ class myserial():
                         hex_data = hex_data + ' '
                         data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
                         slip_n = b'0A '
-                    print("flag:", flag, type(data), data)
                     buffer.extend(data)
 
                     # 按 \r\n 切帧

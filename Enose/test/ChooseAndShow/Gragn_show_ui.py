@@ -2,15 +2,15 @@ import  sys, re, random
 from PySide6.QtCore import (
     Qt, QCoreApplication
 )
-import Enose.tool.serial_thread as mythread
+import serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
 import pyqtgraph as pg
-from Enose.resource_ui.ui_pfile.Gragh_show import Ui_Gragh_show
-import Enose.global_var as g_var
+from ChooseAndShow import Ui_Gragh_show
+import global_var as g_var
 from itertools import cycle
 import logging
-
+import frame_data
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # 主窗口类
@@ -23,11 +23,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         # 初始化串口
         # self.serial = myserial()  # 使用自定义的myserial类
-        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]  #
+        sconfig = [g_var.Port_select2, g_var.Bund_select2]  #
         self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser1 = self.smng.ser_arr[1]
-        self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率
+        self.ser1 = self.smng.ser_arr[0]
         self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率
         d = self.ser1.open(self.Showtemp, flag = 1)
         print(d)
@@ -72,29 +70,26 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Collectbegin_Button.clicked.connect(self.start_serial) # start_serial
         self.Gettep_Button.clicked.connect(self.Get_temp)  # start_serial
         self.Heat_Button.clicked.connect(self.Heat_temp)  # start_serial
-        self.Pause_Button.clicked.connect(self.pause_serial)
-        self.Save_Button.clicked.connect(self.Save_file)
-        self.Folder_Button.clicked.connect(self.savefolder)
+        self.Setpos_Button.clicked.connect(self.Setpos)  # start_serial
+        self.Getpos_Button.clicked.connect(self.Getpos)  # start_serial
+        self.Stra_Button.clicked.connect(self.Stra)  # start_serial
+        self.Startpos_Button.clicked.connect(self.Startpos)  # start_serial
+
+    def _serialComboBoxResetItems(self, texts: list):
+        self.ui.serialComboBox.clear()
+        self.ui.serialComboBox.addItems(texts)
+        self.ui.serialComboBox2.clear()
+        self.ui.serialComboBox2.addItems(texts)
+
+    def _serialComboBoxclear(self):
+        self.ui.serialComboBox.clear()
+        self.ui.serialComboBox2.clear()
 
     def open_serial(self, port, baudrate):
-        if not self.ser.read_flag: # 如果串口存在
-            d = self.ser.open(self.process_data)  # 打开串口，成功返回0，失败返回1， + str信息
+        if not self.ser1.read_flag: # 如果串口存在
+            d = self.ser1.open(self.Showtemp, flag = 1)
+            # d = self.ser1.open(self.process_data)  # 打开串口，成功返回0，失败返回1， + str信息
             print(d)
-
-
-    def pause_serial(self):
-        if self.ser.pause_flag == False:
-            self.ser1.d.setDataTodo(5, 0)
-            self.ser1.serialSend()
-            self.ser.pause()
-            self.Pause_Button.setText("继续采集")
-            print("暂停采集")
-        else:
-            self.ser1.d.setDataTodo(5, 1)
-            self.ser1.serialSend()
-            self.ser.resume()
-            self.Pause_Button.setText("暂停采集")
-            print("继续采集")
 
     def clear_data(self):
         self.time = self.Cleartime_spinBox.value()
@@ -106,7 +101,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if(self.time != 0):
             # 设置 x 轴的固定范围
             self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
-        self.open_serial(g_var.Port_select, g_var.Bund_select)
+        # self.open_serial(g_var.Port_select, g_var.Bund_select)
 
     def start_serial(self):
         print("start_serial")
@@ -119,7 +114,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if (self.time != 0):
             # 设置 x 轴的固定范围
             self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
-        self.open_serial(g_var.Port_select, g_var.Bund_select)
+        # self.open_serial(g_var.Port_select, g_var.Bund_select)
 
     def Get_temp(self):
         self.ser1.d.setDataTodo(2, self.Getchannel_spinBox.value())
@@ -130,15 +125,56 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser1.serialSend()
 
     def Showtemp(self, text):
-        print("Shoetemp:",text)
+        print("收到的信号:",text)
         parts = text.split()  # ['55','AA', ...]
-        byte4, byte5 = parts[4], parts[5]  # '03', 'EB'
-        num = int.from_bytes(bytes.fromhex(byte4 + byte5), byteorder='big')  # 1000
-        lst_int = [int(x, 16) for x in text.split()]
-        decimal_num = num / 10.0
-        print("lst_int[2]:",lst_int[2],"self.Getchannel_spinBox.value()",self.Getchannel_spinBox.value())
-        if lst_int[3] == self.Getchannel_spinBox.value():
-            self.Gettep_spinBox.setValue(decimal_num)
+        Frame = frame_data.FrameData()
+        parts = parts[2 : Frame.pkgLen - 1]
+        Frame.setDataToArray(parts)
+        print(Frame.buf)
+        print(Frame.buf[2])
+        if (Frame.buf[2] == '02'): # 获取温度
+            num = int.from_bytes(bytes.fromhex(Frame.buf[4] + Frame.buf[5]), byteorder='big')  # 1000
+            lst_int = [int(x, 16) for x in text.split()]
+            text = num / 10.0
+            if lst_int[3] == self.Getchannel_spinBox.value():
+                self.Gettep_spinBox.setValue(text)
+            text = "获取温度为：" + str(text)
+        if (Frame.buf[2] == '0B'): # 读取当前坐标
+            x = int.from_bytes(bytes.fromhex(Frame.buf[3] + Frame.buf[4]), byteorder='big')
+            y = int.from_bytes(bytes.fromhex(Frame.buf[5] + Frame.buf[6]), byteorder='big')
+            z = int.from_bytes(bytes.fromhex(Frame.buf[7] + Frame.buf[8]), byteorder='big')
+            text = '('+ str(x) + ','+ str(y) + ',' + str(z) + ')'
+            self.Getpos_lineEdit.setText(text)
+            text = "获取坐标为" + text
+        if (Frame.buf[2] == '0D'): # 读取当前坐标
+            x = Frame.buf[4]
+            y = Frame.buf[6]
+            z = Frame.buf[8]
+            text = '('+ x + ','+ y + ',' + z + ')'
+            if x == y == z == '01':
+                self.Startpos_Button.setText("已初始化")
+            elif x == y == z == '00':
+                self.Startpos_Button.setText("未初始化")
+            text = "获取初始化数据为：" + text
+        print("转化后：", text)
+
+
+
+    def Setpos(self):
+        self.ser1.d.setDataTodo('0A', self.Posx_spinBox.value(), self.Posy_spinBox.value(),self.Posz_spinBox.value())
+        self.ser1.serialSend()
+
+    def Getpos(self): # 获取坐标
+        self.ser1.d.setDataTodo('0B')
+        self.ser1.serialSend()
+
+    def Stra(self): # 运动轴回到原点
+        self.ser1.d.setDataTodo('0C')
+        self.ser1.serialSend()
+
+    def Startpos(self): # 是否初始化
+        self.ser1.d.setDataTodo('0D')
+        self.ser1.serialSend()
 
     def process_data(self, data):
         print("process_data:", data)
@@ -156,7 +192,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def Save_file(self):
         if self.ser.read_flag:
-            self.ser.stop()
             self.ser1.d.setDataTodo(5,0)
             self.ser1.serialSend()
         self.savefile()
@@ -234,7 +269,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     )  # 创建新的绘图线
         # print(len(data_list))
         if len(data_list) == self.time:
-            self.ser.stop()
             self.ser.d.setDataTodo(5,0)
             self.ser1.stop()
 
@@ -290,7 +324,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         event.accept()  # 允许窗口真正关闭
 
 
-#
+# #
 # if __name__ == "__main__":
 #     app = QApplication(sys.argv)
 #     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题

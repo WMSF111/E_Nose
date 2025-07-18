@@ -17,9 +17,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QDoubleSpinBox, QGridLayout,
     QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QPushButton, QSizePolicy, QSpinBox,
-    QTabWidget, QTableView, QToolButton, QVBoxLayout,
-    QWidget)
+    QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QTabWidget, QTableView, QToolButton,
+    QVBoxLayout, QWidget)
 
 
 class Ui_Gragh_show(object):
@@ -73,61 +73,55 @@ class Ui_Gragh_show(object):
         self.Cleartime_spinBox.setObjectName(u"Cleartime_spinBox")
         self.Cleartime_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.Cleartime_spinBox.setMaximum(256)
         self.Cleartime_spinBox.setValue(60)
 
         self.horizontalLayout_7.addWidget(self.Cleartime_spinBox)
 
-        self.Dataclear_Button = QToolButton(self.groupBox_3)
-        self.Dataclear_Button.setObjectName(u"Dataclear_Button")
-
-        self.horizontalLayout_7.addWidget(self.Dataclear_Button)
-
-        self.horizontalLayout_7.setStretch(0, 3)
-        self.horizontalLayout_7.setStretch(1, 4)
+        self.horizontalLayout_7.setStretch(0, 1)
+        self.horizontalLayout_7.setStretch(1, 2)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.label_10 = QLabel(self.groupBox_3)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setLayoutDirection(Qt.LeftToRight)
+        self.label_3 = QLabel(self.groupBox_3)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setLayoutDirection(Qt.LeftToRight)
 
-        self.horizontalLayout_6.addWidget(self.label_10)
-
-        self.Volum_spinBox = QSpinBox(self.groupBox_3)
-        self.Volum_spinBox.setObjectName(u"Volum_spinBox")
-        self.Volum_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.Volum_spinBox.setMinimum(0)
-        self.Volum_spinBox.setMaximum(256)
-        self.Volum_spinBox.setValue(1)
-        self.Volum_spinBox.setDisplayIntegerBase(10)
-
-        self.horizontalLayout_6.addWidget(self.Volum_spinBox)
-
-        self.label_9 = QLabel(self.groupBox_3)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setLayoutDirection(Qt.LeftToRight)
-
-        self.horizontalLayout_6.addWidget(self.label_9)
+        self.horizontalLayout_6.addWidget(self.label_3)
 
         self.Inputtime_spinBox = QSpinBox(self.groupBox_3)
         self.Inputtime_spinBox.setObjectName(u"Inputtime_spinBox")
         self.Inputtime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.Inputtime_spinBox.setMaximum(256)
         self.Inputtime_spinBox.setValue(60)
 
         self.horizontalLayout_6.addWidget(self.Inputtime_spinBox)
 
-        self.Collectbegin_Button = QToolButton(self.groupBox_3)
-        self.Collectbegin_Button.setObjectName(u"Collectbegin_Button")
-
-        self.horizontalLayout_6.addWidget(self.Collectbegin_Button)
-
-        self.horizontalLayout_6.setStretch(3, 2)
+        self.horizontalLayout_6.setStretch(0, 1)
+        self.horizontalLayout_6.setStretch(1, 2)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_4 = QLabel(self.groupBox_3)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setLayoutDirection(Qt.LeftToRight)
+
+        self.horizontalLayout_5.addWidget(self.label_4)
+
+        self.Flowtime_spinBox = QSpinBox(self.groupBox_3)
+        self.Flowtime_spinBox.setObjectName(u"Flowtime_spinBox")
+        self.Flowtime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Flowtime_spinBox.setMaximum(100)
+        self.Flowtime_spinBox.setValue(10)
+
+        self.horizontalLayout_5.addWidget(self.Flowtime_spinBox)
+
+        self.horizontalLayout_5.setStretch(0, 1)
+        self.horizontalLayout_5.setStretch(1, 2)
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -155,7 +149,6 @@ class Ui_Gragh_show(object):
 
         self.Gettep_spinBox = QDoubleSpinBox(self.groupBox_3)
         self.Gettep_spinBox.setObjectName(u"Gettep_spinBox")
-        self.Gettep_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Gettep_spinBox.setDecimals(1)
         self.Gettep_spinBox.setMinimum(-1.000000000000000)
         self.Gettep_spinBox.setValue(-1.000000000000000)
@@ -169,9 +162,6 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout_4.setStretch(0, 2)
         self.horizontalLayout_4.setStretch(1, 1)
-        self.horizontalLayout_4.setStretch(2, 1)
-        self.horizontalLayout_4.setStretch(3, 2)
-        self.horizontalLayout_4.setStretch(4, 1)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
 
@@ -201,7 +191,6 @@ class Ui_Gragh_show(object):
 
         self.Heattep_SpinBox_2 = QDoubleSpinBox(self.groupBox_3)
         self.Heattep_SpinBox_2.setObjectName(u"Heattep_SpinBox_2")
-        self.Heattep_SpinBox_2.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Heattep_SpinBox_2.setDecimals(1)
         self.Heattep_SpinBox_2.setMinimum(-1.000000000000000)
         self.Heattep_SpinBox_2.setValue(50.000000000000000)
@@ -246,6 +235,23 @@ class Ui_Gragh_show(object):
         self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(-1, 0, -1, 0)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.Dataclear_Button = QPushButton(self.widget)
+        self.Dataclear_Button.setObjectName(u"Dataclear_Button")
+        self.Dataclear_Button.setMaximumSize(QSize(100, 32))
+        self.Dataclear_Button.setAutoFillBackground(False)
+
+        self.horizontalLayout.addWidget(self.Dataclear_Button)
+
+        self.Collectbegin_Button = QPushButton(self.widget)
+        self.Collectbegin_Button.setObjectName(u"Collectbegin_Button")
+        self.Collectbegin_Button.setMaximumSize(QSize(100, 32))
+
+        self.horizontalLayout.addWidget(self.Collectbegin_Button)
+
         self.Pause_Button = QPushButton(self.widget)
         self.Pause_Button.setObjectName(u"Pause_Button")
         self.Pause_Button.setMaximumSize(QSize(100, 32))
@@ -296,11 +302,9 @@ class Ui_Gragh_show(object):
         self.groupBox_2.setTitle(QCoreApplication.translate("Gragh_show", u"\u5b58\u50a8\u5730\u5740", None))
         self.Folder_Button.setText(QCoreApplication.translate("Gragh_show", u"...", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u8bbe\u7f6e", None))
-        self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u6e05\u6d17\u65f6\u957f(s)", None))
-        self.Dataclear_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6e05\u6d17", None))
-        self.label_10.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u96c6\u4f53\u79ef(ml)", None))
-        self.label_9.setText(QCoreApplication.translate("Gragh_show", u"\u65f6\u95f4(s)", None))
-        self.Collectbegin_Button.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837", None))
+        self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u65f6\u957f(s)", None))
+        self.label_3.setText(QCoreApplication.translate("Gragh_show", u"\u8fdb\u6837\u65f6\u957f(s)", None))
+        self.label_4.setText(QCoreApplication.translate("Gragh_show", u"\u6d41\u91cf(0-100)", None))
         self.label_5.setText(QCoreApplication.translate("Gragh_show", u"\u83b7\u53d6\u901a\u9053(1-8)", None))
         self.label_7.setText(QCoreApplication.translate("Gragh_show", u"\u6e29\u5ea6", None))
         self.Gettep_Button.setText(QCoreApplication.translate("Gragh_show", u"\u83b7\u53d6", None))
@@ -308,6 +312,8 @@ class Ui_Gragh_show(object):
         self.label_8.setText(QCoreApplication.translate("Gragh_show", u"\u6e29\u5ea6", None))
         self.Heat_Button.setText(QCoreApplication.translate("Gragh_show", u"\u52a0\u70ed", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Gragh_show", u"\u4f20\u611f\u5668\u5217\u8868", None))
+        self.Dataclear_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6570\u636e\u6e05\u6d17", None))
+        self.Collectbegin_Button.setText(QCoreApplication.translate("Gragh_show", u"\u5f00\u59cb\u91c7\u96c6", None))
         self.Pause_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6682\u505c\u91c7\u96c6", None))
         self.Save_Button.setText(QCoreApplication.translate("Gragh_show", u"\u4fdd\u5b58\u6570\u636e", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Line_Show), QCoreApplication.translate("Gragh_show", u"\u66f2\u7ebf\u56fe", None))

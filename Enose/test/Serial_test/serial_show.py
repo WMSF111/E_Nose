@@ -3,12 +3,12 @@ import sys, os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 grandparent_dir = os.path.dirname(parent_dir)
-import Enose.global_var as g_var
+import global_var as g_var
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QWidget, QFileDialog, QApplication
 from PySide6.QtGui import QIcon, QTextCursor
-import Enose.tool.serial_thread as mythread
-from Enose.resource_ui.ui_pfile.Serial import Ui_Serial
+import serial_thread as mythread
+from Serial import Ui_Serial
 
 
 class MySignals(QObject):
@@ -225,9 +225,9 @@ def runApp(ui):
     mainw = Serial_Init(ui)
 
 
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
-#     window = Serial_Init()
-#     window.show()
-#     sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
+    window = Serial_Init()
+    window.show()
+    sys.exit(app.exec())

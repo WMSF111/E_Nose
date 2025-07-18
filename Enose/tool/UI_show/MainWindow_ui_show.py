@@ -62,3 +62,7 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
             elif item.layout():  # 如果是子布局
                 self.clear_layout_recursive(item.layout())  # 递归清除子布局
                 item.layout().deleteLater()  # 删除子布局
+
+    def closeEvent(self, event):
+        self.test_show.closeEvent(event)
+        event.accept()  # 允许窗口真正关闭

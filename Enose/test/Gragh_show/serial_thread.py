@@ -1,7 +1,8 @@
 import serial
 import serial.tools.list_ports
 import threading
-import Enose.tool.frame_data as FrameDate
+import frame_data as FrameDate
+
 
 # 获取系统中所有可用的串口列表
 def getPortList():

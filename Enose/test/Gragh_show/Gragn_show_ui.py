@@ -6,8 +6,8 @@ import Enose.tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
 import pyqtgraph as pg
-from Enose.resource_ui.ui_pfile.Gragh_show import Ui_Gragh_show
-import Enose.global_var as g_var
+from Gragh_show import Ui_Gragh_show
+import global_var as g_var
 from itertools import cycle
 import logging
 
@@ -27,9 +27,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.smng = mythread.SerialsMng(sconfig)
         self.ser = self.smng.ser_arr[0]
         self.ser1 = self.smng.ser_arr[1]
-        self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率
+        self.ser.setSer(g_var.Port_select, g_var.Bund_select, 1)  # 设置串口及波特率
         self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率
-        d = self.ser1.open(self.Showtemp, flag = 1)
+        d = self.ser1.open(self.Showtemp)
         print(d)
         # 初始化绘图
         self.plot_widget = pg.PlotWidget()
@@ -291,9 +291,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
 
 #
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
-#     window = GraphShowWindow()
-#     window.show()
-#     sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
+    window = GraphShowWindow()
+    window.show()
+    sys.exit(app.exec())

@@ -17,7 +17,7 @@ Com_select = " "
 Port_select = "COM1"
 Bund_select = 115200
 
-Port_select2 = "COM3"
+Port_select2 = ""
 Bund_select2 = 9600
 
 sensors = [
