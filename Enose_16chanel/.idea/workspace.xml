@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/ChooseAndShow.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/Gragh_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/Gragn_show_ui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/Serial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/frame_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/global_var.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/running_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ChooseAndShow/serial_thread.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Gragh_show/Gragh_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Gragh_show/Gragn_show_ui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Gragh_show/frame_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Gragh_show/global_var.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Gragh_show/serial_thread.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Serial_test/Serial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Serial_test/frame_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Serial_test/global_var.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Serial_test/serial_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Serial_test/serial_thread.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/Show_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/alg_puifile/Classify_ui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/alg_puifile/alg_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/alg_puifile/pca_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/alg_uifile/Classify_ui.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/alg_uifile/pca_show.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/images/Snipaste_2025-03-25_09-25-46.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/images/icon.qrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/images/打开.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/images/新建.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Alg_show.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Data_source.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Form.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Gragh_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Gragh_show.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/MianWindow.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_file/Serial.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_pfile/Alg_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_pfile/Gragh_show.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_pfile/MianWindow.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_pfile/Serial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/resource_ui/ui_pfile/Serial_setting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/global_var.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Gragh_show.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Gragh_show.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Gragh_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/frame_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/frame_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/serial_thread.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/serial_thread_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/serial_thread_test.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;WMSF111&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/WMSF111/E_Nose.git&quot;,
+    &quot;accountId&quot;: &quot;9801498e-c2d3-4ddc-bd73-47fbd8915e60&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2ukspN0IzD56QTXwjlNAvzK9aGc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.MainWindow_show.executor": "Run",
+    "Python.The_main.executor": "Run",
+    "Python.running.executor": "Run",
+    "Python.running_main.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-975db3bf15a3-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.18034.82" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="" />
+      <created>1742804089091</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742804089091</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+</project>
