@@ -3,6 +3,8 @@ import pandas as pd
 import Enose.global_var as global_var
 import Enose.data_file.filter as filter
 import matplotlib.pyplot as pl
+import logging
+logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 
 
 
@@ -42,10 +44,11 @@ class UI_TXT_TO():
                     for i in range(0, len(table_data1[0])):
                         global_var.headers_list.append(global_var.sensors[i])
             headers_str = " ".join(map(str, global_var.headers_list))
-            outfile.write(headers_str + '\n')
-
+            outfile.write(headers_str)
+            #遍历所有文件
             for file_path in path_folder:
                 file_name = os.path.basename(file_path).replace(".txt", "")
+                outfile.write('\n')
                 with open(file_path, 'r') as infile:
                     lines = infile.readlines()  # 读取每个文件的所有行
                     for line in lines:

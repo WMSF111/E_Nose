@@ -62,6 +62,7 @@ class choose_alg():
         target_variance = target_variance / 100
         # 标准化数据
         scaler = StandardScaler()
+
         data_scaled = scaler.fit_transform(self.data)
 
         # 应用 PCA
