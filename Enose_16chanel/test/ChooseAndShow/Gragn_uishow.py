@@ -2,7 +2,7 @@ import  sys, re, random
 from PySide6.QtCore import (
     Qt, QCoreApplication
 )
-import threading
+import Serial_uishow as serial_setting
 import serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
@@ -23,20 +23,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data_len = len(g_var.sensors)
 
         # # 初始化串口
-        # if(g_var.Port_select2 == "" or g_var.Port_select == ""):
-        #     self.statues_label.setText("串口初始化有问题")
-        #     return;
-        # sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
-        sconfig = ["COM1", 115200, "COM3", 9600]
-        self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
-        self.ser1 = self.smng.ser_arr[1]
-        self.SO = SO.Serial1opea(self, self.ser)
-        self.SO1 = SO.Serial1opea(self, self.ser1)
-        self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
-        d = self.ser1.open(self.SO1.GetSigal1, flag = 1)
-        print("控制串口初始化成功：", d)
+        self.serial_setting()
         # 初始化绘图
         self.plot_widget = pg.PlotWidget()
         self.Linegragh_Layout.addWidget(self.plot_widget)
@@ -55,12 +42,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         self.curves = []
         self.data = [[] for _ in range(self.data_len)]
-        print("glo_sensors:",g_var.sensors)
         self.get_time = 60
         self._data_lines = dict()  # 已存在的绘图线
         self._data_items = dict()  # 数据查看器的数据
         self._data_colors = dict()  # 绘图颜色
         self._data_visible = g_var.sensors.copy() # 选择要看的传感器
+        print("glo_sensors:", g_var.sensors)
 
 
         self.colors = self.generate_random_color_list(self.data_len)
@@ -78,13 +65,36 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
         self.Pause_Button.clicked.connect(self.pause_serial)
+        self.pushButton.clicked.connect(self.set_serial)
 
-    def open_serial(self, port, baudrate):
+    def serial_setting(self):
+        if (g_var.Port_select2 == "" or g_var.Port_select == ""):
+            self.statues_label.setText("串口初始化有问题")
+        else:
+            self.statues_label.setText("串口初始化成功")
+        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
+        print(sconfig)
+        # sconfig = ["COM1", 115200, "COM3", 9600]
+        self.smng = mythread.SerialsMng(sconfig)
+        self.ser = self.smng.ser_arr[0]
+        self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
+        self.ser1 = self.smng.ser_arr[1]
+        self.SO = SO.Serial1opea(self, self.ser)
+        self.SO1 = SO.Serial1opea(self, self.ser1)
+        self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
+        d = self.ser1.open(self.SO1.GetSigal1, flag=1)
+        print("控制串口初始化成功：", d)
+
+    def set_serial(self):
+        window = serial_setting.Serial_Init(self)
+        window.show()
+
+    def open_serial(self, port, baudrate): # 确保串口初始化
         if not self.ser1.read_flag: # 如果串口存在
             d = self.ser1.open(self.SO1.GetSigal1, flag=1)
             print("控制串口初始化成功：", d)
 
-    def clear_data(self):
+    def clear_data(self): # 基线阶段
         d = self.ser.open(self.process_data)
         print("信号串口初始化成功：", d)
         self.ser.d.setDataTodo(5, 1) # 信号串口打开洗气阀
@@ -92,24 +102,14 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser.serialSend()
         self.data = [[] for _ in range(self.data_len)]
 
-    def start_serial(self):
+    def start_serial(self): # 开始采集
         d = self.ser.open(self.process_data)
         print("信号串口初始化成功：", d)
         self.time_th = SO.time_thread(self.ser, self.ser1)
         self.time_th.open_time(self.time_th.loopTime(self)) # 循环直到达到指定温度
-        # self.opea = SO.time_opea(30, self.Cleartime_spinBox.value(), self.Standtime_spinBox.value(), self.ser, self.ser1)
-        # self.time_th.open_time(self.opea.push_opea, self.ser, self.ser1)
-        # self.ser.d.setDataTodo(5, 0)  # 信号串口打开洗气阀
-        # print("clear_data:信号串口关闭洗气阀")
-        # print("start_data:控制串口打开采集阀")
-        # self.ser.d.setDataTodo(3, self.ui.Volum_spinBox.value(), 30)
-        # self.ser.serialSend()
-        # self.data = [[] for _ in range(self.data_len)]
-        # if (time != 0):
-        #     # 设置 x 轴的固定范围
-        #     self.plot_widget.setXRange(0, time, padding=0)  # 设置 x 轴的范围为 0 到 300
 
-    def pause_serial(self):
+
+    def pause_serial(self): # 暂停采集
         if self.ser.pause_flag == False:
             self.ser.pause()
             self.Pause_Button.setText("继续采集")
@@ -139,7 +139,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                  for m in re.finditer(pattern, data)}
 
         # 如果你仍需要按顺序的 16 个值：
-        ordered_keys = g_var.sensors  # ['MQ3_1','MQ3_2',...,'base']
+        ordered_keys = g_var.sensors.copy()  # ['MQ3_1','MQ3_2',...,'base']
         values = [self.pairs[k] for k in ordered_keys]
         return values
 

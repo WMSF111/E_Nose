@@ -14,7 +14,7 @@ filter_preprocess = ' '
 
 
 Com_select = " "
-Port_select = "COM1"
+Port_select = ""
 Bund_select = 115200
 now_temp = 0
 target_temp = 0

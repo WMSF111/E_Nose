@@ -80,7 +80,7 @@ class myserial():
                 if self.pause_flag:
                     continue
 
-            try:
+            # try:
                 if self.ser.in_waiting:
                     data = self.ser.read(self.ser.in_waiting)
                     slip_n = b'\r\n'
@@ -107,13 +107,14 @@ class myserial():
                             text = frame.hex(' ').upper()
                             # 其它字节 → 标准 HEX 字符串
                             # text = frame.hex().upper()  # ← 这里改成无空格的即可
+                            print(text)
                         fun(text)
 
-            except Exception as e:
-                print(f"读取串口数据时发生错误: {e}")
-                with self.lock:
-                    self.read_flag = False
-                break
+            # except Exception as e:
+            #     print(f"读取串口数据时发生错误: {e}")
+            #     with self.lock:
+            #         self.read_flag = False
+            #     break
 
     def pause(self):
         # 暂停串口通信
