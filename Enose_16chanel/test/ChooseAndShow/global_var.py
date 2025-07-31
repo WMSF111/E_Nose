@@ -24,6 +24,7 @@ target_Sam = 1
 
 Port_select2 = ""
 Bund_select2 = 9600
+Save_flag = 0
 
 sensors = [
     "sensor1", "sensor2", "sensor3", "sensor4", "sensor5",

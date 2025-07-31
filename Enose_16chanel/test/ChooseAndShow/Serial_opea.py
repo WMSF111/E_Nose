@@ -3,17 +3,19 @@ import threading
 import time
 import global_var as glo_var
 
-class time_thread():
+class time_thread(): # 时间相关的线程
+    # 初始化输入两个串口， 停止时间与初始时间
     def __init__(self, ser, ser1, stoptime = 0, starttime = 0):
         self.time = starttime
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
         self._running = True
-        self.opea = None
+        self.opea = None # 串口操作
         self.ser = ser
         self.ser1 = ser1
+        self.timeout = 1000; # 循环时间
 
-    def open_time(self, fun, timeout=1000): # 输入要循环的函数
+    def thread_loopfun(self, fun, timeout=1000): # 输入要循环的函数和循环时间
         self.time = 0
         try:
             with self.lock:
@@ -28,22 +30,21 @@ class time_thread():
         except Exception as e:
             return 1, f"计时失败：{e}\n"
 
-    def loopTime(self, ui):
+    def loop_to_target_temp(self, ui): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
         while self._running:
             # 线程安全：把值读出来再比较
             target = ui.Heattep_SpinBox.value()
             print("现在温度是：", glo_var.now_temp)
             self.time += 1
-            if target <= glo_var.now_temp:
-                glo_var.target_temp = target
+            if target <= glo_var.now_temp:  # 当目标温度达成
+                glo_var.target_temp = target # 赋值目标温度到全局
                 print("达到目标温度需要时间：",self.time)
-                self.StopTime_wait(ui, self.time)
-                # self.StopTime_wait(ui, 30)
+                self.opea = time_opea(ui, self.time, self.ser,self.ser1)
                 self._running = False
                 break
-            time.sleep(1)
+            time.sleep(self.timeout / 1000)
 
-    def start_time(self, fun, timeout=1000): # 累加时间并执行
+    def thread_looparri_fun(self, fun, timeout=1000): # 输入要调用循环函数返回结果的函数fun和循环时间
         self.time = 0
         try:
             with self.lock:
@@ -63,24 +64,19 @@ class time_thread():
         while self._running:
             # 线程安全：把值读出来再比较
             self.time += 1
-            fun(self.time)
-            time.sleep(1)
+            fun(self.time) # fun函数调用累加的时间
+            time.sleep(self.timeout / 1000)
 
-    def StopTime_wait(self, ui, time):
-        print("时间到达：", time)
-        self.opea = time_opea(ui, time, ui.Cleartime_spinBox.value(), ui.Standtime_spinBox.value(), self.ser, self.ser1)
-        return time
-
-class time_opea():
-    def __init__(self, ui, temptime, cleartime, standtime, ser, ser1, gettime = 10):
-        print("temptime:", temptime, "cleartime:", cleartime, "standtime:", standtime)
+class time_opea(): # 得到达温时间后，正式开启采样过程
+    def __init__(self, ui, temptime, ser, ser1, gettime = 10):
+        print("temptime:", temptime, "cleartime:", ui.Cleartime_spinBox.value(), "standtime:", ui.Standtime_spinBox.value())
         self.ui = ui
-        self.temptime = temptime
-        self.cleartime = cleartime
-        self.standtime = standtime
-        self.gettime = gettime
-        self.alltime = temptime + standtime + (cleartime + gettime) * 2
-        self.waittime = self.alltime - temptime - standtime
+        self.temptime = temptime # 达到目标温度的时间
+        self.cleartime = ui.Cleartime_spinBox.value() # 洗气时常
+        self.standtime = ui.Standtime_spinBox.value() # 保持温度时常
+        self.gettime = gettime # 采集时常
+        self.alltime = temptime + self.standtime + (self.cleartime + gettime) * 2 # 一个样品整个过程时常
+        self.waittime = self.alltime - temptime - self.standtime # 上个通道开启距下个通道开启时间差值
         print("waittime:", self.waittime, "alltime:", self.alltime)
         self.ser = ser
         self.ser1 = ser1
@@ -89,33 +85,22 @@ class time_opea():
         if self.ser1.ser is None:
             raise ValueError("底层串口句柄为 None，请检查串口是否打开成功")
         self.time_th = time_thread(ser, ser1, starttime = temptime) # 开始计时
-        # self.time_th.start_time(self.push_opea)
-        self.time_th.start_time(lambda t: self.push_opea(t))
+        self.time_th.thread_looparri_fun(self.push_opea) # 适用于不需要参数的函数
+        # self.push_opea(t) 是一个函数调用表达式，会立即执行并返回结果，而 thread_looparri_fun需要的是一个可调用对象（函数对象）
+        # self.time_th.thread_looparri_fun(lambda t: self.push_opea(t)) # 适用于需要参数的函数，提供了更大的灵活性。
 
-    def push_opea(self, time):
-        if time >= self.alltime:
-            Opea_time = (time - (self.temptime + self.standtime)) % self.waittime + self.temptime + self.standtime
-        else:
-            Opea_time = time
-        if time % self.waittime  == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
-            glo_var.now_chan += 1
-            self.ser1.d.setDataTodo(1, glo_var.now_chan, int(glo_var.target_temp))# 开始下一个通道xx加热信号
-            self.ser1.serialSend()
-            self.ui.statues_label.setText("通道" + str(glo_var.now_chan) + "开始加热")
+    def push_opea(self, time): # 一系列执行操作
+        Opea_time = self.time_adjust(time) # 进行时间调整
+        if time % self.waittime == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
+            self.channal_heat()
             print("Opea_time:", Opea_time, "time:", time, "通道" + str(glo_var.now_chan) + "开始加热")
         if ((Opea_time == (self.standtime + self.temptime) or # 达到保持时长开始1、2次采集
                 Opea_time == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
-            glo_var.now_Sam += 1
-            text = "sample_time:" + str(self.gettime)
-            self.ser_opea(text, 3, self.gettime) # 采集
-            self.ui.statues_label.setText("样品" + str(glo_var.now_Sam) + "开始采集")
+            self.sample_collect()
             print("Opea_time:", Opea_time, "time:", time, "样品" + str(glo_var.now_Sam) + "开始采集")
-        if ((Opea_time == (self.standtime + self.temptime + self.cleartime) or
+        if ((Opea_time == (self.standtime + self.temptime + self.cleartime) or # 气室清理
                 Opea_time == (self.alltime - self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())): #第一次采集结束
-            text = "exhaust_time:" + str(self.cleartime) # 清洗30s
-            self.ser_opea(text, 4, self.cleartime) # 清洗30s
-            self.ser_opea("", "0A", glo_var.now_Sam + 1)  # 切换到下一个样品位置
-            self.ui.statues_label.setText("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
+            self.room_clear()
             print("Opea_time:", Opea_time, "time:", time, "气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
         if time == (self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime:
             self.ui.statues_label.setText("已完成采样")
@@ -123,13 +108,38 @@ class time_opea():
             self.time_th._running = False
 
 
-    def ser_opea(self, text, opea, opea1, opea2 = 0, opea3 = 0):
+    def time_adjust(self, time): # 保证每次操作可循环
+        if time >= self.alltime:
+            return (time - (self.temptime + self.standtime)) % self.waittime + self.temptime + self.standtime
+        else:
+            return time
+
+    def channal_heat(self): # 通道加热，只需要ser1操作
+        glo_var.now_chan += 1
+        self.ser1.d.setDataTodo(1, glo_var.now_chan, int(glo_var.target_temp))  # 开始下一个通道xx加热信号
+        self.ser1.serialSend()
+        self.ui.statues_label.setText("通道" + str(glo_var.now_chan) + "开始加热")
+
+    def sample_collect(self): # 信号采集
+        if glo_var.Save_flag != "开始采集":
+            glo_var.Save_flag = "开始采集"
+        glo_var.now_Sam += 1
+        text = "sample_time:" + str(self.gettime) # ser需要发出的信息
+        self.ser_opea(text, 3, self.gettime)  # 信号发出采集信号
+        self.ui.statues_label.setText("样品" + str(glo_var.now_Sam) + "开始采集")
+
+    def room_clear(self):
+        if glo_var.Save_flag != "采集完成":
+            glo_var.Save_flag = "采集完成"
+        text = "exhaust_time:" + str(self.cleartime)  # 清洗30s
+        self.ser_opea(text, 4, self.cleartime)  # 清洗30s
+        self.ser_opea("", "0A", glo_var.now_Sam + 1)  # 切换到下一个样品位置
+        self.ui.statues_label.setText("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
+
+    def ser_opea(self, text, opea, opea1, opea2 = 0, opea3 = 0): # ser与ser1发送信号
         self.ser.write(text)  # 开始采集信号
         self.ser1.d.setDataTodo(opea, opea1, opea2, opea3)  # 清洗30s
         self.ser1.serialSend()
-
-
-
 
 
 class Serial1opea():
