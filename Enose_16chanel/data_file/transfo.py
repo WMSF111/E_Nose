@@ -1,7 +1,7 @@
 import os, glob
 import pandas as pd
-import Enose.global_var as global_var
-import Enose.data_file.filter as filter
+import global_var as global_var
+import data_file.filter as filter
 import matplotlib.pyplot as pl
 import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)

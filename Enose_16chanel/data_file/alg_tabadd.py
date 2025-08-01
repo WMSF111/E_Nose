@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QDialog, QFileDialog
-import Enose.data_file.algriothm as algriothm
-import Enose.resource_ui.alg_puifile.alg_show as alg_show
-import Enose.global_var as glov
-import Enose.data_file.transfo as transfo
+import data_file.algriothm as algriothm
+import resource_ui.alg_puifile.alg_show as alg_show
+import global_var as glov
+import data_file.transfo as transfo
 
 class ALG_TAB_ADD():
     def __init__(self, ui):

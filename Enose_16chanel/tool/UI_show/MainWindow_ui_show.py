@@ -1,11 +1,11 @@
 ''' 用来显示主界面和其他界面的关系'''
 
-import Enose.tool.UI_show.serial_show as se
+import tool.UI_show.serial_show as se
 from PySide6.QtWidgets import QMainWindow
-from Enose.resource_ui.ui_pfile.MianWindow import Ui_MainWindow
-from Enose.tool.UI_show.Gragn_show_ui import GraphShowWindow
-from Enose.resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
-from Enose.tool.UI_show.Alg_ui_show import AlgShow_Init
+from resource_ui.ui_pfile.MianWindow import Ui_MainWindow
+from tool.UI_show.Gragn_show_ui import GraphShowWindow
+from resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
+from tool.UI_show.Alg_ui_show import AlgShow_Init
 
 class MianWindow_Init(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -27,6 +27,7 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
             # 创建并显示串口设置窗口
             self.serial_settings_window = se.Serial_Init()
             self.serial_settings_window.show()  # 显示窗口
+
         # 检查点击的项目是否是“传感器设置”
         if item.text(column) == "传感器设置":
             self.SerialSetting_show = SerialSetting_Init()

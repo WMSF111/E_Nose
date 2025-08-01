@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
+    <width>769</width>
     <height>490</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="7,1,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="7,0,1">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="sizePolicy">

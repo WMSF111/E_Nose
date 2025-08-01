@@ -13,11 +13,14 @@ class FrameData():
         self.pkgLen = pkgLen
 
         self.buf = ['00' for i in range(self.pkgLen)]
-        print(self.buf)
         # 数据头尾定义
-        self.buf[0] = f"{(self.Headflag >> 8) & 0xff:02x}"
-        self.buf[1] = f"{self.Headflag & 0xff:02x}"
-        self.buf[self.pkgLen - 1] = f"{self.end_num:02x}"
+        # self.buf[0] = f"{(self.Headflag >> 8) & 0xff:02x}"
+        # self.buf[1] = f"{self.Headflag & 0xff:02x}"
+        # self.buf[self.pkgLen - 1] = f"{self.end_num:02x}"
+        self.buf[0] = '55'
+        self.buf[1] = 'AA'
+        self.buf[self.pkgLen - 1] = '0A'
+
 
 
     # 将数据包中的数据部分全部设置为0，并更新校验和。
@@ -38,27 +41,41 @@ class FrameData():
             self.buf[i] = arr[i - 2]
 
 
-    def setDataTodo(self, opea, opea1 = 0, opea2 = 0):
-        print("setDataTodo:",opea,opea1,opea2)
+    def setDataTodo(self, opea, opea1 = 0, opea2 = 0, opea3 = 0):
         self.setDataToOff()
-        opea = f"{opea:02x}"
+        if(opea != "0A" and opea != "0B" and opea != "0C" and opea != "0D"):
+            opea = f"{opea:02x}"
         self.buf[2] = opea
-        if (opea == '01'):
+        print("setDataTodo:", opea, opea1, opea2)
+        if (opea == '01'): # 加热xx(01-08)通道到目标温度yyyy(00C8---0384)
             self.buf[3] = f"{opea1 & 0xff:02x}"
             hex_string = f"{opea2:04x}"
             self.buf[4] = hex_string[:2]
             self.buf[5] = hex_string[-2:]
-        if (opea == '02'):
+        if (opea == '02'): # 读取xx(01-08)通道的实时温度
             self.buf[3] = f"{opea1 & 0xff:02x}"
-        if (opea == '03'):
+        if (opea == '03' or opea == '0B' or opea == '0C' or opea == '0D'): # 吸取xx毫升的气体，用时yy秒。
+            # 0B : 运读取当前坐标，返回55 AA 0B XX XX  YY YY  ZZ  ZZ  0A
+            # OC : 运动轴回到初始0坐标点,校准坐标轴。
+            # 0D : 取初始化标识,返回55 AA 0D 00  xx  00  yy  00  zz  0A
             opea1 = 1
-        if (opea == '04'): # 0-100
-            opea1 *= 32
+        if (opea == '04'): # xxxx表示清洗时长，单位秒。
             hex_string = f"{opea1:04x}"
             self.buf[3] = hex_string[:2]
             self.buf[4] = hex_string[-2:]
         if (opea == '05'): # 00：关闭气泵 01：打开气泵
             self.buf[3] = f"{opea1 & 0xff:02x}"
+        if(opea == '0A'): # 运动到指定位置位置（XXXX,YYYY,ZZZZ）
+            hex_string = f"{opea1:04x}"
+            self.buf[3] = hex_string[:2]
+            self.buf[4] = hex_string[-2:]
+            hex_string = f"{opea2:04x}"
+            self.buf[5] = hex_string[:2]
+            self.buf[6] = hex_string[-2:]
+            hex_string = f"{opea3:04x}"
+            self.buf[7] = hex_string[:2]
+            self.buf[8] = hex_string[-2:]
+
 
     def packBytes(self):
         print("packBytes:",self.buf)
@@ -196,3 +213,4 @@ class FrameData():
 #
 #     while True:
 #         time.sleep(1)
+

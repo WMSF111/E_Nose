@@ -1,5 +1,5 @@
 import sys
-import Enose.tool.UI_show.MainWindow_ui_show as Main_Win
+import tool.UI_show.MainWindow_ui_show as Main_Win
 from PySide6.QtWidgets import QApplication
 
 if __name__ == "__main__":

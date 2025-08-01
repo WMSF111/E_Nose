@@ -4,7 +4,7 @@ import numpy as np
 import os, sys
 import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-import Enose.global_var
+import global_var
 
 script_dir = os.path.dirname(__file__)
 

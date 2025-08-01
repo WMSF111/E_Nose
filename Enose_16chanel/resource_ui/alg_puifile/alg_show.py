@@ -1,11 +1,11 @@
 '''算法显示'''
 
-from Enose.resource_ui.alg_puifile.pca_show import Ui_PCA_show  # 导入生成的 UI 类
-from Enose.resource_ui.alg_puifile.Classify_ui import Ui_Classify_ui  # 导入生成的 UI 类
+from resource_ui.alg_puifile.pca_show import Ui_PCA_show  # 导入生成的 UI 类
+from resource_ui.alg_puifile.Classify_ui import Ui_Classify_ui  # 导入生成的 UI 类
 from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog # 改为继承 QDialog
 from PySide6.QtGui import QKeySequence, QAction
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import Enose.global_var as global_var
+import global_var as global_var
 from matplotlib.figure import Figure
 import numpy as np
 from matplotlib import cm

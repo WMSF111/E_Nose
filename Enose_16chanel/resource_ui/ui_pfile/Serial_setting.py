@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QLineEdit, QHBoxLayout, QScrollArea
-import Enose.global_var as glo_var
+import global_var as glo_var
 
 
 class SerialSetting_Init(QMainWindow):

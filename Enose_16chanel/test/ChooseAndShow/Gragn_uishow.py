@@ -99,6 +99,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def start_serial(self): # 开始采集
         self.open_serial(self.process_data)
+        self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
+                      g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
+        self.ser1.serialSend()
         self.time_th = SO.time_thread(self.ser, self.ser1) # 创建time线程对象
         self.time_th.thread_loopfun(self.time_th.loop_to_target_temp(self)) # 循环直到达到指定温度
 

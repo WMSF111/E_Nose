@@ -3,13 +3,13 @@
 import sys,os
 import pandas as pd
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-from Enose.resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
-import Enose.data_file.transfo as transfo
-import Enose.data_file.algriothm as algriothm
-import Enose.resource_ui.alg_puifile.alg_show as alg_show
+from resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
+import data_file.transfo as transfo
+import data_file.algriothm as algriothm
+import resource_ui.alg_puifile.alg_show as alg_show
 import matplotlib.pyplot as plt
-import Enose.global_var as glov
-from Enose.data_file.alg_tabadd import ALG_TAB_ADD
+import global_var as glov
+from data_file.alg_tabadd import ALG_TAB_ADD
 
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置字体为 SimHei
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题

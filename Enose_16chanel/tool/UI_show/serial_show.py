@@ -3,12 +3,12 @@ import sys, os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 grandparent_dir = os.path.dirname(parent_dir)
-import Enose.global_var as g_var
+import global_var as g_var
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QWidget, QFileDialog, QApplication
 from PySide6.QtGui import QIcon, QTextCursor
-import Enose.tool.serial_thread as mythread
-from Enose.resource_ui.ui_pfile.Serial import Ui_Serial
+import tool.serial_thread as mythread
+from resource_ui.ui_pfile.Serial import Ui_Serial
 
 
 class MySignals(QObject):
@@ -59,9 +59,6 @@ class Action():
         # 确保光标可见
         self.ui.tb.ensureCursorVisible()
 
-
-import Enose.tool.serial_thread_test as test
-import threading, time
 
 
 class Serial_Init(QWidget):
@@ -212,6 +209,8 @@ class Serial_Init(QWidget):
             self.ser.stop()
         if hasattr(self, 'ser1') and self.ser1.read_flag:
             self.ser1.stop()
+        event.accept()  # 允许窗口真正关闭
+        # self.Gragh.serial_setting()
         # 2. 如果有额外线程，一并停止
         #   例：self.worker_thread.quit(); self.worker_thread.wait()
         # 3. 结束 Qt 事件循环

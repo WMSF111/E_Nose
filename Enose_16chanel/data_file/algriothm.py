@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import load_wine
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 import statsmodels.api as sm
-import Enose.global_var as global_var
+import global_var as global_var
 
 class choose_alg():
     def __init__(self, ui, textEdit_DataFrame):
