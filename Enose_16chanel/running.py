@@ -8,6 +8,6 @@ if __name__ == "__main__":
     window = Main_Win.MianWindow_Init()
     window.show()
     sys.exit(app.exec())
-
+KKK
     
 
