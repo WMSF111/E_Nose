@@ -50,11 +50,15 @@ class myserial():
                 rt.start()  # 启动读取线程
 
                 return 0, "打开串口%s成功,波特率%d\n" % (self.port, self.bund)  # 返回成功信息
+            else:
+                self.ser.close()
         except Exception as e:
             # 如果打开串口失败
             with self.lock:
                 self.read_flag = False  # 设置读取标志为 False
             return 1, "打开串口%s失败\n%s\n" % (self.port, str(e))  # 返回失败信息
+
+        # ---------- 3. 重新绑定 ----------
 
     def write(self, text):
         # 向串口写入数据

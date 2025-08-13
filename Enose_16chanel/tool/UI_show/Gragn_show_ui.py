@@ -25,8 +25,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         super(GraphShowWindow, self).__init__()
         self.setupUi(self)  # 设置 UI 界面
         self.setWindowTitle("串口数据实时显示")
-        self.data_len = len(g_var.sensors)
-        # # 初始化串口
+        self.data_len = len(g_var.sensors) # 获取传感器数量
+        # 初始化ser、ser1串口的数据
         self.serial_setting()
 
         # 初始化绘图
@@ -60,7 +60,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
         self.Pause_Button.clicked.connect(self.pause_serial)
-        # self.pushButton.clicked.connect(self.set_serial)
         self.Save_Button.clicked.connect(self.savefile)
 
     def serial_setting(self):
@@ -69,7 +68,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         else:
             self.statues_label.setText("串口初始化成功")
         sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
-        print(sconfig)
+        # print(sconfig)
         # sconfig = ["COM1", 115200, "COM3", 9600]
         self.smng = mythread.SerialsMng(sconfig)
         self.ser = self.smng.ser_arr[0]
@@ -78,15 +77,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.SO = SO.Serial1opea(self, self.ser)
         self.SO1 = SO.Serial1opea(self, self.ser1)
         self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
-        self.open_serial1(self.SO1.GetSigal1)
-
-    def set_serial(self): # 串口设置界面
-        window = serial_ui.Serial_Init(self)
-        window.show()
+        self.open_serial1(self.SO1.GetSigal1) # 初始化串口ser1及其获取操作
 
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
-            d = self.ser.open(Signal)
+            d = self.ser.open(Signal) # 对获取数据进行的操作
             print("控制串口初始化成功：", d)
 
     def open_serial1(self, Signal): # 确保串口初始化

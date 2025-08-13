@@ -156,33 +156,33 @@ class Serial1opea():
         self.ser.d.setDataTodo(1, self.Getchannel_spinBox.value(), int(self.Heattep_SpinBox_2.value()*10))
         self.ser.serialSend()
 
-    def GetSigal1(self, text): # 获取信号
-        print("收到的信号:",text)
+    def GetSigal1(self, text): # 获取控制信号
+        # print("收到的信号:",text)
         parts = text.split()  # ['55','AA', ...]
-        Frame = frame_data.FrameData()
-        parts = parts[2 : Frame.pkgLen - 1]
-        Frame.setDataToArray(parts)
-        print(Frame.buf)
-        print(Frame.buf[2])
-        if (Frame.buf[2] == '02'): # 获取温度
-            num = int.from_bytes(bytes.fromhex(Frame.buf[4] + Frame.buf[5]), byteorder='big')  # 1000
+        # Frame = frame_data.FrameData() # 从模块 frame_data 中取出（导入）类 FrameData
+        # parts = parts[2 : Frame.pkgLen - 1] # 获取除去标志位的信号位
+        # Frame.setDataToArray(parts)  # 将patrs输入框架
+        print(parts)
+        print(parts[2])
+        if (parts[2] == '02'): # 获取温度
+            num = int.from_bytes(bytes.fromhex(parts[4] + parts[5]), byteorder='big')  # 1000
             lst_int = [int(x, 16) for x in text.split()]
             text = num / 10.0
             glo_var.now_temp = text
             # if lst_int[3] == self.ui.Getchannel_spinBox.value():
             #     self.ui.Gettep_spinBox.setValue(text)
             text = "获取温度为：" + str(text)
-        if (Frame.buf[2] == '0B'): # 读取当前坐标
-            x = int.from_bytes(bytes.fromhex(Frame.buf[3] + Frame.buf[4]), byteorder='big')
-            y = int.from_bytes(bytes.fromhex(Frame.buf[5] + Frame.buf[6]), byteorder='big')
-            z = int.from_bytes(bytes.fromhex(Frame.buf[7] + Frame.buf[8]), byteorder='big')
+        if (parts[2] == '0B'): # 读取当前坐标
+            x = int.from_bytes(bytes.fromhex(parts[3] + parts[4]), byteorder='big')
+            y = int.from_bytes(bytes.fromhex(parts[5] + parts[6]), byteorder='big')
+            z = int.from_bytes(bytes.fromhex(parts[7] + parts[8]), byteorder='big')
             text = '('+ str(x) + ','+ str(y) + ',' + str(z) + ')'
             self.ui.Getpos_lineEdit.setText(text)
             text = "获取坐标为" + text
-        if (Frame.buf[2] == '0D'): # 读取当前坐标
-            x = Frame.buf[4]
-            y = Frame.buf[6]
-            z = Frame.buf[8]
+        if (parts[2] == '0D'): # 读取当前坐标
+            x = parts[4]
+            y = parts[6]
+            z = parts[8]
             text = '('+ x + ','+ y + ',' + z + ')'
             if x == y == z == '01':
                 self.ui.Startpos_Button.setText("已初始化")
