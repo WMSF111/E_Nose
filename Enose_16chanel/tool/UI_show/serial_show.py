@@ -46,7 +46,6 @@ class Action():
         self.ui.sendEdit.clear()
 
     def print(self, receive_data):
-        print(receive_data)
         self.ui.tb.insertPlainText(receive_data)
 
         # 获取到text光标,确保下次插入到内容最后
@@ -74,14 +73,14 @@ class Serial_Init(QWidget):
         self.Port_select = ""
         # self.set_initial_baud_rate(g_var.Bund_select)
         self.Com_Dict = {}
-        sconfig = ["COM1", 115200, "COM3", 9600]  #
-        self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser1 = self.smng.ser_arr[1]
-        self.initSerial(self.ui.serialComboBox, self.ui.statues)
-        self.initSerial(self.ui.serialComboBox2, self.ui.statues_3)
+        # sconfig = ["COM1", 115200, "COM3", 9600]  #
+        # self.smng = mythread.SerialsMng(sconfig)
+        # self.ser = self.smng.ser_arr[0]
+        # self.ser1 = self.smng.ser_arr[1]
+        # self.initComboBox(self.ui.serialComboBox, self.ui.statues)
+        # self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
         # self.timer2 = QTimer()
-        # self.timer2.timeout.connect(self.initSerial)
+        # self.timer2.timeout.connect(self.initComboBox)
         # self.timer2.start(100)
 
     def set_initial_baud_rate(self, baud_rate):
@@ -104,22 +103,20 @@ class Serial_Init(QWidget):
         ms._setButtonText.connect(self.a._setButtonText)
         ms.print.connect(self.a.print)
         ms._lineClear.connect(self.a._lineClear)
-        self.ui.CheckButton.clicked.connect(self.initSerial)  # 链接按钮选择
+        self.ui.CheckButton.clicked.connect(self.initallSerial)  # 链接按钮选择
         self.ui.connectButton.clicked.connect(self.openPort)  # 链接按钮选择
         self.ui.sendButton.clicked.connect(self.send)  # sendButton联系
         # 串口信息显示
         self.ui.serialComboBox.currentTextChanged.connect(
-            lambda: self.initSerial(self.ui.serialComboBox, self.ui.statues)
+            lambda: self.initComboBox(self.ui.serialComboBox, self.ui.statues)
         )
         self.ui.serialComboBox2.currentTextChanged.connect(
-            lambda: self.initSerial(self.ui.serialComboBox2, self.ui.statues_3)
+            lambda: self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
         )
-        # self.ui.serialComboBox.currentTextChanged.connect(self.initSerial(self.ui.statues)) # 串口选择窗口联系显示串口信息
-        # self.ui.serialComboBox2.currentTextChanged.connect(self.initSerial(self.ui.statues_3))  # 串口选择窗口联系显示串口信息
         self.ui.saveButton.clicked.connect(self.savefile)  # 保存文件按钮
         self.ui.clearButton.clicked.connect(self.ui.tb.clear)  # 清除按钮
 
-    def initSerial(self, serialComboBox, statues):
+    def initComboBox(self, serialComboBox, statues): # 初始化下拉列表
         self.port_imf(serialComboBox, statues)  # 显示串口信息
         ports, self.Com_Dict = mythread.getPortList()  # 获取串口列表
         if self.ports != ports:  # 如果串口不是所选的
@@ -130,33 +127,38 @@ class Serial_Init(QWidget):
                 print("g_var.Port_select not in [i.name for i in self.ports]")
             ms._serialComboBoxResetItems.emit([i.name for i in self.ports])  # 添加所有串口
 
+    def initallSerial(self):
+        sconfig = [" ", 115200, " ", 9600]
+        self.smng = mythread.SerialsMng(sconfig)
+        self.ser = self.smng.ser_arr[0]
+        self.ser1 = self.smng.ser_arr[1]
+        self.initComboBox(self.ui.serialComboBox, self.ui.statues) # 初始化ser列表
+        self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3) # 初始化ser1列表
 
     def openPort(self):  # 打开串口
         print("read_flag:", str(self.ser.read_flag))
         if self.ser.read_flag:
             ms._setButtonText.emit("断开状态")
-            # self.ser_open_look_ui(False)
+            self.ser_open_look_ui(True)
         else:
             ms._setButtonText.emit("连接状态")
-            # self.ser_open_look_ui(True)
+            self.ser_open_look_ui(False)
         if self.ser.read_flag:  # 如果串口存在
             self.ser.stop()  # 关闭串口
-            # ms._setButtonText.emit("连接")
-        else:
+        else: # 如果串口没有在读取数据
+            #先重设串口设置
             g_var.Port_select = self.ui.serialComboBox.currentText()  # 串口选择
-            self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率
+            self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率 重设
             g_var.Port_select2 = self.ui.serialComboBox2.currentText()  # 串口选择
-            self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率
-            print(g_var.Port_select, g_var.Bund_select)
-            print(g_var.Port_select2, g_var.Bund_select2)
+            self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率 重设
+
+            #再打开串口
             d = self.ser.open(ms.print.emit)  # 打开串口，成功返回0，失败返回1， + str信息
             print(d)
             ms.print.emit(d[1])
             d = self.ser1.open(ms.print.emit, flag = 1)
             print(d)
             ms.print.emit(d[1])
-            # ms._setButtonText.emit("断开")
-
 
     def send(self):
         text = self.ui.sendEdit.text()
@@ -200,7 +202,7 @@ class Serial_Init(QWidget):
 
     def ser_open_look_ui(self, status):
         self.ui.serialComboBox.setEnabled(status)
-        self.ui.baudComboBox.setEnabled(status)
+        self.ui.serialComboBox2.setEnabled(status)
 
     def closeEvent(self, event):
         """点击右上角 X 时调用"""
@@ -216,12 +218,6 @@ class Serial_Init(QWidget):
         # 3. 结束 Qt 事件循环
         # QCoreApplication.quit()
         event.accept()  # 允许窗口真正关闭
-
-
-
-
-def runApp(ui):
-    mainw = Serial_Init(ui)
 
 
 # if __name__ == "__main__":

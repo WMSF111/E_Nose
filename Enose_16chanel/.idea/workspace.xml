@@ -5,11 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Enose.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Enose.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Enose/~$下位机协议.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Enose/下位机协议.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Enose/resource_ui/ui_file/MianWindow.ui" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/MianWindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/MianWindow.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/MianWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/MianWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/Serial_opea.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/serial_thread.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,25 +61,31 @@
     "Python.Gragn_show_ui.executor": "Run",
     "Python.MainWindow_show.executor": "Run",
     "Python.MainWindow_ui_show.executor": "Run",
+    "Python.Serial_opea.executor": "Run",
     "Python.The_main.executor": "Run",
     "Python.running.executor": "Run",
     "Python.running_main.executor": "Run",
+    "Python.serial_show.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose_16chanel",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose_16chanel/resource_ui",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "settings.editor.selected.configurable": "preferences.externalTools",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose_16chanel\resource_ui" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose_16chanel\resource_ui\ui_pfile" />
     </key>
   </component>
   <component name="SharedIndexes">

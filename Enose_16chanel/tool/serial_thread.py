@@ -170,7 +170,7 @@ class SerialsMng(): # 管理多线程
     # 接收一个列表 lst，列表中包含串口的配置信息
     # list=[name,bps,pixStyle,width,  name,bps,pixStyle,width,]
     # ["COM3",250000,0x13, 45,"COM4",250000,0x13, 45]
-    def __init__(self, lst):
+    def __init__(self, lst): # 设置串口的port和bound
 
         self.ser_count = int(len(lst) / 2) # 计算串口设备的数量，每个设备占用 4 个配置项。
         self.ser_arr = [] # 初始化一个空列表，用于存储串口设备对象。
@@ -180,7 +180,7 @@ class SerialsMng(): # 管理多线程
             sop = myserial(lst[idx], lst[idx + 1])
             print(lst[idx], lst[idx + 1])
             self.ser_arr.append(sop)
-        print(self.ser_arr) # 打印串口设备对象列表。
+        print("ser_arr:", self.ser_arr) # 打印串口设备对象列表。
 
     def setdataAndsend(self, idx, data): # 设置指定串口设备的数据并发送。
         sop = self.ser_arr[idx]

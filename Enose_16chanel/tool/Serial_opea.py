@@ -1,18 +1,24 @@
-import tool.frame_data as frame_data
+from PySide6.QtCore import QObject, Signal, QThread, QTimer
 import threading
 import time
 import global_var as glo_var
 
-class time_thread(): # 时间相关的线程
+class time_thread(QObject): # 时间相关的线程
+
+    # 子线程里触发
+    temp_ready = Signal(float)  # 把当前温度发给主线程
+    finished = Signal()  # 任务完成
+
     # 初始化输入两个串口， 停止时间与初始时间
-    def __init__(self, ser, ser1, stoptime = 0, starttime = 0):
+    def __init__(self, ser, ser1, stoptime = 0, starttime = 0, parent=None):      # QObject 需要的 parent
+        super().__init__(parent)    # 必须先调父类构造
         self.time = starttime
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
         self._running = True
-        self.opea = None # 串口操作
         self.ser = ser
         self.ser1 = ser1
+        self.SO1 = Serial1opea(self, self.ser1)
         self.timeout = 1000; # 循环时间
 
     def thread_loopfun(self, fun, timeout=1000): # 输入要循环的函数和循环时间
@@ -30,16 +36,15 @@ class time_thread(): # 时间相关的线程
         except Exception as e:
             return 1, f"计时失败：{e}\n"
 
-    def loop_to_target_temp(self, ui): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
+    def loop_to_target_temp(self, target): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
         while self._running:
             # 线程安全：把值读出来再比较
-            target = ui.Heattep_SpinBox.value()
             print("现在温度是：", glo_var.now_temp)
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
                 glo_var.target_temp = target # 赋值目标温度到全局
                 print("达到目标温度需要时间：",self.time)
-                self.opea = time_opea(ui, self.time, self.ser,self.ser1)
+                self.temp_ready.emit(self.time)  # 通知主线程
                 self._running = False
                 break
             time.sleep(self.timeout / 1000)
@@ -69,14 +74,15 @@ class time_thread(): # 时间相关的线程
 
 class time_opea(): # 得到达温时间后，正式开启采样过程
     def __init__(self, ui, temptime, ser, ser1, gettime = 10):
-        print("temptime:", temptime, "cleartime:", ui.Cleartime_spinBox.value(), "standtime:", ui.Standtime_spinBox.value())
         self.ui = ui
-        self.temptime = temptime # 达到目标温度的时间
-        self.cleartime = ui.Cleartime_spinBox.value() # 洗气时常
-        self.standtime = ui.Standtime_spinBox.value() # 保持温度时常
-        self.gettime = gettime # 采集时常
-        self.alltime = temptime + self.standtime + (self.cleartime + gettime) * 2 # 一个样品整个过程时常
-        self.waittime = self.alltime - temptime - self.standtime # 上个通道开启距下个通道开启时间差值
+        print("temptime:", temptime, "cleartime:", self.ui.Cleartime_spinBox.value(), "standtime:",
+              self.ui.Standtime_spinBox.value())
+        self.temptime = temptime  # 达到目标温度的时间
+        self.cleartime = self.ui.Cleartime_spinBox.value()  # 洗气时常
+        self.standtime = self.ui.Standtime_spinBox.value()  # 保持温度时常
+        self.gettime = gettime  # 采集时常
+        self.alltime = temptime + self.standtime + (self.cleartime + gettime) * 2  # 一个样品整个过程时常
+        self.waittime = self.alltime - temptime - self.standtime  # 上个通道开启距下个通道开启时间差值
         print("waittime:", self.waittime, "alltime:", self.alltime)
         self.ser = ser
         self.ser1 = ser1
@@ -84,11 +90,8 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
             raise ValueError("底层串口句柄为 None，请检查串口是否打开成功")
         if self.ser1.ser is None:
             raise ValueError("底层串口句柄为 None，请检查串口是否打开成功")
-        self.time_th = time_thread(ser, ser1, starttime = temptime) # 开始计时
-        self.time_th.thread_looparri_fun(self.push_opea) # 适用于不需要参数的函数
-
-        # self.push_opea(t) 是一个函数调用表达式，会立即执行并返回结果，而 thread_looparri_fun需要的是一个可调用对象（函数对象）
-        # self.time_th.thread_looparri_fun(lambda t: self.push_opea(t)) # 适用于需要参数的函数，提供了更大的灵活性。
+        self.time_th = time_thread(ser, ser1, starttime=temptime)  # 开始计时
+        self.time_th.thread_looparri_fun(self.push_opea)  # 适用于不需要参数的函数
 
     def push_opea(self, time): # 一系列执行操作
         Opea_time = self.time_adjust(time) # 进行时间调整
@@ -103,10 +106,19 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
                 Opea_time == (self.alltime - self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())): #第一次采集结束
             self.room_clear()
             print("Opea_time:", Opea_time, "time:", time, "气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
-        if time == (self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime:
+        if self.ui.Simnum_spinBox.value() != 1:
+            if time == ((self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime):
+                self.ui.statues_label.setText("已完成采样")
+                print("Opea_time:", Opea_time, "time:", time, "已完成采样")
+                glo_var.Save_flag = "采集完成"
+                self.time_th._running = False
+                self.ser.pause()
+        elif self.ui.Simnum_spinBox.value() == 1 and time == (self.temptime + self.standtime + self.gettime):
             self.ui.statues_label.setText("已完成采样")
             print("Opea_time:", Opea_time, "time:", time, "已完成采样")
+            glo_var.Save_flag = "采集完成"
             self.time_th._running = False
+            self.ser.pause()
 
 
     def time_adjust(self, time): # 保证每次操作可循环
@@ -129,7 +141,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         self.ser_opea(text, 3, self.gettime)  # 信号发出采集信号
         self.ui.statues_label.setText("样品" + str(glo_var.now_Sam) + "开始采集")
 
-    def room_clear(self):
+    def room_clear(self): # 气室清理
         if glo_var.Save_flag != "采集完成":
             glo_var.Save_flag = "采集完成"
         text = "exhaust_time:" + str(self.cleartime)  # 清洗30s
@@ -143,10 +155,12 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         self.ser1.serialSend()
 
 
-class Serial1opea():
-    def __init__(self, ui, ser):
+class Serial1opea(QObject):
+    def __init__(self, ui, ser, parent = None):
+        super().__init__(parent)  # 必须先调父类构造
         self.ser = ser
         self.ui = ui
+        self.temp_curr = 0
 
     def Get_temp(self): # 发送获取温度信号
         self.ser.d.setDataTodo(2, self.Getchannel_spinBox.value())
@@ -167,11 +181,11 @@ class Serial1opea():
         if (parts[2] == '02'): # 获取温度
             num = int.from_bytes(bytes.fromhex(parts[4] + parts[5]), byteorder='big')  # 1000
             lst_int = [int(x, 16) for x in text.split()]
-            text = num / 10.0
-            glo_var.now_temp = text
+            self.temp_curr = num / 10.0
+            glo_var.now_temp = self.temp_curr
             # if lst_int[3] == self.ui.Getchannel_spinBox.value():
             #     self.ui.Gettep_spinBox.setValue(text)
-            text = "获取温度为：" + str(text)
+            text = "获取温度为：" + str(self.temp_curr)
         if (parts[2] == '0B'): # 读取当前坐标
             x = int.from_bytes(bytes.fromhex(parts[3] + parts[4]), byteorder='big')
             y = int.from_bytes(bytes.fromhex(parts[5] + parts[6]), byteorder='big')

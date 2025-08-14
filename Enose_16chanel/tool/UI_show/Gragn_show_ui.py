@@ -1,7 +1,3 @@
-import  sys, re, random
-from PySide6.QtCore import (
-    Qt, QCoreApplication
-)
 import tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
@@ -10,10 +6,7 @@ import global_var as g_var
 from itertools import cycle
 import logging, os
 import  sys, re, random
-from PySide6.QtCore import (
-    Qt, QCoreApplication
-)
-import resource_ui.ui_pfile.Serial as serial_ui
+from PySide6.QtCore import Qt
 from resource_ui.ui_pfile.ChooseAndShow import Ui_Gragh_show
 import tool.Serial_opea as SO
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -43,8 +36,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self._data_lines = dict()  # 已存在的绘图线
         self._data_items = dict()  # 数据查看器的数据
         self._data_colors = dict()  # 绘图颜色
-        self._data_visible = g_var.sensors.copy() # 选择要看的传感器
-        print("glo_sensors:", g_var.sensors)
+        # self._data_visible = g_var.sensors.copy() # 选择要看的传感器
         self.colors = self.generate_random_color_list(self.data_len)
         self.color_cycle = cycle(self.colors)
 
@@ -61,6 +53,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
         self.Pause_Button.clicked.connect(self.pause_serial)
         self.Save_Button.clicked.connect(self.savefile)
+        self.Folder_Button.clicked.connect(self.savefolder)
 
     def serial_setting(self):
         if (g_var.Port_select2 == "" or g_var.Port_select == ""):
@@ -82,12 +75,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
             d = self.ser.open(Signal) # 对获取数据进行的操作
-            print("控制串口初始化成功：", d)
+            print(d)
 
     def open_serial1(self, Signal): # 确保串口初始化
         if not self.ser1.read_flag: # 如果串口存在
             d = self.ser1.open(Signal, flag=1)
-            print("控制串口初始化成功：", d)
+            print( d)
 
     def clear_data(self): # 基线阶段
         self.open_serial(self.process_data)
@@ -102,7 +95,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                       g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
         self.ser1.serialSend()
         self.time_th = SO.time_thread(self.ser, self.ser1) # 创建time线程对象
-        self.time_th.thread_loopfun(self.time_th.loop_to_target_temp(self)) # 循环直到达到指定温度
+        self.time_th.temp_ready.connect(self.on_temp_update)
+        self.time_th.thread_loopfun(self.time_th.loop_to_target_temp(self.Heattep_SpinBox.value()))  # 循环直到达到指定温度
+
+    def on_temp_update(self, t):
+        print("收到温度达标信号")
+        self.ser_time = SO.time_opea(self, t, self.ser, self.ser1, 10)
 
     def show_set(self, time):
         self.open_serial(self.process_data)
@@ -131,8 +129,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.data = [[] for _ in range(self.data_len)]
             g_var.Save_flag = "正在采集"
         # 解析数据
-        values = re.findall(r'\d+',data)
-        # values = self.decode_data(data)
+        values = self.decode_data(data)
         if len(values) == self.data_len:
             values = [int(v) for v in values]
             for i, value in enumerate(values):
@@ -143,17 +140,24 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.update_table()  # 更新表格
 
     def decode_data(self, data):
+        # 在字符串 data 中查找所有与正则表达式 r'\d+' 匹配的子串，并以列表形式返回所有匹配结果。
+        # return re.findall(r'\d+',data)
+        # \d 表示任意一个数字字符（等价于 [0-9]）。
+        # + 表示前面的字符（\d）出现一次或多次。
         pattern = r'(?P<name>[^=,]+)=(?P<value>\d+)'
         self.pairs = {m.group('name'): int(m.group('value'))
                  for m in re.finditer(pattern, data)}
-
         # 如果你仍需要按顺序的 16 个值：
-        ordered_keys = g_var.sensors.copy()  # ['MQ3_1','MQ3_2',...,'base']
+        ordered_keys = list(self.pairs.keys())  # ['MQ3_1','MQ3_2',...,'base']
+        if g_var.sensors[0] != ordered_keys[0]:
+            g_var.sensors = ordered_keys
+            self._data_visible = g_var.sensors.copy()  # 选择要看的传感器
+            # print(g_var.sensors)
         values = [self.pairs[k] for k in ordered_keys]
         return values
 
 
-    def savefolder(self):
+    def savefolder(self): # 设置保存路径
         foldername = QFileDialog.getExistingDirectory(None, "Select Folder", "/")
         if foldername:  # 如果用户选择了文件夹
             self.Folder_lineEdit.setText(foldername)  # 设置 QLineEdit 的文本为选择的文件夹路径
@@ -163,8 +167,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def auto_savefile(self):
         # 获取项目文件夹路径
-        project_folder = os.path.dirname(os.path.abspath(__file__))
-        file_folder = os.path.join(project_folder, "file")
+        if self.Folder_lineEdit.text() == "":
+            project_folder = os.path.dirname(os.path.abspath(__file__))
+            file_folder = os.path.join(project_folder, "file")
+        else:
+            file_folder = self.Folder_lineEdit.text()
 
         # 确保 file 文件夹存在
         if not os.path.exists(file_folder):
