@@ -57,13 +57,13 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Folder_Button.clicked.connect(self.savefolder)
 
     def serial_setting(self):
-        # if (g_var.Port_select2 == "" or g_var.Port_select == ""):
-        #     self.statues_label.setText("串口初始化有问题")
-        # else:
-        #     self.statues_label.setText("串口初始化成功")
-        # sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
+        if (g_var.Port_select2 == "" or g_var.Port_select == ""):
+            self.statues_label.setText("串口初始化有问题")
+        else:
+            self.statues_label.setText("串口初始化成功")
+        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
         # print(sconfig)
-        sconfig = ["COM1", 115200, "COM3", 9600]
+        # sconfig = ["COM1", 115200, "COM3", 9600]
         self.smng = mythread.SerialsMng(sconfig)
         self.ser = self.smng.ser_arr[0]
         self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
