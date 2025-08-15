@@ -15,11 +15,24 @@ class time_thread(QObject): # 时间相关的线程
         self.time = starttime
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
+        self._stop_evt = threading.Event()  # 用来打断 sleep
         self._running = True
         self.ser = ser
         self.ser1 = ser1
         self.SO1 = Serial1opea(self, self.ser1)
         self.timeout = 1000; # 循环时间
+
+    # —— 供外部调用的停止接口 ——
+    def stop(self):
+        with self.lock:  # 若存在并发访问，加锁
+            self._running = False
+            self._stop_evt.set()  # 立即唤醒正在 sleep 的线程
+            self.time = 0
+            glo_var.now_temp = 0
+            glo_var.target_temp = 0
+            glo_var.now_chan = 1
+            glo_var.now_Sam = 0
+            glo_var.target_Sam = 1
 
     def thread_loopfun(self, fun, timeout=1000): # 输入要循环的函数和循环时间
         self.time = 0
@@ -50,7 +63,7 @@ class time_thread(QObject): # 时间相关的线程
             time.sleep(self.timeout / 1000)
 
     def thread_looparri_fun(self, fun, timeout=1000): # 输入要调用循环函数返回结果的函数fun和循环时间
-        self.time = 0
+        # self.time = 0
         try:
             with self.lock:
                 self.timeout = timeout

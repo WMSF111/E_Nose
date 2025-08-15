@@ -19,6 +19,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.setupUi(self)  # 设置 UI 界面
         self.setWindowTitle("串口数据实时显示")
         self.data_len = len(g_var.sensors) # 获取传感器数量
+        self.time_th = None
         # 初始化ser、ser1串口的数据
         self.serial_setting()
 
@@ -56,13 +57,13 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Folder_Button.clicked.connect(self.savefolder)
 
     def serial_setting(self):
-        if (g_var.Port_select2 == "" or g_var.Port_select == ""):
-            self.statues_label.setText("串口初始化有问题")
-        else:
-            self.statues_label.setText("串口初始化成功")
-        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
+        # if (g_var.Port_select2 == "" or g_var.Port_select == ""):
+        #     self.statues_label.setText("串口初始化有问题")
+        # else:
+        #     self.statues_label.setText("串口初始化成功")
+        # sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
         # print(sconfig)
-        # sconfig = ["COM1", 115200, "COM3", 9600]
+        sconfig = ["COM1", 115200, "COM3", 9600]
         self.smng = mythread.SerialsMng(sconfig)
         self.ser = self.smng.ser_arr[0]
         self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
@@ -94,9 +95,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
         self.ser1.serialSend()
-        self.time_th = SO.time_thread(self.ser, self.ser1) # 创建time线程对象
-        self.time_th.temp_ready.connect(self.on_temp_update)
-        self.time_th.thread_loopfun(self.time_th.loop_to_target_temp(self.Heattep_SpinBox.value()))  # 循环直到达到指定温度
+        if self.time_th is None:
+            # 第一次：真正创建
+            self.time_th = SO.time_thread(self.ser, self.ser1)
+            self.time_th.temp_ready.connect(self.on_temp_update)
+
+            # 每一次：只需“重启”逻辑
+        target = self.Heattep_SpinBox.value()
+        self.time_th.stop()  # 先停掉旧循环
+        self.time_th.thread_loopfun(
+            lambda: self.time_th.loop_to_target_temp(target)) # 循环直到达到指定温度
 
     def on_temp_update(self, t):
         print("收到温度达标信号")
