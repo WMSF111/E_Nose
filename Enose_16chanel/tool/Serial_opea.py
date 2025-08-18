@@ -55,7 +55,7 @@ class time_thread(QObject): # 时间相关的线程
             print("现在温度是：", glo_var.now_temp)
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
-                glo_var.target_temp = target # 赋值目标温度到全局
+                # glo_var.target_temp = target # 赋值目标温度到全局
                 print("达到目标温度需要时间：",self.time)
                 self.temp_ready.emit(self.time)  # 通知主线程
                 self._running = False
@@ -142,7 +142,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
 
     def channal_heat(self): # 通道加热，只需要ser1操作
         glo_var.now_chan += 1
-        self.ser1.d.setDataTodo(1, glo_var.now_chan, int(glo_var.target_temp))  # 开始下一个通道xx加热信号
+        self.ser1.d.setDataTodo(1, glo_var.now_chan, glo_var.target_temp)  # 开始下一个通道xx加热信号
         self.ser1.serialSend()
         self.ui.statues_label.setText("通道" + str(glo_var.now_chan) + "开始加热")
 

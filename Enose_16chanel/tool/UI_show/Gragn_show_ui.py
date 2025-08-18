@@ -91,9 +91,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data = [[] for _ in range(self.data_len)]
 
     def start_serial(self): # 开始采集
+        g_var.target_temp = (int)(self.Heattep_SpinBox.value()*100)
         self.open_serial(self.process_data)
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
+        self.ser1.d.setDataTodo("01", g_var.now_Sam + 1, g_var.target_temp)  # 切换到下一个样品位置
         self.ser1.serialSend()
         if self.time_th is None:
             # 第一次：真正创建

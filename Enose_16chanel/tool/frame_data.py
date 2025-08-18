@@ -43,7 +43,7 @@ class FrameData():
 
     def setDataTodo(self, opea, opea1 = 0, opea2 = 0, opea3 = 0):
         self.setDataToOff()
-        if(opea != "0A" and opea != "0B" and opea != "0C" and opea != "0D"):
+        if(opea != "0A" and opea != "0B" and opea != "0C" and opea != "0D" and opea != "01"):
             opea = f"{opea:02x}"
         self.buf[2] = opea
         print("setDataTodo:", opea, opea1, opea2)
