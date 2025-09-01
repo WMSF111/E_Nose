@@ -34,29 +34,26 @@ class UI_TXT_TO():
         # 读取文件夹，将.txt合并成一个,第一列是文件名
         with open(global_var.trainfile_txt_path, "a") as outfile:
             # 第一行是列名
-            with open(path_folder[0], 'r') as infile: # 写入列名
+            with open(path_folder[0], 'r') as infile:
                 trainfile_txt_text = infile.read()
                 rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
                 table_data1 = [row.split(' ') for row in rows]  # 假设每列用空格分隔
                 data = []
-                if(len(global_var.headers_list) == 0): # 当不存在列名
+                if(len(global_var.headers_list) == 0):
                     global_var.headers_list.append("target")
                     for i in range(0, len(table_data1[0])):
                         global_var.headers_list.append(global_var.sensors[i])
             headers_str = " ".join(map(str, global_var.headers_list))
-            outfile.write(headers_str + '\n')
+            outfile.write(headers_str)
             #遍历所有文件
             for file_path in path_folder:
                 file_name = os.path.basename(file_path).replace(".txt", "")
+                outfile.write('\n')
                 with open(file_path, 'r') as infile:
                     lines = infile.readlines()  # 读取每个文件的所有行
                     for line in lines:
-                        stripped = line.rstrip()  # 去掉行尾空白和换行
-                        if not stripped:  # 空行直接跳过
-                            print(f"{file_name} 有空行")
-                            continue
-                        # 确保每一行最后都有且只有一个 \n
-                        outfile.write(f"{file_name} {stripped}\n")
+                        line_with_file_name = f"{file_name} {line}"  # 在每行开头添加文件名
+                        outfile.write(line_with_file_name)
 
     def txt_to_dataframe(the_path):
         # 读取trainfile.txt并显示到数据源看板，将.txt存储为dataFrame

@@ -1,13 +1,12 @@
 '''测试算法页面'''
 
 import sys,os
-import pandas as pd
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
 from resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
-import data_file.transfo as transfo
+import transfo as transfo
 import matplotlib.pyplot as plt
 import global_var as glov
-from data_file.alg_tabadd import ALG_TAB_ADD
+from alg_tabadd import ALG_TAB_ADD
 
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置字体为 SimHei
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
