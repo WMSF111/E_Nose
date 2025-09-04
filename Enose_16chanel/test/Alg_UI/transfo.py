@@ -1,9 +1,7 @@
-import os, glob
+import os, glob, global_var, filter, logging, ast
 import pandas as pd
-import global_var as global_var
-import data_file.filter as filter
+import numpy as np
 import matplotlib.pyplot as pl
-import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 
 
@@ -34,54 +32,65 @@ class UI_TXT_TO():
         # 读取文件夹，将.txt合并成一个,第一列是文件名
         with open(global_var.trainfile_txt_path, "a") as outfile:
             # 第一行是列名
-            with open(path_folder[0], 'r') as infile:
+            with open(path_folder[0], 'r') as infile: # 写入列名
                 trainfile_txt_text = infile.read()
                 rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
                 table_data1 = [row.split(' ') for row in rows]  # 假设每列用空格分隔
                 data = []
-                if(len(global_var.headers_list) == 0):
+                if(len(global_var.headers_list) == 0): # 当不存在列名
                     global_var.headers_list.append("target")
                     for i in range(0, len(table_data1[0])):
                         global_var.headers_list.append(global_var.sensors[i])
             headers_str = " ".join(map(str, global_var.headers_list))
-            outfile.write(headers_str)
+            outfile.write(headers_str + '\n')
             #遍历所有文件
             for file_path in path_folder:
                 file_name = os.path.basename(file_path).replace(".txt", "")
-                outfile.write('\n')
                 with open(file_path, 'r') as infile:
                     lines = infile.readlines()  # 读取每个文件的所有行
                     for line in lines:
-                        line_with_file_name = f"{file_name} {line}"  # 在每行开头添加文件名
-                        outfile.write(line_with_file_name)
+                        stripped = line.rstrip()  # 去掉行尾空白和换行
+                        if not stripped:  # 空行直接跳过
+                            print(f"{file_name} 有空行")
+                            continue
+                        # 确保每一行最后都有且只有一个 \n
+                        outfile.write(f"{file_name} {stripped}\n")
 
     def txt_to_dataframe(the_path):
         # 读取trainfile.txt并显示到数据源看板，将.txt存储为dataFrame
         with open(the_path, 'r') as file: # 显示列名
             trainfile_txt_text = file.read()
-            # rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
-        #     table_data1 = [row.split(' ') for row in rows]  # 假设每列用空格分隔
-        #     data = []
-        #     global_var.headers_list.append("target")
-        #     for i in range(1, len(table_data1[0])):
-        #         global_var.headers_list.append(global_var.sensors[i-1])
-        # headers_str = " ".join(map(str, global_var.headers_list))
         text = trainfile_txt_text
-        # train.turn_to_csv(text)
         if len(text) >= 4: # 显示所有数据
             rows = text.split('\n')  # 每行代表表格中的一行数据
             table_data = [row.split(' ') for row in rows]  # 假设每列用逗号分隔
             num_cols = len(table_data[0])
             data = []
             for i in range(1, len(rows) - 1):
-                # if len(table_data[i]) == num_cols:
                 data.append(table_data[i])
         print("Columns:", table_data[0])
         return pd.DataFrame(data, columns=table_data[0])
-        # global_var.textEdit_DataFrame = pd.DataFrame(data, columns=table_data[0])  # 保存创建的 DataFrame
-        # global_var.textEdit_nolc_DataFrame = global_var.textEdit_DataFrame.iloc[1:, 1:]
-        # print(global_var.textEdit_DataFrame)
-        # self.Broad.append(global_var.textEdit_DataFrame.to_string(index=False))
+
+    def txt_to_Array(the_path):
+        # 读取txt文件中的数据
+        with open(the_path, 'r') as file:
+            lines = file.readlines()
+
+        # 初始化存储第一列和从第二列开始的列的空数组
+        first_column = []
+        remaining_columns = []
+
+        # 假设 lines 是每行数据的列表
+        for line in lines:
+            line = line.strip()  # 清除行末的换行符
+            row_data = line.split()  # 将每行按空格分割
+
+            # 第一列是字符串
+            first_column.append(row_data[0])  # row_data[0] 是第一列的字符串数据
+
+            # 将从第二列开始的数据转换为浮动数，并存入 remaining_columns
+            remaining_columns.append([float(x) for x in row_data[1:]])  # 转换为浮动数
+        return first_column, remaining_columns
 
 
     def Choose_Filter_Alg(self, filter_preprocess):

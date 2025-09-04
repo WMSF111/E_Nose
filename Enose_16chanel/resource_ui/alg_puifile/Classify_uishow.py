@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'pca_show.ui'
+## Form generated from reading UI file 'Classify.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,31 +19,31 @@ from PySide6.QtWidgets import (QApplication, QFormLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QSpinBox,
     QToolButton, QVBoxLayout, QWidget)
 
-class Ui_PCA_show(object):
-    def setupUi(self, PCA_show):
-        if not PCA_show.objectName():
-            PCA_show.setObjectName(u"PCA_show")
-        PCA_show.resize(300, 238)
-        self.verticalLayout = QVBoxLayout(PCA_show)
+class Ui_Classify(object):
+    def setupUi(self, Classify):
+        if not Classify.objectName():
+            Classify.setObjectName(u"Classify")
+        Classify.resize(300, 238)
+        self.verticalLayout = QVBoxLayout(Classify)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.pushButton = QPushButton(PCA_show)
+        self.pushButton = QPushButton(Classify)
         self.pushButton.setObjectName(u"pushButton")
 
         self.verticalLayout.addWidget(self.pushButton)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_3 = QLabel(PCA_show)
+        self.label_3 = QLabel(Classify)
         self.label_3.setObjectName(u"label_3")
 
         self.horizontalLayout_2.addWidget(self.label_3)
 
-        self.FilePath_lineEdit = QLineEdit(PCA_show)
+        self.FilePath_lineEdit = QLineEdit(Classify)
         self.FilePath_lineEdit.setObjectName(u"FilePath_lineEdit")
 
         self.horizontalLayout_2.addWidget(self.FilePath_lineEdit)
 
-        self.toolButton = QToolButton(PCA_show)
+        self.toolButton = QToolButton(Classify)
         self.toolButton.setObjectName(u"toolButton")
 
         self.horizontalLayout_2.addWidget(self.toolButton)
@@ -58,31 +58,31 @@ class Ui_PCA_show(object):
         self.formLayout.setHorizontalSpacing(10)
         self.formLayout.setVerticalSpacing(10)
         self.formLayout.setContentsMargins(-1, 10, -1, 10)
-        self.label = QLabel(PCA_show)
+        self.label = QLabel(Classify)
         self.label.setObjectName(u"label")
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label)
 
-        self.Di_spinBox = QSpinBox(PCA_show)
+        self.Di_spinBox = QSpinBox(Classify)
         self.Di_spinBox.setObjectName(u"Di_spinBox")
         self.Di_spinBox.setMinimum(2)
         self.Di_spinBox.setDisplayIntegerBase(10)
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.Di_spinBox)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.Di_spinBox)
 
-        self.label_2 = QLabel(PCA_show)
+        self.label_2 = QLabel(Classify)
         self.label_2.setObjectName(u"label_2")
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_2)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_2)
 
-        self.Di_spinBox_2 = QSpinBox(PCA_show)
+        self.Di_spinBox_2 = QSpinBox(Classify)
         self.Di_spinBox_2.setObjectName(u"Di_spinBox_2")
         self.Di_spinBox_2.setMinimum(50)
         self.Di_spinBox_2.setMaximum(99)
         self.Di_spinBox_2.setValue(80)
         self.Di_spinBox_2.setDisplayIntegerBase(10)
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.Di_spinBox_2)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.Di_spinBox_2)
 
 
         self.verticalLayout.addLayout(self.formLayout)
@@ -91,17 +91,17 @@ class Ui_PCA_show(object):
         self.verticalLayout.setStretch(1, 1)
         self.verticalLayout.setStretch(2, 4)
 
-        self.retranslateUi(PCA_show)
+        self.retranslateUi(Classify)
 
-        QMetaObject.connectSlotsByName(PCA_show)
+        QMetaObject.connectSlotsByName(Classify)
     # setupUi
 
-    def retranslateUi(self, PCA_show):
-        PCA_show.setWindowTitle(QCoreApplication.translate("PCA_show", u"Form", None))
-        self.pushButton.setText(QCoreApplication.translate("PCA_show", u"\u786e\u5b9a", None))
-        self.label_3.setText(QCoreApplication.translate("PCA_show", u"\u6587\u4ef6\u8def\u5f84", None))
-        self.toolButton.setText(QCoreApplication.translate("PCA_show", u"...", None))
-        self.label.setText(QCoreApplication.translate("PCA_show", u"PCA\u7ef4\u5ea6\uff082-\u4f20\u611f\u5668\u6570\uff09", None))
-        self.label_2.setText(QCoreApplication.translate("PCA_show", u"\u8d21\u732e\u5ea6\u9700\u6c42\uff0850-99%\uff09", None))
+    def retranslateUi(self, Classify):
+        Classify.setWindowTitle(QCoreApplication.translate("Classify", u"Form", None))
+        self.pushButton.setText(QCoreApplication.translate("Classify", u"\u786e\u5b9a", None))
+        self.label_3.setText(QCoreApplication.translate("Classify", u"\u6587\u4ef6\u8def\u5f84", None))
+        self.toolButton.setText(QCoreApplication.translate("Classify", u"...", None))
+        self.label.setText(QCoreApplication.translate("Classify", u"PCA\u7ef4\u5ea6\uff082-\u4f20\u611f\u5668\u6570\uff09", None))
+        self.label_2.setText(QCoreApplication.translate("Classify", u"\u8d21\u732e\u5ea6\u9700\u6c42\uff0850-99%\uff09", None))
     # retranslateUi
 

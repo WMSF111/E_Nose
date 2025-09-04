@@ -33,10 +33,10 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         self.tabWidget.removeTab(index)
 
     def ComboInit(self):
-        self.Di_Re_ComboBox.addItems(["无", "PCA", "LDA", "选项3"])  # 添加选项
+        self.Di_Re_ComboBox.addItems(["无", "PCA", "LDA", "选项3"])  # 聚类算法
         self.Di_Re_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         self.Di_Re_ComboBox.currentIndexChanged.connect(self.tabadd.Di_Re_Combo_select)
-        self.Classify_ComboBox.addItems(["无", "线性回归", "选项2", "选项3"])  # 添加选项
+        self.Classify_ComboBox.addItems(["无", "线性回归", "选项2", "选项3"])  # 回归算法
         self.Classify_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         self.Classify_ComboBox.currentIndexChanged.connect(self.tabadd.Classify_Combo_select)
         self.Cluster_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项

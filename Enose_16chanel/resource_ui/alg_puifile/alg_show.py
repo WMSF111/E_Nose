@@ -1,7 +1,7 @@
 '''算法显示'''
 
-from resource_ui.alg_puifile.pca_show import Ui_PCA_show  # 导入生成的 UI 类
-from resource_ui.alg_puifile.Classify_ui import Ui_Classify_ui  # 导入生成的 UI 类
+from resource_ui.alg_puifile.Classify_uishow import Ui_Classify as Classify_uishow  # 导入生成的 UI 类
+from resource_ui.alg_puifile.Regression_uishow import Ui_Regression as Regression_uishow  # 导入生成的 UI 类
 from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog # 改为继承 QDialog
 from PySide6.QtGui import QKeySequence, QAction
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -9,12 +9,14 @@ import global_var as global_var
 from matplotlib.figure import Figure
 import numpy as np
 from matplotlib import cm
+import matplotlib.pyplot as plt
 # from mplcursors import cursor as mplcursors
 
 class ADDTAB():
     def __init__(self, The_QTabWidget):
         self.The_QTabWidget = The_QTabWidget
 
+    # 新建新的绘图TAB
     def add_plot_tab(self, Dnum = 2, title="Plot", plot_function=None, *args, **kwargs):
         """添加一个新的 Tab 来显示 PCA 碎石图"""
         # 创建一个新的 Tab
@@ -72,9 +74,12 @@ class ADDTAB():
     def save_text(self, text):
         """保存当前图表"""
         file_path, _ = QFileDialog.getSaveFileName(None, "Save result", global_var.folder_path, "TXT Files (*.txt);;All Files (*)")
-        if file_path:
-            file_path.write(text)
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(text)
             print(f"Plot saved to {file_path}")
+        # if file_path:
+        #     file_path.write(text)
+        #     print(f"Plot saved to {file_path}")
 
 def draw_scatter(ax, name, num, target, finalData, data=None):
     """
@@ -159,7 +164,7 @@ def draw_scatter(ax, name, num, target, finalData, data=None):
         # 添加图例
         ax.legend()
 
-class PCASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
+class PCASHOW(QDialog, Classify_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(PCASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
@@ -188,6 +193,7 @@ class PCASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
             self.file_path = folder_path
 
     def plot_scree_plot(self, ax, variance_ratios):
+        # fig, ax = plt.subplots()  # 正确解包
         """绘制 PCA 碎石图"""
         ax.plot(range(1, len(variance_ratios) + 1), variance_ratios, 'o-', label='单个主成分贡献率')
         ax.plot(range(1, len(variance_ratios) + 1), np.cumsum(variance_ratios), 's-', label='累积贡献率')
@@ -198,7 +204,7 @@ class PCASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
         ax.legend()
         ax.grid()
 
-class LDASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
+class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LDASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
@@ -228,6 +234,7 @@ class LDASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
     def plot_lda_variance_ratio(self, ax, variance_ratios, Contrnum):
         """绘制 LDA 解释方差比图"""
         # 绘制单个主成分的解释方差比
+        # fig, ax = plt.subplots()  # 正确解包
         ax.plot(range(1, len(variance_ratios) + 1), variance_ratios, 'o-', label='单个主成分解释方差比')
 
         # 绘制累积解释方差比
@@ -249,22 +256,30 @@ class LDASHOW(QDialog, Ui_PCA_show):  # 继承 QDialog
         ax.grid()
 
 
-class LRSHOW(QDialog, Ui_Classify_ui):  # 继承 QDialog
+class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LRSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
         self.ButInit()
         self.desize = self.doubleSpinBox.value()
 
+
     def ButInit(self):
         # 绑定按钮点击事件
         self.pushButton_2.clicked.connect(self.num_select)
-
+        self.toolButton.clicked.connect(self.select_file)
 
     def num_select(self):
         """弹出文件夹选择对话框"""
         self.desize = self.doubleSpinBox.value()
         self.accept()  # 关闭对话框并返回 QDialog.Accepted
+
+    def select_file(self):
+        """弹出文件夹选择对话框"""
+        folder_path, _ = QFileDialog.getOpenFileName(None, "Open File", "", "All Files (*)")
+        if folder_path:  # 如果用户选择了文件夹（而不是取消）
+            self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
+            self.file_path = folder_path
 
     def plot_lda_variance_ratio(self, ax, variance_ratios, Contrnum):
         """绘制 LDA 解释方差比图"""

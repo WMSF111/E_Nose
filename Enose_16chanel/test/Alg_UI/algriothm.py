@@ -19,15 +19,16 @@ class choose_alg():
         self.df = textEdit_DataFrame  # 读取文件
         # 初始化一个三维图像
         self.fig = plt.figure()
-        self.finalData = 0
-        self.name = []
-        self.num = 3
-        self.target = self.df['target'].values  # numpy.ndarray
+        # self.finalData = 0
+        # self.name = []
+        # self.num = 3
+        # self.target = self.df['target'].values  # numpy.ndarray
         self.data = pd.DataFrame(self.df.iloc[:, 1:])
-        self.confusion_matrix = self.accuracy_score = self.classification_report = ' '
+        # self.confusion_matrix = self.accuracy_score = self.classification_report = ' '
         # self.choose_al(self.data, 3)
         # if self.num != 0:
         #     self.train_data()
+
 
 
     def choose_al(self, al, num):
@@ -69,6 +70,10 @@ class choose_alg():
         pca_f = PCA(n_components=num, svd_solver="full")
         pca_f = pca_f.fit(data_scaled)
         self.finalData = pca_f.transform(data_scaled)
+        df = pd.DataFrame(self.finalData) # 转化成DataFrame
+        df.insert(0, 'target', self.df['target'].values)# 将 new_column 添加到 DataFrame 的第一列
+        self.finalData = df.to_numpy()# 如果需要，你可以将 df 转回 NumPy 数组
+
 
         variance_ratios = pca_f.explained_variance_ratio_  # 贡献率
 
@@ -95,7 +100,11 @@ class choose_alg():
 
     def lda(self, num, target_variance):
         lda_model = LinearDiscriminantAnalysis(n_components=num)
-        self.finalData = lda_model.fit_transform(self.data, self.target)
+        self.finalData = lda_model.fit_transform(self.data, self.df['target'].values)
+        df = pd.DataFrame(self.finalData)  # 转化成DataFrame
+        df.insert(0, 'target', self.df['target'].values)  # 将 new_column 添加到 DataFrame 的第一列
+        self.finalData = df.to_numpy()  # 如果需要，你可以将 df 转回 NumPy 数组
+
         # 获取解释方差比
         explained_variance_ratio = lda_model.explained_variance_ratio_
         sum_explained_variance_ratio = np.cumsum(explained_variance_ratio)
@@ -128,12 +137,14 @@ class choose_alg():
         return self.finalData, explained_variance_ratio
 
 class TRAIN():
-    def __init__(self, ui):
+    def __init__(self, ui, target, data):
         self.ui = ui
-        self.df = global_var.textEdit_DataFrame  # 读取文件
-    def LG_train(finalData, target, test_size):
+        self.finalData = data  # 读取数据
+        self.target = target  # 读取标签
+    #输入： finalData=数据级 target =数据标签 test_size = 训练集数量（0.1-0.9）
+    def LG_train(self, test_size):
         x_train, x_test, y_train, y_test = (  # 划分训练集与测试集
-            train_test_split(finalData, target, test_size = test_size, random_state=0))
+            train_test_split(self.finalData, self.target, test_size = test_size, random_state=0))
 
         # 搭建逻辑回归模型
         lg = LogisticRegression()
@@ -146,9 +157,9 @@ class TRAIN():
         y_pred = lg.predict(x_test)
         y_pred[:20]
 
-        accuracy_score = accuracy_score(y_test, y_pred)  # 查看模型准确度
-        confusion_matrix = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
-        classification_report = classification_report(y_test, y_pred)  # 提供分类报告
+        accuracy = accuracy_score(y_test, y_pred)  # 查看模型准确度
+        confusion = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
+        classification = classification_report(y_test, y_pred)  # 提供分类报告
 
         print("模型准确率", accuracy_score(y_test, y_pred))
         print("混淆矩阵", confusion_matrix(y_test, y_pred))
