@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'Alg_show.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -102,53 +102,51 @@ class Ui_Alg_show(object):
         self.gridLayout_4.setSpacing(3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(-1, -1, -1, 3)
-        self.label_3 = QLabel(self.groupBox_3)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setLayoutDirection(Qt.LeftToRight)
+        self.Reg_ComboBox = QComboBox(self.groupBox_3)
+        self.Reg_ComboBox.setObjectName(u"Reg_ComboBox")
 
-        self.gridLayout_4.addWidget(self.label_3, 2, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.Reg_ComboBox, 5, 1, 1, 1)
 
         self.label_4 = QLabel(self.groupBox_3)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setLayoutDirection(Qt.LeftToRight)
 
-        self.gridLayout_4.addWidget(self.label_4, 3, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.label_4, 1, 0, 1, 1)
+
+        self.Net_ComboBox = QComboBox(self.groupBox_3)
+        self.Net_ComboBox.setObjectName(u"Net_ComboBox")
+
+        self.gridLayout_4.addWidget(self.Net_ComboBox, 7, 1, 1, 1)
+
+        self.label_3 = QLabel(self.groupBox_3)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_4.addWidget(self.label_3, 5, 0, 1, 1)
 
         self.label_2 = QLabel(self.groupBox_3)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setLayoutDirection(Qt.LeftToRight)
 
-        self.gridLayout_4.addWidget(self.label_2, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.label_2, 3, 0, 1, 1)
 
         self.label_5 = QLabel(self.groupBox_3)
         self.label_5.setObjectName(u"label_5")
 
-        self.gridLayout_4.addWidget(self.label_5, 4, 0, 1, 1)
-
-        self.Di_Re_ComboBox = QComboBox(self.groupBox_3)
-        self.Di_Re_ComboBox.setObjectName(u"Di_Re_ComboBox")
-
-        self.gridLayout_4.addWidget(self.Di_Re_ComboBox, 0, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.label_5, 7, 0, 1, 1)
 
         self.Classify_ComboBox = QComboBox(self.groupBox_3)
         self.Classify_ComboBox.setObjectName(u"Classify_ComboBox")
 
-        self.gridLayout_4.addWidget(self.Classify_ComboBox, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.Classify_ComboBox, 3, 1, 1, 1)
 
-        self.Cluster_ComboBox = QComboBox(self.groupBox_3)
-        self.Cluster_ComboBox.setObjectName(u"Cluster_ComboBox")
+        self.Pre_Button = QPushButton(self.groupBox_3)
+        self.Pre_Button.setObjectName(u"Pre_Button")
 
-        self.gridLayout_4.addWidget(self.Cluster_ComboBox, 3, 1, 1, 1)
-
-        self.Reg_ComboBox = QComboBox(self.groupBox_3)
-        self.Reg_ComboBox.setObjectName(u"Reg_ComboBox")
-
-        self.gridLayout_4.addWidget(self.Reg_ComboBox, 4, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.Pre_Button, 1, 1, 1, 1)
 
         self.gridLayout_4.setColumnStretch(0, 1)
         self.gridLayout_4.setColumnStretch(1, 2)
-        self.gridLayout_4.setColumnMinimumWidth(0, 1)
-        self.gridLayout_4.setColumnMinimumWidth(1, 2)
 
         self.verticalLayout.addWidget(self.groupBox_3)
 
@@ -191,10 +189,11 @@ class Ui_Alg_show(object):
         self.label.setText(QCoreApplication.translate("Alg_show", u"\u6587\u4ef6\u8def\u5f84", None))
         self.toolButton.setText(QCoreApplication.translate("Alg_show", u"...", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("Alg_show", u"\u7b97\u6cd5\u9009\u62e9", None))
-        self.label_3.setText(QCoreApplication.translate("Alg_show", u"\u5206\u7c7b\u7b97\u6cd5", None))
-        self.label_4.setText(QCoreApplication.translate("Alg_show", u"\u805a\u7c7b\u7b97\u6cd5", None))
+        self.label_4.setText(QCoreApplication.translate("Alg_show", u"\u9884\u5904\u7406", None))
+        self.label_3.setText(QCoreApplication.translate("Alg_show", u"\u56de\u5f52\u9884\u6d4b", None))
         self.label_2.setText(QCoreApplication.translate("Alg_show", u"\u964d\u7ef4\u7b97\u6cd5", None))
-        self.label_5.setText(QCoreApplication.translate("Alg_show", u"\u56de\u5f52\u9884\u6d4b", None))
+        self.label_5.setText(QCoreApplication.translate("Alg_show", u"\u795e\u7ecf\u7f51\u7edc", None))
+        self.Pre_Button.setText(QCoreApplication.translate("Alg_show", u"\u7b97\u6cd5\u9009\u62e9", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Alg_show", u"\u6570\u636e\u9009\u62e9", None))
     # retranslateUi
 

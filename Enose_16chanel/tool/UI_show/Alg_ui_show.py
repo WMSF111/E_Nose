@@ -1,9 +1,8 @@
 '''测试算法页面'''
 
-import sys,os
-import pandas as pd
+import sys
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-from resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
+from resource_ui.alg_puifile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
 import data_file.transfo as transfo
 import matplotlib.pyplot as plt
 import global_var as glov

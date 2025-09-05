@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QDialog, QFileDialog
 import data_file.algriothm as algriothm
-import resource_ui.alg_puifile.alg_show as alg_show
+import resource_ui.alg_puifile.pic_tab_add as alg_show
 import global_var as glov
 import data_file.transfo as transfo
 

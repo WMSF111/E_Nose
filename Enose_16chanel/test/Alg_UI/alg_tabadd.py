@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QDialog, QFileDialog
 import algriothm as algriothm
-import resource_ui.alg_puifile.alg_show as alg_show
+import resource_ui.alg_puifile.pic_tab_add as alg_show
 import global_var as glov
 import transfo as transfo
 import numpy as np
@@ -12,8 +12,14 @@ class ALG_TAB_ADD():
         # 定义TAB类
         self.tabset = alg_show.ADDTAB(self.tabWidget)
 
+    def Filter_Combo_select(self):
+        pre =alg_show.PRESHOW()
+        if pre.exec() == QDialog.Accepted:  # 等待弹窗关闭
+            print(pre.PreAlg, pre.ValAlg)
+
+
     def Di_Re_Combo_select(self, index):
-        selected_item = self.ui.Di_Re_ComboBox.itemText(index)
+        selected_item = self.ui.Classify_ComboBox.itemText(index)
         if selected_item == "PCA":
             pca = alg_show.PCASHOW()  # PCA弹窗
             self.process_data_and_plot(selected_item="PCA", dialog=pca, algriothm=algriothm, transfo=transfo,
@@ -26,20 +32,36 @@ class ALG_TAB_ADD():
                                        target_column_name="target")
 
     def Classify_Combo_select(self, index): #回归算法
-        selected_item = self.ui.Classify_ComboBox.itemText(index)
+        selected_item = self.ui.Reg_ComboBox.itemText(index)
         if (selected_item == "线性回归"):
             lr = alg_show.LRSHOW() # LR弹窗
+            self.ui.Reg_ComboBox.setCurrentIndex(0)
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭
-                print("弹窗返回值:", lr.desize)
-                Target, Data = transfo.UI_TXT_TO.txt_to_Array(lr.file_path)  # 读取txt
+                Target, Data = transfo.UI_TXT_TO.txt_to_Array(lr.file_path)  # 读取txt转数组
                 train = algriothm.TRAIN(self.ui, Target, Data)
-                train.LG_train(lr.desize)
-
-
-
+                accuracy, confusion, classification, err_str = train.LG_train(lr.desize)
+                accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
+                confusion_str = "混淆矩阵:\n" + "\n".join(" ".join(map(str, row)) for row in confusion)
+                classification_str = "\n分类矩阵:\n  " + " ".join(map(str, classification))
+                # 使用空格连接列表元素
+                self.tabset.add_text_tab(
+                    finaldata=accuracy_str + confusion_str + classification_str,
+                    title="预测性能"
+                )
+                # 去除重复标签并保持原有顺序
+                unique_labels = []
+                for label in Target:
+                    if label not in unique_labels:
+                        unique_labels.append(label)
+                self.tabset.add_plot_tab(
+                    title="线性回归混淆矩阵",
+                    plot_function = lr.plot_confusion,
+                    confusion = confusion,
+                    labels_name = list(set(unique_labels)))
 
     def process_data_and_plot(self, selected_item, dialog, algriothm, transfo, plot_title, plot_function,
                               target_column_name):
+        self.ui.Classify_ComboBox.setCurrentIndex(0)
         if dialog.exec() == QDialog.Accepted:  # 等待弹窗关闭
             print("弹窗返回值:", dialog.Dinum, dialog.Contrnum)
             # 读取txt并显示到数据源看板
@@ -65,7 +87,7 @@ class ALG_TAB_ADD():
 
             # 原始数据
             self.tabset.add_text_tab(
-                finaldata=DataFrame.to_string(index=True),
+                finaldata=DataFrame.to_string(index= False),
                 title="原始数据"
             )
 

@@ -72,7 +72,7 @@ class UI_TXT_TO():
         return pd.DataFrame(data, columns=table_data[0])
 
     def txt_to_Array(the_path):
-        # 读取txt文件中的数据
+        # 读取txt文件中的数据，返回第一列标签，和后面的数据
         with open(the_path, 'r') as file:
             lines = file.readlines()
 

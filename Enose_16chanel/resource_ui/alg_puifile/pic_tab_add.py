@@ -1,5 +1,5 @@
 '''算法显示'''
-
+from resource_ui.alg_puifile.Predict_uishow import Ui_Pre_show
 from resource_ui.alg_puifile.Classify_uishow import Ui_Classify as Classify_uishow  # 导入生成的 UI 类
 from resource_ui.alg_puifile.Regression_uishow import Ui_Regression as Regression_uishow  # 导入生成的 UI 类
 from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog # 改为继承 QDialog
@@ -18,8 +18,6 @@ class ADDTAB():
 
     # 新建新的绘图TAB
     def add_plot_tab(self, Dnum = 2, title="Plot", plot_function=None, *args, **kwargs):
-        """添加一个新的 Tab 来显示 PCA 碎石图"""
-        # 创建一个新的 Tab
         new_tab = QWidget()
         layout = QVBoxLayout(new_tab)
 
@@ -41,14 +39,15 @@ class ADDTAB():
 
         # 添加新的 Tab 到 QTabWidget
         self.The_QTabWidget.addTab(new_tab, title)
-        self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)  # 切换到新添加的 Tab
+        # 切换到新添加的 Tab
+        self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
 
+    # 创建一个新的文本Tab
     def add_text_tab(self, finaldata, title="Plot"):
-        """添加一个新的 Tab 来显示 PCA 碎石图"""
-        # 创建一个新的 Tab
         new_tab = QWidget()
         layout = QVBoxLayout(new_tab)
         new_textedit = QTextEdit()
+        new_textedit.setFontFamily("Consolas")  # 设置为固定宽度字体（Courier）
         # 将图表添加到布局
         layout.addWidget(new_textedit)
         title = title
@@ -204,6 +203,7 @@ class PCASHOW(QDialog, Classify_uishow):  # 继承 QDialog
         ax.legend()
         ax.grid()
 
+
 class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LDASHOW, self).__init__(parent)  # 设置父窗口
@@ -270,7 +270,7 @@ class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
         self.toolButton.clicked.connect(self.select_file)
 
     def num_select(self):
-        """弹出文件夹选择对话框"""
+        """选择了选择模型：关闭对话框"""
         self.desize = self.doubleSpinBox.value()
         self.accept()  # 关闭对话框并返回 QDialog.Accepted
 
@@ -281,28 +281,73 @@ class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
             self.file_path = folder_path
 
-    def plot_lda_variance_ratio(self, ax, variance_ratios, Contrnum):
-        """绘制 LDA 解释方差比图"""
-        # 绘制单个主成分的解释方差比
-        ax.plot(range(1, len(variance_ratios) + 1), variance_ratios, 'o-', label='单个主成分解释方差比')
+    def plot_confusion(self, ax, confusion , labels_name):
+        """绘制混淆矩阵"""
+        confusion = np.array(confusion)  # 将list类型转换成数组类型，如果已经是numpy数组类型，则忽略此步骤。
+        # 归一化，防止除以零
+        row_sums = confusion.sum(axis=1, keepdims=True)
+        confusion_normalized = confusion / row_sums if row_sums.all() != 0 else confusion
+        # 显示归一化后的混淆矩阵
+        im = ax.imshow(confusion_normalized, interpolation='nearest', cmap=plt.cm.Blues)
 
-        # 绘制累积解释方差比
-        cumulative_variance_ratios = np.cumsum(variance_ratios)
-        ax.plot(range(1, len(cumulative_variance_ratios) + 1), cumulative_variance_ratios, 's-', label='累积解释方差比')
+        # 设置标题
+        ax.set_title("混淆矩阵")
 
-        # 标记目标阈值（例如 80%）
-        ax.axhline(y=0.8, color='r', linestyle='--', label=f"{Contrnum}% 阈值")
+        # 添加颜色条
+        plt.colorbar(im, ax=ax)
 
-        # 设置坐标轴标签和标题
+        # 获取标签的间隔数
+        num_class = np.arange(len(labels_name))
+
+        # 设置坐标轴
+        ax.set_xticks(num_class)
+        ax.set_xticklabels(labels_name, rotation=90)
+        ax.set_yticks(num_class)
+        ax.set_yticklabels(labels_name)
+
+        # 设置坐标轴标签
+        ax.set_ylabel('True label')
+        ax.set_xlabel('Predicted label')
+
+
+class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
+    def __init__(self, parent=None):
+        super(PRESHOW, self).__init__(parent)  # 设置父窗口
+        self.setupUi(self)  # 设置 UI 界面
+        self.ButInit()
+        self.Pre_ComboBox.addItems(["不选", "算术平均滤波法", "递推平均滤波法", "中位值平均滤波法",
+                           "一阶滞后滤波法", "加权递推平均滤波法", "消抖滤波法", "限幅消抖滤波法"])
+        self.Valchoose_ComboBox.addItems(["不选", "平均值", "中位数", "众数"])
+        self.PreAlg = self.Pre_ComboBox.currentText()
+        self.ValAlg = self.Valchoose_ComboBox.currentText()
+        self.file_path = ' '
+
+    def ButInit(self):
+        # 绑定按钮点击事件
+        self.pushButton.clicked.connect(self.Alg_select) # 完成设置
+        self.toolButton.clicked.connect(self.select_file) # 选择文件
+
+    def Alg_select(self):
+        """弹出文件夹选择对话框"""
+        self.PreAlg = self.Pre_ComboBox.currentText()
+        self.ValAlg = self.Valchoose_ComboBox.currentText()
+        self.accept()  # 关闭对话框并返回 QDialog.Accepted
+
+    def select_file(self):
+        """弹出文件夹选择对话框"""
+        folder_path, _ = QFileDialog.getOpenFileName(None, "Open File", "", "All Files (*)")
+        if folder_path:  # 如果用户选择了文件夹（而不是取消）
+            self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
+            self.file_path = folder_path
+
+    def plot_scree_plot(self, ax, variance_ratios):
+        # fig, ax = plt.subplots()  # 正确解包
+        """绘制 PCA 碎石图"""
+        ax.plot(range(1, len(variance_ratios) + 1), variance_ratios, 'o-', label='单个主成分贡献率')
+        ax.plot(range(1, len(variance_ratios) + 1), np.cumsum(variance_ratios), 's-', label='累积贡献率')
+        ax.axhline(y=0.8, color='r', linestyle='--', label='80% 阈值')  # 标记目标阈值
         ax.set_xlabel("主成分数量")
-        ax.set_ylabel("解释方差比")
-        ax.set_title("LDA 解释方差比图")
-
-        # 添加图例
+        ax.set_ylabel("方差贡献率")
+        ax.set_title("PCA 碎石图")
         ax.legend()
-
-        # 添加网格
         ax.grid()
-
-
-

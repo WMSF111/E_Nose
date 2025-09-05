@@ -119,34 +119,40 @@
           <property name="title">
            <string>算法选择</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,2" columnminimumwidth="1,2">
+          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,2">
            <property name="bottomMargin">
             <number>3</number>
            </property>
            <property name="spacing">
             <number>3</number>
            </property>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="layoutDirection">
-              <enum>Qt::LeftToRight</enum>
-             </property>
-             <property name="text">
-              <string>分类算法</string>
-             </property>
-            </widget>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="Reg_ComboBox"/>
            </item>
-           <item row="3" column="0">
+           <item row="1" column="0">
             <widget class="QLabel" name="label_4">
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="text">
-              <string>聚类算法</string>
+              <string>预处理</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item row="7" column="1">
+            <widget class="QComboBox" name="Net_ComboBox"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>回归预测</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
             <widget class="QLabel" name="label_2">
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
@@ -156,24 +162,22 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="7" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>回归预测</string>
+              <string>神经网络</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="Di_Re_ComboBox"/>
-           </item>
-           <item row="2" column="1">
+           <item row="3" column="1">
             <widget class="QComboBox" name="Classify_ComboBox"/>
            </item>
-           <item row="3" column="1">
-            <widget class="QComboBox" name="Cluster_ComboBox"/>
-           </item>
-           <item row="4" column="1">
-            <widget class="QComboBox" name="Reg_ComboBox"/>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="Pre_Button">
+             <property name="text">
+              <string>算法选择</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
