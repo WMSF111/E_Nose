@@ -38,7 +38,7 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         self.Classify_ComboBox.activated.connect(self.tabadd.Di_Re_Combo_select)
         self.Reg_ComboBox.addItems(["无", "线性回归", "选项2", "选项3"])  # 回归算法
         self.Reg_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
-        self.Reg_ComboBox.currentIndexChanged.connect(self.tabadd.Classify_Combo_select)
+        self.Reg_ComboBox.activated.connect(self.tabadd.Classify_Combo_select)
         self.Pre_Button.clicked.connect(self.tabadd.Filter_Combo_select)
         self.Net_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项
         self.Net_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）

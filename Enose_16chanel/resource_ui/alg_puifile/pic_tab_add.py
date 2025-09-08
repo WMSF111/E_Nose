@@ -341,13 +341,5 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
             self.file_path = folder_path
 
     def plot_scree_plot(self, ax, variance_ratios):
-        # fig, ax = plt.subplots()  # 正确解包
-        """绘制 PCA 碎石图"""
-        ax.plot(range(1, len(variance_ratios) + 1), variance_ratios, 'o-', label='单个主成分贡献率')
-        ax.plot(range(1, len(variance_ratios) + 1), np.cumsum(variance_ratios), 's-', label='累积贡献率')
-        ax.axhline(y=0.8, color='r', linestyle='--', label='80% 阈值')  # 标记目标阈值
-        ax.set_xlabel("主成分数量")
-        ax.set_ylabel("方差贡献率")
-        ax.set_title("PCA 碎石图")
-        ax.legend()
-        ax.grid()
+        # 绘制
+        print("plot")

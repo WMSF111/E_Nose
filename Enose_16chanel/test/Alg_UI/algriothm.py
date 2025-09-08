@@ -17,19 +17,7 @@ class choose_alg():
     def __init__(self, ui, textEdit_DataFrame):
         self.ui = ui
         self.df = textEdit_DataFrame  # 读取文件
-        # 初始化一个三维图像
-        self.fig = plt.figure()
-        # self.finalData = 0
-        # self.name = []
-        # self.num = 3
-        # self.target = self.df['target'].values  # numpy.ndarray
         self.data = pd.DataFrame(self.df.iloc[:, 1:])
-        # self.confusion_matrix = self.accuracy_score = self.classification_report = ' '
-        # self.choose_al(self.data, 3)
-        # if self.num != 0:
-        #     self.train_data()
-
-
 
     def choose_al(self, al, num):
         print(al)
@@ -173,4 +161,45 @@ class TRAIN():
         # print("模型准确率", accuracy_score(y_test, y_pred))
         # print("混淆矩阵", confusion_matrix(y_test, y_pred))
         # print("分类报告", classification_report(y_test, y_pred))
+
+class Pre_Alg():
+    def __init__(self, ui, textEdit_DataFrame, select):
+        self.ui = ui
+        self.select = select
+        self.df = textEdit_DataFrame  # 读取文件
+        # self.nohead_data = pd.DataFrame(self.df.iloc[:, 1:])
+        self.data = np.array(textEdit_DataFrame)  # 先将数据框转换为数组
+        self.result = self.data.copy()
+        # 获取数据部分（去除列头和行头）
+        self.nohead_data = self.data.iloc[1:, 1:].copy()  # 假设第0行和第0列是头部信息
+
+    def Filter_Choose(self):
+        for column in self.nohead_data.columns:
+            column_data = self.nohead_data[column].astype(int).tolist()
+            if self.select == "算术平均滤波法":
+                # window_size: 窗口大小，用于计算中位值，输入整数，越小越接近原数据
+                result = filter.ArithmeticAverage(column_data.copy(), 2)
+                # window_size: 窗口大小，用于计算中位值，输入整数，越小越接近原数据
+            elif self.select == "递推平均滤波法":
+                result = filter.SlidingAverage(column_data.copy(), 2)
+            elif self.select == "中位值平均滤波法":
+                result = filter.MedianAverage(column_data.copy(), 2)
+            elif self.select == "一阶滞后滤波法":
+                # 滞后程度决定因子，0~1（越大越接近原数据）
+                result = filter.FirstOrderLag(column_data.copy(), 0.9)
+            elif self.select == "加权递推平均滤波法":
+                # 平滑系数，范围在0到1之间（越大越接近原数据）
+                result = filter.WeightBackstepAverage(column_data.copy(), 0.9)
+            elif self.select == "消抖滤波法":
+                # N:消抖上限,范围在2以上。
+                result = filter.ShakeOff(column_data.copy(), 4)
+            elif self.select == "限幅消抖滤波法":
+                # Amplitude:限制最大振幅,范围在0 ~ ∞ 建议设大一点
+                # N:消抖上限,范围在0 ~ ∞
+                result = filter.AmplitudeLimitingShakeOff(column_data.copy(), 200, 3)
+            # data.iloc[1:, data.columns.get_loc(column)] = result
+            self.result[column] = result
+        print(self.result)
+        return self.result
+
 

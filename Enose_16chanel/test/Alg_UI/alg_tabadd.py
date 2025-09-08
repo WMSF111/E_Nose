@@ -3,7 +3,7 @@ import algriothm as algriothm
 import resource_ui.alg_puifile.pic_tab_add as alg_show
 import global_var as glov
 import transfo as transfo
-import numpy as np
+import filter
 
 class ALG_TAB_ADD():
     def __init__(self, ui):
@@ -16,6 +16,13 @@ class ALG_TAB_ADD():
         pre =alg_show.PRESHOW()
         if pre.exec() == QDialog.Accepted:  # 等待弹窗关闭
             print(pre.PreAlg, pre.ValAlg)
+            Dataframe = transfo.UI_TXT_TO.txt_to_dataframe(pre.file_path)  # 读取txt转数组
+            result = algriothm.Pre_Alg(self, Dataframe, pre.PreAlg)
+            result_str = "\n".join(" ".join(map(str, row)) for row in result)
+            self.tabset.add_text_tab(
+                finaldata=result,
+                title="预测性能"
+            )
 
 
     def Di_Re_Combo_select(self, index):
