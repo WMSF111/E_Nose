@@ -35,8 +35,11 @@ class ALG_TAB_ADD():
                     Dataframe = result # 对滤波后的数据进行处理
                 pre_alg = algr.Pre_Alg(self, Dataframe, pre_plot.ValAlg)  # 创建选择数据对象
                 val_text = pre_alg.Val_Choose()
+                val_text_str = val_text.to_string(index= False)
+                val_text_str = val_text_str.replace("     ", " ")
+                val_text_str = val_text_str.replace("  ", " ")
                 self.tabset.add_text_tab(
-                    finaldata=val_text.to_string(index= False),
+                    finaldata=val_text_str,
                     title=f"{pre_plot.ValAlg}数据")
 
     def Di_Re_Combo_select(self, index):
@@ -59,6 +62,7 @@ class ALG_TAB_ADD():
             self.ui.Reg_ComboBox.setCurrentIndex(0)
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 Target, Data = transfo.UI_TXT_TO.txt_to_Array(lr.file_path)  # 读取txt转数组
+                print("Target, Data",Target, Data)
                 train = algr.TRAIN(self.ui, Target, Data)
                 accuracy, confusion, classification, err_str = train.LG_train(lr.desize)
                 accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
@@ -114,14 +118,15 @@ class ALG_TAB_ADD():
 
             # 将每行数据转化为字符串
             data_str = [" ".join(map(str, row)) for row in finaldata]
+            final_str = "target " +" ".join([f"CP{i+1}" for i in range(dialog.Dinum)]) + "\n"
             # 将字符串列表转为最终的字符串（每行一个数据）
-            final_str = "\n".join(data_str)
+            final_str = final_str + "\n".join(data_str)
             self.tabset.add_text_tab(
                 finaldata=final_str,
                 title=f"{selected_item}结果数据"
             )
 
-            # 转换为两列数据（如果有多列，取前两列）
+            # 取除第一列的所有列
             finaldata_columns = finaldata[:, 1:]
             # 如果Dinum小于4，添加散点图
             if dialog.Dinum < 4:

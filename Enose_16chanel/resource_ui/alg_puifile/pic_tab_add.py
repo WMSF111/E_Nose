@@ -12,7 +12,6 @@ import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
 # from mplcursors import cursor as mplcursors
-
 class ADDTAB():
     def __init__(self, The_QTabWidget):
         self.The_QTabWidget = The_QTabWidget
@@ -98,7 +97,7 @@ class ADDTAB():
         new_tab = QWidget()
         layout = QVBoxLayout(new_tab)
         new_textedit = QTextEdit()
-        new_textedit.setFontFamily("Consolas")  # 设置为固定宽度字体（Courier）
+        # new_textedit.setFontFamily("Consolas")  # 设置为固定宽度字体（Courier）
         # 将图表添加到布局
         layout.addWidget(new_textedit)
         title = title
@@ -125,6 +124,7 @@ class ADDTAB():
         """保存当前图表"""
         file_path, _ = QFileDialog.getSaveFileName(None, "Save result", global_var.folder_path, "TXT Files (*.txt);;All Files (*)")
         with open(file_path, "w", encoding="utf-8") as f:
+            # text = re.sub(r'\s+', ' ', text)
             f.write(text)
             print(f"Plot saved to {file_path}")
         # if file_path:
@@ -155,15 +155,14 @@ def draw_scatter(ax, name, num, target, finalData, data=None):
         for i, category in enumerate(unique_categories):
             category_data = finalData[target == category]  # 提取出 finalData 中对应当前类别的数据行
             color = cmap(i % cmap.N)
-            scatter = ax.scatter(category_data[:, 0], category_data[:, 1], category_data[:, 2], color=color,
+            ax.scatter(category_data[:, 0], category_data[:, 1], category_data[:, 2], color=color,
                                  label=f"Category {category}")
-
+            # print(category_data[:, 0].shape, category_data[:, 1].shape, category_data[:, 2].shape)
         # 添加图例，只显示每种颜色的标签
         handles, labels = ax.get_legend_handles_labels()
         unique_handles = list(set(handles))
         unique_labels = [label for handle, label in zip(handles, labels) if handle in unique_handles]
         ax.legend(unique_handles, unique_labels, title="Category", loc='upper right', bbox_to_anchor=(1.4, 1))
-
         # 设置坐标轴标签
         if len(name) != 0:
             ax.set_xlabel("PC" + name[0])
@@ -185,7 +184,7 @@ def draw_scatter(ax, name, num, target, finalData, data=None):
         for i, category in enumerate(unique_categories):
             category_data = finalData[target == category]
             color = cmap(i % cmap.N)
-            scatter = ax.scatter(category_data[:, 0], category_data[:, 1], color=color, label=f'{category}')
+            ax.scatter(category_data[:, 0], category_data[:, 1], color=color, label=f'{category}')
 
         # 添加图例，只显示每种颜色的标签
         handles, labels = ax.get_legend_handles_labels()

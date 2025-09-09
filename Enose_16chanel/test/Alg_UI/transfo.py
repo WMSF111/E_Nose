@@ -63,7 +63,7 @@ class UI_TXT_TO():
         text = trainfile_txt_text
         if len(text) >= 4: # 显示所有数据
             rows = text.split('\n')  # 每行代表表格中的一行数据
-            table_data = [row.split(' ') for row in rows]  # 假设每列用逗号分隔
+            table_data = [row.split(' ') for row in rows]  # 假设每列用空格分隔
             num_cols = len(table_data[0])
             data = []
             for i in range(1, len(rows) - 1):
@@ -79,9 +79,10 @@ class UI_TXT_TO():
         # 初始化存储第一列和从第二列开始的列的空数组
         first_column = []
         remaining_columns = []
+        print("lines:", lines)
 
         # 假设 lines 是每行数据的列表
-        for line in lines:
+        for line in lines[1:]: # 从第二行开始
             line = line.strip()  # 清除行末的换行符
             row_data = line.split()  # 将每行按空格分割
 

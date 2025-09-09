@@ -219,7 +219,6 @@ class Pre_Alg():
                       agg(lambda x: x.mode().iloc[0]).astype(int))
         # 取消索引，将 'target' 列恢复为普通列
         df_new.reset_index(inplace=True)
-        print(df_new)
         return df_new
 
 
