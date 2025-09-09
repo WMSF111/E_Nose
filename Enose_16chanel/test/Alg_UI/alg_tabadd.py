@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QDialog, QFileDialog
-import algriothm as algriothm
+import algriothm as algr
 import resource_ui.alg_puifile.pic_tab_add as alg_show
 import global_var as glov
 import transfo as transfo
@@ -13,28 +13,42 @@ class ALG_TAB_ADD():
         self.tabset = alg_show.ADDTAB(self.tabWidget)
 
     def Filter_Combo_select(self):
-        pre =alg_show.PRESHOW()
-        if pre.exec() == QDialog.Accepted:  # 等待弹窗关闭
-            print(pre.PreAlg, pre.ValAlg)
-            Dataframe = transfo.UI_TXT_TO.txt_to_dataframe(pre.file_path)  # 读取txt转数组
-            result = algriothm.Pre_Alg(self, Dataframe, pre.PreAlg)
-            result_str = "\n".join(" ".join(map(str, row)) for row in result)
-            self.tabset.add_text_tab(
-                finaldata=result,
-                title="预测性能"
-            )
-
+        pre_plot =alg_show.PRESHOW()
+        if pre_plot.exec() == QDialog.Accepted:  # 等待弹窗关闭
+            print(pre_plot.PreAlg, pre_plot.ValAlg)
+            Dataframe = transfo.UI_TXT_TO.txt_to_dataframe(pre_plot.file_path)  # 读取txt转数组
+            if(pre_plot.PreAlg != "不选"):
+                pre_alg = algr.Pre_Alg(self, Dataframe, pre_plot.PreAlg) #创建预处理算法对象
+                result = pre_alg.Filter_Choose()
+                # .strip()去除前后不必要空格
+                self.tabset.add_text_tab(
+                    finaldata=result.to_string(index= False),
+                    title=f"{pre_plot.PreAlg}数据")
+                self.tabset.add_plot_tab(
+                    title=f"{pre_plot.PreAlg}对比图",
+                    plot_function=pre_plot.plot_data,
+                    data = Dataframe,
+                    plot_function2=pre_plot.plot_result,
+                    result = result)
+            if(pre_plot.ValAlg != "不选"):
+                if(pre_plot.PreAlg != "不选"):
+                    Dataframe = result # 对滤波后的数据进行处理
+                pre_alg = algr.Pre_Alg(self, Dataframe, pre_plot.ValAlg)  # 创建选择数据对象
+                val_text = pre_alg.Val_Choose()
+                self.tabset.add_text_tab(
+                    finaldata=val_text.to_string(index= False),
+                    title=f"{pre_plot.ValAlg}数据")
 
     def Di_Re_Combo_select(self, index):
         selected_item = self.ui.Classify_ComboBox.itemText(index)
         if selected_item == "PCA":
             pca = alg_show.PCASHOW()  # PCA弹窗
-            self.process_data_and_plot(selected_item="PCA", dialog=pca, algriothm=algriothm, transfo=transfo,
+            self.process_data_and_plot(selected_item="PCA", dialog=pca, algriothm=algr, transfo=transfo,
                                        plot_title="PCA", plot_function=pca.plot_scree_plot, target_column_name="target")
 
         if selected_item == "LDA":
             lda = alg_show.LDASHOW()  # LDA弹窗
-            self.process_data_and_plot(selected_item="LDA", dialog=lda, algriothm=algriothm, transfo=transfo,
+            self.process_data_and_plot(selected_item="LDA", dialog=lda, algriothm=algr, transfo=transfo,
                                        plot_title="LDA", plot_function=lda.plot_lda_variance_ratio,
                                        target_column_name="target")
 
@@ -45,7 +59,7 @@ class ALG_TAB_ADD():
             self.ui.Reg_ComboBox.setCurrentIndex(0)
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 Target, Data = transfo.UI_TXT_TO.txt_to_Array(lr.file_path)  # 读取txt转数组
-                train = algriothm.TRAIN(self.ui, Target, Data)
+                train = algr.TRAIN(self.ui, Target, Data)
                 accuracy, confusion, classification, err_str = train.LG_train(lr.desize)
                 accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
                 confusion_str = "混淆矩阵:\n" + "\n".join(" ".join(map(str, row)) for row in confusion)
@@ -95,7 +109,7 @@ class ALG_TAB_ADD():
             # 原始数据
             self.tabset.add_text_tab(
                 finaldata=DataFrame.to_string(index= False),
-                title="原始数据"
+                title=f"{selected_item}原始数据"
             )
 
             # 将每行数据转化为字符串

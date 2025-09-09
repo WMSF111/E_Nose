@@ -61,10 +61,10 @@ class Get_txt():
         File = global_vars.file_text_DataFrame
         print(File)
         train_data = np.array(File)  # 先将数据框转换为数组
-        train_data_list = train_data.tolist()  # 其次转换为列表
-        T = np.arange(0, 0.5, 1 / 4410.0)
-        num = signal.chirp(T, f0=10, t1=0.5, f1=1000.0)
-        File2 = File
+        # train_data_list = train_data.tolist()  # 其次转换为列表
+        # T = np.arange(0, 0.5, 1 / 4410.0)
+        # num = signal.chirp(T, f0=10, t1=0.5, f1=1000.0)
+        # File2 = File
         # 获取数据部分（去除列头和行头）
         data = File.iloc[1:, 1:].copy()  # 假设第0行和第0列是头部信息
 

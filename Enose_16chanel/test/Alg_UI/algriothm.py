@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import scale
+import filter
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity
@@ -166,16 +166,12 @@ class Pre_Alg():
     def __init__(self, ui, textEdit_DataFrame, select):
         self.ui = ui
         self.select = select
-        self.df = textEdit_DataFrame  # 读取文件
-        # self.nohead_data = pd.DataFrame(self.df.iloc[:, 1:])
-        self.data = np.array(textEdit_DataFrame)  # 先将数据框转换为数组
-        self.result = self.data.copy()
-        # 获取数据部分（去除列头和行头）
-        self.nohead_data = self.data.iloc[1:, 1:].copy()  # 假设第0行和第0列是头部信息
+        self.data = textEdit_DataFrame.iloc[1:, 1:].copy()  # 去除列头行头
+        self.result = textEdit_DataFrame.copy()
 
     def Filter_Choose(self):
-        for column in self.nohead_data.columns:
-            column_data = self.nohead_data[column].astype(int).tolist()
+        for column in self.data.columns:
+            column_data = self.data[column].astype(int).tolist() # 将每列数值转化为int类型
             if self.select == "算术平均滤波法":
                 # window_size: 窗口大小，用于计算中位值，输入整数，越小越接近原数据
                 result = filter.ArithmeticAverage(column_data.copy(), 2)
@@ -197,9 +193,33 @@ class Pre_Alg():
                 # Amplitude:限制最大振幅,范围在0 ~ ∞ 建议设大一点
                 # N:消抖上限,范围在0 ~ ∞
                 result = filter.AmplitudeLimitingShakeOff(column_data.copy(), 200, 3)
-            # data.iloc[1:, data.columns.get_loc(column)] = result
-            self.result[column] = result
-        print(self.result)
+            # 保存原始 result 的副本
+            original_result = self.result.copy()
+            # 将处理后的数据直接更新回原始的 DataFrame
+            self.result.iloc[1:, self.result.columns.get_loc(column)] = result
+            # # 对比修改前后的结果
+            # if not original_result.equals(self.result):
+            #     print("滤波有效")
+            #     # 你可以进一步分析具体的差异
+            # else:
+            #     print("没有有效的滤波")
         return self.result
+
+    def Val_Choose(self):
+        self.result.set_index('target', inplace=True)
+        self.result = self.result.apply(pd.to_numeric, errors='coerce')
+        if(self.select == "平均值"):
+            df_new = self.result.groupby(self.result.index).median().astype(int) # 按平均值新建dataframe
+        elif(self.select == "中位数"):
+            df_new = self.result.groupby(self.result.index).mean().astype(int)
+        elif(self.select == "众数"):
+            # mode()，它会返回一个 DataFrame 或者 Series，包含每个组的众数（如果有多个众数，它会列出所有的众数）
+            # iloc[0] 用来选取第一个众数（如果有多个众数）
+            df_new = (self.result.groupby(self.result.index).
+                      agg(lambda x: x.mode().iloc[0]).astype(int))
+        # 取消索引，将 'target' 列恢复为普通列
+        df_new.reset_index(inplace=True)
+        print(df_new)
+        return df_new
 
 

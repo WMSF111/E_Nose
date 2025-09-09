@@ -2,12 +2,13 @@
 from resource_ui.alg_puifile.Predict_uishow import Ui_Pre_show
 from resource_ui.alg_puifile.Classify_uishow import Ui_Classify as Classify_uishow  # 导入生成的 UI 类
 from resource_ui.alg_puifile.Regression_uishow import Ui_Regression as Regression_uishow  # 导入生成的 UI 类
-from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog # 改为继承 QDialog
+from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog, QHBoxLayout # 改为继承 QDialog
 from PySide6.QtGui import QKeySequence, QAction
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import global_var as global_var
 from matplotlib.figure import Figure
 import numpy as np
+import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
 # from mplcursors import cursor as mplcursors
@@ -17,30 +18,80 @@ class ADDTAB():
         self.The_QTabWidget = The_QTabWidget
 
     # 新建新的绘图TAB
-    def add_plot_tab(self, Dnum = 2, title="Plot", plot_function=None, *args, **kwargs):
+    def add_plot_tab(self, Dnum=2, title="Plot", plot_function=None, plot_function2=None, *args, **kwargs):
         new_tab = QWidget()
+
+        # 创建主垂直布局
         layout = QVBoxLayout(new_tab)
 
-        # 创建 Matplotlib 图表
-        fig = Figure(figsize=(6, 4))
-        canvas = FigureCanvas(fig)
-        # 将图表添加到布局
+        # 创建一个垂直布局来放置图表
+        horizontal_layout = QVBoxLayout()
+
+        # 创建第一个Matplotlib图表
+        fig1 = Figure(figsize=(6, 4))
+        canvas1 = FigureCanvas(fig1)
         if Dnum == 3:
-            ax = fig.add_subplot(111, projection='3d')
+            ax1 = fig1.add_subplot(111, projection='3d')
         else:
-            ax = fig.add_subplot(111)
+            ax1 = fig1.add_subplot(111)
 
         # 如果提供了绘图函数，调用它
         if plot_function:
-            plot_function(ax, *args, **kwargs)
+            plot_function(ax1, *args, **kwargs)
 
-        # 将图表添加到布局
-        layout.addWidget(canvas)
+        # 将第一个图表添加到水平布局
+        horizontal_layout.addWidget(canvas1)
+
+        # 如果需要创建第二个图表
+        if plot_function2 != None:
+            # 创建第二个Matplotlib图表
+            fig2 = Figure(figsize=(6, 4))
+            canvas2 = FigureCanvas(fig2)
+            if Dnum == 3:
+                ax2 = fig2.add_subplot(111, projection='3d')
+            else:
+                ax2 = fig2.add_subplot(111)
+
+            # 如果提供了绘图函数，调用它
+            if plot_function2:
+                plot_function2(ax2, *args, **kwargs)
+
+            # 将第二个图表添加到水平布局
+            horizontal_layout.addWidget(canvas2)
+
+        # 将水平布局添加到主垂直布局中
+        layout.addLayout(horizontal_layout)
 
         # 添加新的 Tab 到 QTabWidget
         self.The_QTabWidget.addTab(new_tab, title)
+
         # 切换到新添加的 Tab
         self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
+
+    # def add_plot_tab(self, Dnum = 2, title="Plot", plot_function=None, *args, **kwargs):
+    #     new_tab = QWidget()
+    #     layout = QVBoxLayout(new_tab)
+    #
+    #     # 创建 Matplotlib 图表
+    #     fig = Figure(figsize=(6, 4))
+    #     canvas = FigureCanvas(fig)
+    #     # 将图表添加到布局
+    #     if Dnum == 3:
+    #         ax = fig.add_subplot(111, projection='3d')
+    #     else:
+    #         ax = fig.add_subplot(111)
+    #
+    #     # 如果提供了绘图函数，调用它
+    #     if plot_function:
+    #         plot_function(ax, *args, **kwargs)
+    #
+    #     # 将图表添加到布局
+    #     layout.addWidget(canvas)
+    #
+    #     # 添加新的 Tab 到 QTabWidget
+    #     self.The_QTabWidget.addTab(new_tab, title)
+    #     # 切换到新添加的 Tab
+    #     self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
 
     # 创建一个新的文本Tab
     def add_text_tab(self, finaldata, title="Plot"):
@@ -340,6 +391,16 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
             self.file_path = folder_path
 
-    def plot_scree_plot(self, ax, variance_ratios):
-        # 绘制
-        print("plot")
+    def plot_data(self, ax, data, result):
+        data = data.iloc[1:, 1:]
+        data = data.apply(pd.to_numeric, errors='coerce')
+        # ax = data.plot()  # 直接使用 DataFrame 的 plot 方法,按列绘制
+        data.plot(ax=ax)  # 在传入的 ax 上绘图
+        ax.set_title("原始数据")
+
+    def plot_result(self, ax, data, result):
+        data = result.iloc[1:, 1:]
+        data = data.apply(pd.to_numeric, errors='coerce')
+        # ax = data.plot()  # 直接使用 DataFrame 的 plot 方法,按列绘制
+        data.plot(ax=ax)  # 在传入的 ax 上绘图
+        ax.set_title("滤波后数据")
