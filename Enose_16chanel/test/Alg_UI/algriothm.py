@@ -73,7 +73,6 @@ class choose_alg():
         # 将主成分个数转换为字符串并追加到 QTextBrowser
         self.ui.textBrowser.append('主成分个数: ' + str(len(variance_ratios)))
         self.ui.textBrowser.append('累计贡献率：' + cumulative_variance_ratios_str)
-        print(cumulative_variance_ratios[-1])
         if cumulative_variance_ratios[-1] > target_variance:
             # 找到累积贡献率达到目标值的最小主成分数
             num_components = np.argmax(cumulative_variance_ratios >= target_variance) + 1
@@ -111,7 +110,6 @@ class choose_alg():
         self.ui.textBrowser.append('解释方差比: ' + str(explained_variance_ratio))
         self.ui.textBrowser.append("解释方差比之和: " + str(sum_explained_variance_ratio))
         self.ui.textBrowser.append("类间散布与类内散布之比: " + str(inter_intra_ratio))
-        print(sum_explained_variance_ratio[-1])
         if sum_explained_variance_ratio[-1] * 100 > target_variance :
             # 找到累积贡献率达到目标值的最小主成分数
             num_components = np.argmax(sum_explained_variance_ratio >= target_variance) + 1
@@ -166,12 +164,13 @@ class Pre_Alg():
     def __init__(self, ui, textEdit_DataFrame, select):
         self.ui = ui
         self.select = select
-        self.data = textEdit_DataFrame.iloc[1:, 1:].copy()  # 去除列头行头
+        self.type = float
+        self.data = textEdit_DataFrame.iloc[:, 1:].copy()  # 去除列头行头
         self.result = textEdit_DataFrame.copy()
 
     def Filter_Choose(self):
         for column in self.data.columns:
-            column_data = self.data[column].astype(int).tolist() # 将每列数值转化为int类型
+            column_data = self.data[column].to_numpy() # 转化为数组
             if self.select == "算术平均滤波法":
                 # window_size: 窗口大小，用于计算中位值，输入整数，越小越接近原数据
                 result = filter.ArithmeticAverage(column_data.copy(), 2)
@@ -193,30 +192,26 @@ class Pre_Alg():
                 # Amplitude:限制最大振幅,范围在0 ~ ∞ 建议设大一点
                 # N:消抖上限,范围在0 ~ ∞
                 result = filter.AmplitudeLimitingShakeOff(column_data.copy(), 200, 3)
-            # 保存原始 result 的副本
-            original_result = self.result.copy()
+            # 将 result 列表中的元素显式转换为目标列的数据类型
+            result = [self.result[column].dtype.type(value) for value in result]
             # 将处理后的数据直接更新回原始的 DataFrame
-            self.result.iloc[1:, self.result.columns.get_loc(column)] = result
-            # # 对比修改前后的结果
-            # if not original_result.equals(self.result):
-            #     print("滤波有效")
-            #     # 你可以进一步分析具体的差异
-            # else:
-            #     print("没有有效的滤波")
+            self.result.iloc[:, self.result.columns.get_loc(column)] = result
         return self.result
 
-    def Val_Choose(self):
+    def Val_Choose(self): # 返回Dataframe
         self.result.set_index('target', inplace=True)
-        self.result = self.result.apply(pd.to_numeric, errors='coerce')
+        self.result = self.result.apply(pd.to_numeric, errors='coerce') # 全部转化为数字
         if(self.select == "平均值"):
-            df_new = self.result.groupby(self.result.index).median().astype(int) # 按平均值新建dataframe
+            df_new = self.result.groupby(self.result.index).median() # 按平均值新建dataframe
         elif(self.select == "中位数"):
-            df_new = self.result.groupby(self.result.index).mean().astype(int)
+            df_new = self.result.groupby(self.result.index).mean()
         elif(self.select == "众数"):
             # mode()，它会返回一个 DataFrame 或者 Series，包含每个组的众数（如果有多个众数，它会列出所有的众数）
             # iloc[0] 用来选取第一个众数（如果有多个众数）
             df_new = (self.result.groupby(self.result.index).
-                      agg(lambda x: x.mode().iloc[0]).astype(int))
+                      agg(lambda x: x.mode().iloc[0]))
+        # self.result.iloc[:, 0].dtype：获取第一列数据类型
+        df_new = df_new.astype(self.result.iloc[:, 0].dtype)
         # 取消索引，将 'target' 列恢复为普通列
         df_new.reset_index(inplace=True)
         return df_new

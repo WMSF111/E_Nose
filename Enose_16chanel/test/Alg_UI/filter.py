@@ -64,7 +64,8 @@ def ArithmeticAverage(inputs, window_size):
         end = min(i + window_size // 2 + 1, len(inputs))
         window = inputs[start:end]
         window_average = sum(window) / len(window)
-        filtered_output.append((int)(window_average))
+        # filtered_output.append((int)(window_average))
+        filtered_output.append((window_average))
 
     return filtered_output
  
@@ -100,12 +101,13 @@ def SlidingAverage(inputs, window_size):
     window_sum = sum(inputs[:window_size])  # 初始窗口内数据的总和
 
     # 初始窗口的平均值作为第一个输出
-    filtered_output.append((int)(window_sum / window_size))
-
+    # filtered_output.append((int)(window_sum / window_size))
+    filtered_output.append((window_sum / window_size))
     # 对于每个后续的数据点，利用递推公式更新窗口内数据的总和，并计算平均值
     for i in range(window_size, len(inputs)):
         window_sum = window_sum - inputs[i - window_size] + inputs[i]  # 更新窗口内数据的总和
-        filtered_output.append((int)(window_sum / window_size))  # 计算平均值并添加到输出列表中
+        # filtered_output.append((int)(window_sum / window_size))  # 计算平均值并添加到输出列表中
+        filtered_output.append(window_sum / window_size) # 计算平均值并添加到输出列表中
 
     # 计算填充值
     padding_size = window_size // 2
@@ -141,7 +143,8 @@ def MedianAverage(inputs, window_size):
     # 对于每个窗口，计算中位值并将其添加到结果列表中
     for i in range(len(inputs) - window_size + 1):
         window = inputs[i:i + window_size]
-        median_value = (int)(np.median(window))
+        # median_value = (int)(np.median(window))
+        median_value = np.median(window)
         filtered_output.append(median_value)
 
     # 边缘情况处理：处理后 window_size//2 个值
@@ -185,7 +188,8 @@ def FirstOrderLag(inputs, a):
 
     # 遍历输入列表并进行滤波
     for index, tmp in enumerate(inputs):
-        filtered_output[index] = (int)((1 - a) * tmp + a * tmpnum)
+        # filtered_output[index] = (int)((1 - a) * tmp + a * tmpnum)
+        filtered_output[index] = (1 - a) * tmp + a * tmpnum
         tmpnum = filtered_output[index]  # 更新上一次滤波结果为当前滤波结果
 
     return filtered_output
@@ -223,7 +227,8 @@ def WeightBackstepAverage(inputs, alpha):
 
     for i in range(1, len(inputs)):
         # 递推式：滤波后的当前值等于上一个滤波后的值乘以(1-alpha)，再加上当前输入值乘以alpha
-        filtered_output[i] = (int)((1 - alpha) * filtered_output[i - 1] + alpha * inputs[i])
+        # filtered_output[i] = (int)((1 - alpha) * filtered_output[i - 1] + alpha * inputs[i])
+        filtered_output[i] = (1 - alpha) * filtered_output[i - 1] + alpha * inputs[i]
 
     return filtered_output
 

@@ -61,15 +61,29 @@ class UI_TXT_TO():
         with open(the_path, 'r') as file: # 显示列名
             trainfile_txt_text = file.read()
         text = trainfile_txt_text
-        if len(text) >= 4: # 显示所有数据
+        if len(text) >= 4:  # 显示所有数据
             rows = text.split('\n')  # 每行代表表格中的一行数据
-            table_data = [row.split(' ') for row in rows]  # 假设每列用空格分隔
-            num_cols = len(table_data[0])
+            # table_data = [row.split(' ') for row in rows]  # split() 自动处理多个空格,转化为列表
+            table_data = [row.split() for row in rows]  # 默认按空白字符分割，去除多余空格
             data = []
-            for i in range(1, len(rows) - 1):
-                data.append(table_data[i])
-        print("Columns:", table_data[0])
-        return pd.DataFrame(data, columns=table_data[0])
+            for row in table_data[1:]:  # 从第二行开始（去掉标题行）
+                # 检查是否是空行，如果是空行则跳过
+                if not any(row):  # 如果整行没有任何有效数据
+                    continue
+                data_row = []
+                for value in row:
+                    try:
+                        # 尝试转换为整数，如果失败则转换为浮动数
+                        data_row.append(int(value))
+                    except ValueError:
+                        try:
+                            data_row.append(float(value))  # 如果整数转换失败，尝试浮动数
+                        except ValueError:
+                            data_row.append(value)  # 如果两者都无法转换，保留原始字符串
+                data.append(data_row)
+
+            print("Columns:", table_data[0])
+            return pd.DataFrame(data, columns=table_data[0])
 
     def txt_to_Array(the_path):
         # 读取txt文件中的数据，返回第一列标签，和后面的数据
