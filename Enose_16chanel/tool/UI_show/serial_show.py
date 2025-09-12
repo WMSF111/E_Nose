@@ -140,17 +140,17 @@ class Serial_Init(QWidget):
         if self.ser.read_flag:
             ms._setButtonText.emit("断开状态")
             self.ser_open_look_ui(True)
+            self.ser.stop()  # 关闭串口
+            self.ser1.stop()  # 关闭串口
         else:
             ms._setButtonText.emit("连接状态")
             self.ser_open_look_ui(False)
-        if self.ser.read_flag:  # 如果串口存在
-            self.ser.stop()  # 关闭串口
-        else: # 如果串口没有在读取数据
-            #先重设串口设置
+            # 先重设串口设置
             g_var.Port_select = self.ui.serialComboBox.currentText()  # 串口选择
             self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率 重设
             g_var.Port_select2 = self.ui.serialComboBox2.currentText()  # 串口选择
             self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率 重设
+
 
             #再打开串口
             d = self.ser.open(ms.print.emit)  # 打开串口，成功返回0，失败返回1， + str信息
@@ -169,7 +169,8 @@ class Serial_Init(QWidget):
                 if text[0:2] == "55":
                     self.ser1.serialSendData(text)
                 else:
-                    self.ser1.write(text)
+                    self.ser.write(text)
+                ms.print.emit(text)
                 ms._lineClear.emit()
 
     def showAbout(self):

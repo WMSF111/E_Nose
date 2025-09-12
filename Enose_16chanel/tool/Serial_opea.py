@@ -10,10 +10,11 @@ class time_thread(QObject): # 时间相关的线程
     finished = Signal()  # 任务完成
 
     # 初始化输入两个串口， 停止时间与初始时间
-    def __init__(self, ser, ser1, stoptime = 0, starttime = 0, parent=None):      # QObject 需要的 parent
+    def __init__(self, ser, ser1, waittime = 0, starttime = 0, parent=None):      # QObject 需要的 parent
         super().__init__(parent)    # 必须先调父类构造
         self.time = starttime
-        self.stoptime = stoptime
+        self.waittime = waittime
+        self.temptime = 0
         self.lock = threading.Lock()  # 创建一个锁
         self._stop_evt = threading.Event()  # 用来打断 sleep
         self._running = True
@@ -28,6 +29,7 @@ class time_thread(QObject): # 时间相关的线程
             self._running = False
             self._stop_evt.set()  # 立即唤醒正在 sleep 的线程
             self.time = 0
+            self.temptime = 0
             glo_var.now_temp = 0
             glo_var.target_temp = 0
             glo_var.now_chan = 1
@@ -52,18 +54,17 @@ class time_thread(QObject): # 时间相关的线程
     def loop_to_target_temp(self, target): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
         while self._running:
             # 线程安全：把值读出来再比较
-            print("现在温度是：", glo_var.now_temp)
             self.time += 1
-            if target <= glo_var.now_temp:  # 当目标温度达成
+            if self.temptime == 0 and target <= glo_var.now_temp:  # 当目标温度达成
                 # glo_var.target_temp = target # 赋值目标温度到全局
-                print("达到目标温度需要时间：",self.time)
-                self.temp_ready.emit(self.time)  # 通知主线程
+                self.temptime = self.time
+                print("达到目标温度需要时间：",self.temptime)
+                self.temp_ready.emit(self.temptime)  # 通知主线程
                 self._running = False
                 break
             time.sleep(self.timeout / 1000)
 
     def thread_looparri_fun(self, fun, timeout=1000): # 输入要调用循环函数返回结果的函数fun和循环时间
-        # self.time = 0
         try:
             with self.lock:
                 self.timeout = timeout

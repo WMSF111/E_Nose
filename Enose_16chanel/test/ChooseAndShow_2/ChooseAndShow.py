@@ -17,9 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QDoubleSpinBox, QGridLayout,
     QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QPushButton, QSizePolicy, QSpinBox,
-    QTabWidget, QTableView, QToolButton, QVBoxLayout,
-    QWidget)
+    QPushButton, QSizePolicy, QSpinBox, QTabWidget,
+    QTableView, QVBoxLayout, QWidget)
 
 class Ui_Gragh_show(object):
     def setupUi(self, Gragh_show):
@@ -44,15 +43,10 @@ class Ui_Gragh_show(object):
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.horizontalLayout_2 = QHBoxLayout(self.groupBox_2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.Folder_lineEdit = QLineEdit(self.groupBox_2)
-        self.Folder_lineEdit.setObjectName(u"Folder_lineEdit")
+        self.pushButton = QPushButton(self.groupBox_2)
+        self.pushButton.setObjectName(u"pushButton")
 
-        self.horizontalLayout_2.addWidget(self.Folder_lineEdit)
-
-        self.Folder_Button = QToolButton(self.groupBox_2)
-        self.Folder_Button.setObjectName(u"Folder_Button")
-
-        self.horizontalLayout_2.addWidget(self.Folder_Button)
+        self.horizontalLayout_2.addWidget(self.pushButton)
 
 
         self.verticalLayout.addWidget(self.groupBox_2)
@@ -354,8 +348,8 @@ class Ui_Gragh_show(object):
     def retranslateUi(self, Gragh_show):
         Gragh_show.setWindowTitle(QCoreApplication.translate("Gragh_show", u"Form", None))
         self.groupBox.setTitle(QCoreApplication.translate("Gragh_show", u"\u5b9e\u9a8c\u4fe1\u606f", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("Gragh_show", u"\u4fdd\u5b58\u8def\u5f84", None))
-        self.Folder_Button.setText(QCoreApplication.translate("Gragh_show", u"...", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Gragh_show", u"\u4e32\u53e3\u9009\u62e9", None))
+        self.pushButton.setText(QCoreApplication.translate("Gragh_show", u"\u4e32\u53e3\u8bbe\u7f6e", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u8bbe\u7f6e", None))
         self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u6d17\u6c14\u65f6\u957f", None))
         self.label_34.setText(QCoreApplication.translate("Gragh_show", u"s", None))

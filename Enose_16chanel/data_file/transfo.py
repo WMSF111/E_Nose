@@ -1,9 +1,8 @@
-import os, glob
-import pandas as pd
-import global_var as global_var
+import os, glob, global_var,  logging, ast
 import data_file.filter as filter
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as pl
-import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 
 
@@ -62,29 +61,52 @@ class UI_TXT_TO():
         # 读取trainfile.txt并显示到数据源看板，将.txt存储为dataFrame
         with open(the_path, 'r') as file: # 显示列名
             trainfile_txt_text = file.read()
-            # rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
-        #     table_data1 = [row.split(' ') for row in rows]  # 假设每列用空格分隔
-        #     data = []
-        #     global_var.headers_list.append("target")
-        #     for i in range(1, len(table_data1[0])):
-        #         global_var.headers_list.append(global_var.sensors[i-1])
-        # headers_str = " ".join(map(str, global_var.headers_list))
         text = trainfile_txt_text
-        # train.turn_to_csv(text)
-        if len(text) >= 4: # 显示所有数据
+        if len(text) >= 4:  # 显示所有数据
             rows = text.split('\n')  # 每行代表表格中的一行数据
-            table_data = [row.split(' ') for row in rows]  # 假设每列用逗号分隔
-            num_cols = len(table_data[0])
+            # table_data = [row.split(' ') for row in rows]  # split() 自动处理多个空格,转化为列表
+            table_data = [row.split() for row in rows]  # 默认按空白字符分割，去除多余空格
             data = []
-            for i in range(1, len(rows) - 1):
-                # if len(table_data[i]) == num_cols:
-                data.append(table_data[i])
-        print("Columns:", table_data[0])
-        return pd.DataFrame(data, columns=table_data[0])
-        # global_var.textEdit_DataFrame = pd.DataFrame(data, columns=table_data[0])  # 保存创建的 DataFrame
-        # global_var.textEdit_nolc_DataFrame = global_var.textEdit_DataFrame.iloc[1:, 1:]
-        # print(global_var.textEdit_DataFrame)
-        # self.Broad.append(global_var.textEdit_DataFrame.to_string(index=False))
+            for row in table_data[1:]:  # 从第二行开始（去掉标题行）
+                # 检查是否是空行，如果是空行则跳过
+                if not any(row):  # 如果整行没有任何有效数据
+                    continue
+                data_row = []
+                for value in row:
+                    try:
+                        # 尝试转换为整数，如果失败则转换为浮动数
+                        data_row.append(int(value))
+                    except ValueError:
+                        try:
+                            data_row.append(float(value))  # 如果整数转换失败，尝试浮动数
+                        except ValueError:
+                            data_row.append(value)  # 如果两者都无法转换，保留原始字符串
+                data.append(data_row)
+
+            print("Columns:", table_data[0])
+            return pd.DataFrame(data, columns=table_data[0])
+
+    def txt_to_Array(the_path):
+        # 读取txt文件中的数据，返回第一列标签，和后面的数据
+        with open(the_path, 'r') as file:
+            lines = file.readlines()
+
+        # 初始化存储第一列和从第二列开始的列的空数组
+        first_column = []
+        remaining_columns = []
+        print("lines:", lines)
+
+        # 假设 lines 是每行数据的列表
+        for line in lines[1:]: # 从第二行开始
+            line = line.strip()  # 清除行末的换行符
+            row_data = line.split()  # 将每行按空格分割
+
+            # 第一列是字符串
+            first_column.append(row_data[0])  # row_data[0] 是第一列的字符串数据
+
+            # 将从第二列开始的数据转换为浮动数，并存入 remaining_columns
+            remaining_columns.append([float(x) for x in row_data[1:]])  # 转换为浮动数
+        return first_column, remaining_columns
 
 
     def Choose_Filter_Alg(self, filter_preprocess):

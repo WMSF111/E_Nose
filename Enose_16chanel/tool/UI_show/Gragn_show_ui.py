@@ -91,25 +91,37 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data = [[] for _ in range(self.data_len)]
 
     def start_serial(self): # 开始采集
+        self.data = [[] for _ in range(self.data_len)]
         g_var.target_temp = (int)(self.Heattep_SpinBox.value()*100)
         self.open_serial(self.process_data)
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
         self.ser1.d.setDataTodo("01", g_var.now_Sam + 1, g_var.target_temp)  # 切换到下一个样品位置
         self.ser1.serialSend()
-        if self.time_th is None:
-            # 第一次：真正创建
-            self.time_th = SO.time_thread(self.ser, self.ser1)
-            self.time_th.temp_ready.connect(self.on_temp_update)
-
-            # 每一次：只需“重启”逻辑
+        self.statues_label.setText("等待通道到达目标温度")
+        if self.time_th is not None:
+            self.ser_time.time_th._running = False
+            self.time_th.stop()
+            print("重启")
+        # 第一次：真正创建
+        self.time_th = SO.time_thread(self.ser, self.ser1, waittime= self.Standtime_spinBox.value())
+        self.time_th.temp_ready.connect(self.on_temp_update)
         target = self.Heattep_SpinBox.value()
-        self.time_th.stop()  # 先停掉旧循环
         self.time_th.thread_loopfun(
             lambda: self.time_th.loop_to_target_temp(target)) # 循环直到达到指定温度
+        # if self.time_th is None:
+        #     # 第一次：真正创建
+        #     self.time_th = SO.time_thread(self.ser, self.ser1)
+        #     self.time_th.temp_ready.connect(self.on_temp_update)
+        #
+        #     # 每一次：只需“重启”逻辑
+        # target = self.Heattep_SpinBox.value()
+        # self.time_th.stop()  # 先停掉旧循环
+        # self.time_th.thread_loopfun(
+        #     lambda: self.time_th.loop_to_target_temp(target)) # 循环直到达到指定温度
 
     def on_temp_update(self, t):
-        print("收到温度达标信号")
+        print("收到温度达标信号，time：", t)
         self.ser_time = SO.time_opea(self, t, self.ser, self.ser1, 10)
 
     def show_set(self, time):

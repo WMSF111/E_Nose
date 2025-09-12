@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1246</width>
-    <height>802</height>
+    <width>997</width>
+    <height>662</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,20 +33,23 @@
        <property name="checkable">
         <bool>false</bool>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="1,3,10">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,10">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>存储地址</string>
+           <string>串口选择</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QLineEdit" name="Folder_lineEdit"/>
-           </item>
-           <item>
-            <widget class="QToolButton" name="Folder_Button">
+            <widget class="QPushButton" name="pushButton">
              <property name="text">
-              <string>...</string>
+              <string>串口设置</string>
              </property>
             </widget>
            </item>
@@ -60,14 +63,17 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,4,0">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,2,1,3,2,1">
+             <property name="spacing">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QLabel" name="label_2">
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>清洗时长(s)</string>
+                <string>洗气时长</string>
                </property>
               </widget>
              </item>
@@ -83,105 +89,84 @@
                 <number>256</number>
                </property>
                <property name="value">
-                <number>60</number>
+                <number>30</number>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QToolButton" name="Dataclear_Button">
+              <widget class="QLabel" name="label_34">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
                <property name="text">
-                <string>清洗</string>
+                <string>s</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>采样时长 </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="Cleartime_spinBox_2">
+               <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="maximum">
+                <number>256</number>
+               </property>
+               <property name="value">
+                <number>30</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_35">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>s</string>
                </property>
               </widget>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,2,0">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="3,2,1,3,3">
+             <property name="spacing">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QLabel" name="label_10">
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>采集体积(ml)</string>
+                <string>保持时间</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="Volum_spinBox">
+              <widget class="QSpinBox" name="Standtime_spinBox_2">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
                <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>256</number>
-               </property>
-               <property name="value">
                 <number>1</number>
                </property>
-               <property name="displayIntegerBase">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_9">
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string>时间(s)</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="Inputtime_spinBox">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::NoButtons</enum>
-               </property>
                <property name="maximum">
-                <number>256</number>
-               </property>
-               <property name="value">
                 <number>60</number>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="Collectbegin_Button">
-               <property name="text">
-                <string>采样</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,1,1,2,1">
-             <item>
-              <widget class="QLabel" name="label_5">
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string>获取通道(1-8)</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="Getchannel_spinBox">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::NoButtons</enum>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>8</number>
-               </property>
                <property name="value">
                 <number>1</number>
                </property>
@@ -191,54 +176,27 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_7">
+              <widget class="QLabel" name="label_20">
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>温度</string>
+                <string>s</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="Gettep_spinBox">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::NoButtons</enum>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="minimum">
-                <double>-1.000000000000000</double>
-               </property>
-               <property name="value">
-                <double>-1.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="Gettep_Button">
-               <property name="text">
-                <string>获取</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,1,0,0,0">
              <item>
               <widget class="QLabel" name="label_6">
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>加热通道(1-8)</string>
+                <string>样品个数</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="Heatchannel_spinBox">
+              <widget class="QSpinBox" name="Simnum_spinBox">
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
@@ -246,46 +204,13 @@
                 <number>1</number>
                </property>
                <property name="maximum">
-                <number>8</number>
+                <number>16</number>
                </property>
                <property name="value">
                 <number>1</number>
                </property>
                <property name="displayIntegerBase">
                 <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_8">
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string>温度</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="Heattep_SpinBox_2">
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::NoButtons</enum>
-               </property>
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="minimum">
-                <double>-1.000000000000000</double>
-               </property>
-               <property name="value">
-                <double>50.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="Heat_Button">
-               <property name="text">
-                <string>加热</string>
                </property>
               </widget>
              </item>
@@ -324,13 +249,62 @@
      </item>
      <item row="0" column="1">
       <widget class="QWidget" name="widget" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10,0,1,1,1">
         <property name="topMargin">
          <number>0</number>
         </property>
         <property name="bottomMargin">
          <number>0</number>
         </property>
+        <item>
+         <widget class="QLabel" name="label_37">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>当前状态:</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::AutoText</enum>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="statues_label">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Clear_Button">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>基线调整</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Collectbegin_Button">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>开始采集</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QPushButton" name="Pause_Button">
           <property name="maximumSize">
@@ -381,8 +355,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../images/icon.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
