@@ -109,16 +109,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         target = self.Heattep_SpinBox.value()
         self.time_th.thread_loopfun(
             lambda: self.time_th.loop_to_target_temp(target)) # 循环直到达到指定温度
-        # if self.time_th is None:
-        #     # 第一次：真正创建
-        #     self.time_th = SO.time_thread(self.ser, self.ser1)
-        #     self.time_th.temp_ready.connect(self.on_temp_update)
-        #
-        #     # 每一次：只需“重启”逻辑
-        # target = self.Heattep_SpinBox.value()
-        # self.time_th.stop()  # 先停掉旧循环
-        # self.time_th.thread_loopfun(
-        #     lambda: self.time_th.loop_to_target_temp(target)) # 循环直到达到指定温度
 
     def on_temp_update(self, t):
         print("收到温度达标信号，time：", t)

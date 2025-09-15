@@ -5,8 +5,9 @@ import global_var as glo_var
 
 class time_thread(): # 时间相关的线程
     # 初始化输入两个串口， 停止时间与初始时间
-    def __init__(self, ser, ser1, stoptime = 0, starttime = 0):
+    def __init__(self,ser, ser1,  ui = None, stoptime = 0, starttime = 0):
         self.time = starttime
+        self.ui = ui
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
         self._running = True
@@ -30,16 +31,19 @@ class time_thread(): # 时间相关的线程
         except Exception as e:
             return 1, f"计时失败：{e}\n"
 
-    def loop_to_target_temp(self, ui): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
+    def loop_to_target_temp(self): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
         while self._running:
             # 线程安全：把值读出来再比较
-            target = ui.Heattep_SpinBox.value()
+            target = glo_var.target_temp
             print("现在温度是：", glo_var.now_temp)
+            self.ser.d.setDataTodo(2, 1)
+            self.ser.serialSend()
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
                 glo_var.target_temp = target # 赋值目标温度到全局
                 print("达到目标温度需要时间：",self.time)
-                self.opea = time_opea(ui, self.time, self.ser,self.ser1)
+                self.ui.attendtime_spinBox.setValue(self.time)
+                self.opea = time_opea(self.ui, self.time, self.ser,self.ser1)
                 self._running = False
                 break
             time.sleep(self.timeout / 1000)
@@ -169,8 +173,8 @@ class Serial1opea():
             lst_int = [int(x, 16) for x in text.split()]
             text = num / 10.0
             glo_var.now_temp = text
-            # if lst_int[3] == self.ui.Getchannel_spinBox.value():
-            #     self.ui.Gettep_spinBox.setValue(text)
+            if self.ui.Currtem_spinBox.value() == 1:
+                self.ui.Currtem_spinBox.setValue(text)
             text = "获取温度为：" + str(text)
         if (Frame.buf[2] == '0B'): # 读取当前坐标
             x = int.from_bytes(bytes.fromhex(Frame.buf[3] + Frame.buf[4]), byteorder='big')
@@ -211,4 +215,3 @@ class Serial1opea():
     def Startpos(self): # 是否初始化
         self.ser1.d.setDataTodo('0D')
         self.ser1.serialSend()
-
