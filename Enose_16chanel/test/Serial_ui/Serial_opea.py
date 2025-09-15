@@ -6,6 +6,8 @@ import global_var as glo_var
 class time_thread(): # 时间相关的线程
     # 初始化输入两个串口， 停止时间与初始时间
     def __init__(self, ser, stoptime = 0, starttime = 0):
+        # 使用 Event 来控制线程退出
+        self.stop_event = threading.Event()
         self.time = starttime
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
@@ -15,18 +17,17 @@ class time_thread(): # 时间相关的线程
         self.ser = ser
         self.timeout = 1000; # 循环时间
 
-    def thread_loopfun(self, fun, timeout=1000): # 输入要循环的函数和循环时间
+    def thread_loopfun(self, fun): # 输入要循环的函数和循环时间
         self.time = 0
         try:
             with self.lock:
-                self.timeout = timeout
                 self._running = True
                 self._thread = threading.Thread(
                     target=fun,
                     daemon=True
                 )
                 self._thread.start()
-                return 0, f"开始计时，每{timeout}ms触发一次\n"
+                return 0
         except Exception as e:
             return 1, f"计时失败：{e}\n"
 
@@ -102,14 +103,14 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         if glo_var.Save_flag != "开始采集":
             glo_var.Save_flag = "开始采集"
         glo_var.now_Sam += 1
-        text = "sample_time:" + str(self.gettime) # ser需要发出的信息
+        text = "sample_time:" + str(self.gettime) + "\r\n" # ser需要发出的信息
         self.ser_opea(text, 3, self.gettime)  # 信号发出采集信号
         self.ui.statues_label.setText("样品" + str(glo_var.now_Sam) + "开始采集")
 
     def room_clear(self):
         if glo_var.Save_flag != "采集完成":
             glo_var.Save_flag = "采集完成"
-        text = "exhaust_time:" + str(self.cleartime)  # 清洗30s
+        text = "exhaust_time:" + str(self.cleartime) + "\r\n"  # 清洗30s
         self.ser_opea(text, 4, self.cleartime)  # 清洗30s
         self.ser_opea("", "0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1], glo_var.posxyz[glo_var.now_Sam + 1][2])  # 切换到下一个样品位置
         self.ui.statues_label.setText("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))

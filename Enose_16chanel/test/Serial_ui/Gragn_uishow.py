@@ -1,4 +1,4 @@
-import  sys, re, random
+import  sys, re, random, copy
 from PySide6.QtCore import (
     Qt, QCoreApplication
 )
@@ -35,7 +35,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.plot_widget.setLabel('bottom', 'Time(单位:s)')
 
         self.curves = []
-        self.data = [[] for _ in range(self.data_len)]
+        self.alldata = [[] for _ in range(self.data_len)]
+        self.data = copy.deepcopy(self.alldata)
         self.get_time = 60
         self._data_lines = dict()  # 已存在的绘图线
         self._data_items = dict()  # 数据查看器的数据
@@ -78,34 +79,27 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口没有打开
-            d = self.ser.open(Signal)
+            d = self.ser.open(Signal) # 阻塞输出
             print("控制串口初始化成功：", d)
 
     def clear_data(self): # 基线阶段
         self.open_serial(self.process_data)
-        text = "base_time:" + str(60)  # 基线操作60s
+        text = ("base_time:" + str(self.Cleartime_spinBox.value()) +
+                ",sample_time:" + str(self.Standtime_spinBox_2.value()) +
+                ",exhaust_time:" + str(self.Cleartime_spinBox_2.value()) + '\r\n')
         self.ser.write(text)
-        print("clear_data:基线操作")
-        self.data = [[] for _ in range(self.data_len)]
+        print("clear_data:基线操作:", text)
+        self.ser.pause()
 
     def start_serial(self): # 开始采集
-        self.data = [[] for _ in range(self.data_len)] # 清空数据
-        self.open_serial(self.process_data)
-        text = "sample_time::" + str(self.Standtime_spinBox_2.value())  # 基线操作60s
-        self.ser.write(text)
-        if self.time_th is not None:
-            self.time_th._running = False
-        self.time_th = SO.time_thread(self.ser)  # 新建计时线程
-        self.opea = SO.time_opea(self, self.ser, self.time_th, self.Cleartime_spinBox_2.value())
-        self.time_th.thread_looparri_fun(self.opea.push_opea)  # 适用于不需要参数的函数
-
-
-    def show_set(self, time):
-        self.open_serial(self.process_data)
         self.data = [[] for _ in range(self.data_len)]
-        if (time != 0):
-            # 设置 x 轴的固定范围
-            self.plot_widget.setXRange(0, time, padding=0)  # 设置 x 轴的范围为 0 到 300
+        self.alldata = copy.deepcopy(self.data)
+        self.ser.resume()
+        text = "#START$\r\n"
+        self.ser.write(text)
+        self.time_th = SO.time_thread(self.ser)
+        self.time_th.thread_looparri_fun(self.updata)
+
 
     def pause_serial(self): # 暂停采集
         if self.ser.pause_flag == False:
@@ -127,16 +121,26 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.data = [[] for _ in range(self.data_len)]
             g_var.Save_flag = "正在采集"
         # 解析数据
-        # values = re.findall(r'\d+',data)
         values = self.decode_data(data)
         if len(values) == self.data_len:
-            values = [int(v) for v in values]
+            values = [int(v) for v in values] # 转化为数组
             for i, value in enumerate(values):
-                self.data[i].append(value)
-                if len(self.data[i]) > 300:  # 限制数据长度
-                    self.data[i].pop(0)
+                self.alldata[i].append(value)
+                if len(self.alldata[i]) > 300:  # 限制数据长度
+                    self.alldata[i].pop(0)
+            # self.redraw()  # 更新图表
+            # self.update_table()  # 更新表格
+
+    def updata(self, time):
+        print(self.alldata)
+        print(self.data)
+        for i in range(len(self.alldata)):  # 使用索引遍历
+            self.data[i].append(self.alldata[i][-1])  # 获取 alldata 中每个子列表的最后一个元素
+        if self.data[0]:
             self.redraw()  # 更新图表
             self.update_table()  # 更新表格
+        if time == self.Standtime_spinBox_2.value():
+            self.time_th._running = False
 
     def decode_data(self, data):
         # 在字符串 data 中查找所有与正则表达式 r'\d+' 匹配的子串，并以列表形式返回所有匹配结果。
@@ -144,17 +148,27 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         # \d 表示任意一个数字字符（等价于 [0-9]）。
         # + 表示前面的字符（\d）出现一次或多次。
         pattern = r'(?P<name>[^=,]+)=(?P<value>\d+)'
+
+        # 假设 data 是输入数据字符串
         self.pairs = {m.group('name'): int(m.group('value'))
                       for m in re.finditer(pattern, data)}
-        # 如果你仍需要按顺序的 16 个值：
-        ordered_keys = list(self.pairs.keys())  # ['MQ3_1','MQ3_2',...,'base']
-        if g_var.sensors[0] != ordered_keys[0]:
-            g_var.sensors = ordered_keys
-            self._data_visible = g_var.sensors.copy()  # 选择要看的传感器
-            # print(g_var.sensors)
-        values = [self.pairs[k] for k in ordered_keys]
-        return values
 
+        # 只在 self.pairs 非空时进行后续操作
+        if self.pairs:
+            # 如果你仍需要按顺序的 16 个值：
+            ordered_keys = list(self.pairs.keys())  # ['MQ3_1','MQ3_2',...,'base']
+
+            # 确保顺序一致
+            if g_var.sensors[0] != ordered_keys[0]:
+                g_var.sensors = ordered_keys
+                self._data_visible = g_var.sensors.copy()  # 选择要看的传感器
+                # print(g_var.sensors)
+
+            values = [self.pairs[k] for k in ordered_keys]
+            return values
+        else:
+            print("No valid pairs found")
+            return []  # 或者返回一个空列表或其他处理逻辑
 
     def savefolder(self):
         foldername = QFileDialog.getExistingDirectory(None, "Select Folder", "/")

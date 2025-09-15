@@ -31,7 +31,7 @@ class myserial():
         self.port = port
         self.bund = bund
 
-    def open(self, fun, flag = 0, stock = 0, timeout=100):
+    def open(self, fun, flag = 0, stock = 0, timeout=1000):
         # 打开串口
         try:
             # 创建串口对象
@@ -83,31 +83,14 @@ class myserial():
             # try:
                 if self.ser.in_waiting:
                     data = self.ser.read(self.ser.in_waiting)
-                    slip_n = b'\r\n'
-                    if flag == 1:
-                        hex_data = ' '.join(f'{b:02X}' for b in data)
-                        hex_data = hex_data + ' '
-                        data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
-                        slip_n = b'0A '
+                    slip_n = b'\n'
                     buffer.extend(data)
-
-                    # 按 \r\n 切帧
+                    # 按 \n 切帧
                     while slip_n in buffer:
                         frame, buffer = buffer.split(slip_n, 1)
-
-                        # 1. 判断是否全是可打印 ASCII
-                        if all(0x20 <= b <= 0x7E for b in frame):
-                            # 文本
-                            try:
-                                text = frame.decode('utf-8', errors='replace')
-                            except Exception:
-                                text = frame.decode('latin-1', errors='replace')
-                        else:
-                            # 2. 十六进制
-                            text = frame.hex(' ').upper()
-                            # 其它字节 → 标准 HEX 字符串
-                            # text = frame.hex().upper()  # ← 这里改成无空格的即可
-                            print(text)
+                        text = frame.decode('utf-8', errors='replace')
+                        # text = text + "\n"
+                        # print("切帧后：", text)
                         fun(text)
 
             # except Exception as e:
