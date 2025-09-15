@@ -132,14 +132,13 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             # self.update_table()  # 更新表格
 
     def updata(self, time):
-        print(self.alldata)
-        print(self.data)
-        for i in range(len(self.alldata)):  # 使用索引遍历
-            self.data[i].append(self.alldata[i][-1])  # 获取 alldata 中每个子列表的最后一个元素
+        if self.alldata[0]:
+            for i in range(len(self.alldata)):  # 使用索引遍历
+                self.data[i].append(self.alldata[i][-1])  # 获取 alldata 中每个子列表的最后一个元素
         if self.data[0]:
             self.redraw()  # 更新图表
             self.update_table()  # 更新表格
-        if time == self.Standtime_spinBox_2.value():
+        if time == self.Standtime_spinBox_2.value() + self.Cleartime_spinBox_2.value():
             self.time_th._running = False
 
     def decode_data(self, data):
@@ -231,9 +230,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         try:
             with open(filename[0], "w") as f:
                 sensor_names_str = " ".join(self._data_visible)
-                f.write(sensor_names_str + "\n")
+                f.write(sensor_names_str)
                 # 筛选出选中的传感器数据
-                selected_data = [self.data[g_var.sensors.index(sensor)] for sensor in self._data_visible]
+                selected_data = [self.alldata[g_var.sensors.index(sensor)] for sensor in self._data_visible]
 
                 # 转置筛选后的数据
                 transposed_data = list(map(list, zip(*selected_data)))
@@ -241,7 +240,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                 # 将转置后的数据写入文件
                 for row in transposed_data:
                     row_str = " ".join(map(str, row))
-                    f.write(row_str + "\n")
+                    f.write("\n" + row_str)
         except Exception as e:
             print("保存失败: " + str(e))
 
