@@ -47,25 +47,6 @@ class Action():
     def _lineClear(self):
         self.ui.sendEdit.clear()
 
-    def headerprint(self, receive_data):
-        # data 示例：MQ3_1=123,MQ3_2=456,TGS2603_1=789,base=999,...
-        pattern = r'([^=,]+)='  # 捕获等号前的名称
-        names = re.findall(pattern, receive_data)
-        # 去重且保序（Python 3.7+ dict 保序）
-        g_var.sensors = list(dict.fromkeys(names))
-        print(receive_data)
-        self.ui.tb.insertPlainText(receive_data)
-
-        # 获取到text光标,确保下次插入到内容最后
-        textCursor = self.ui.tb.textCursor()
-        # 滚动到底部
-        textCursor.movePosition(QTextCursor.End)
-        # 设置光标到text中去
-        self.ui.tb.setTextCursor(textCursor)
-
-        # 确保光标可见
-        self.ui.tb.ensureCursorVisible()
-
     def print(self, receive_data):
 
         self.ui.tb.insertPlainText(receive_data)

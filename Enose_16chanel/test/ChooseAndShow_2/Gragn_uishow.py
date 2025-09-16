@@ -104,6 +104,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data = [[] for _ in range(self.data_len)]
 
     def start_serial(self): # 开始采集
+        self.Collectbegin_Button.setEnabled(False)
         self.open_serial(self.process_data)
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
@@ -113,9 +114,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         g_var.target_temp = self.Heattep_SpinBox.value()
         self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象
         self.time_th.thread_loopfun(self.time_th.loop_to_target_temp)  # 循环直到达到指定温度
-        # self.Currtem_spinBox.setValue(g_var.room_temp)
-        # self.attendtime_spinBox.setValue(g_var.target_temp_time)
-        # self.opea = SO.time_opea(self, g_var.target_temp_time, self.ser, self.ser1)
 
     def show_set(self, time):
         self.open_serial(self.process_data)
@@ -132,7 +130,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         else:
             self.ser.resume()
             self.Pause_Button.setText("暂停采集")
+            self.Collectbegin_Button.setEnabled(True)
             print("继续采集")
+        if self.time_th and self.time_th._running == True:
+            self.time_th._running = False
+        if self.time_th.opea and self.time_th.opea.time_th._running == True:
+            self.time_th.opea.time_th._running = False
 
     def process_data(self, data):
         if (g_var.Save_flag == "采集完成"):

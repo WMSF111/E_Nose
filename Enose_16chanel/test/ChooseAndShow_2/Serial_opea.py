@@ -36,8 +36,8 @@ class time_thread(): # 时间相关的线程
             # 线程安全：把值读出来再比较
             target = glo_var.target_temp
             print("现在温度是：", glo_var.now_temp)
-            self.ser.d.setDataTodo(2, 1)
-            self.ser.serialSend()
+            self.ser1.d.setDataTodo(2, 1)
+            self.ser1.serialSend()
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
                 glo_var.target_temp = target # 赋值目标温度到全局
@@ -95,6 +95,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         # self.time_th.thread_looparri_fun(lambda t: self.push_opea(t)) # 适用于需要参数的函数，提供了更大的灵活性。
 
     def push_opea(self, time): # 一系列执行操作
+        # print("time: ",time)
         Opea_time = self.time_adjust(time) # 进行时间调整
         if time % self.waittime == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
             self.channal_heat()
@@ -111,6 +112,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
             self.ui.statues_label.setText("已完成采样")
             print("Opea_time:", Opea_time, "time:", time, "已完成采样")
             self.time_th._running = False
+            self.ui.Collectbegin_Button.setEnabled(True)
 
 
     def time_adjust(self, time): # 保证每次操作可循环
@@ -138,6 +140,8 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
             glo_var.Save_flag = "采集完成"
         text = "exhaust_time:" + str(self.cleartime)  # 清洗30s
         self.ser_opea(text, 4, self.cleartime)  # 清洗30s
+        self.ser_opea("", "0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1], (int)(glo_var.posxyz[glo_var.now_Sam + 1][2] * 1.5))  # 切换到下一个样品位置
+        time.sleep(1)
         self.ser_opea("", "0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1], glo_var.posxyz[glo_var.now_Sam + 1][2])  # 切换到下一个样品位置
         self.ui.statues_label.setText("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
 
