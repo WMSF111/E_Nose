@@ -131,7 +131,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
             self.ui.statues_label.setText("已完成采样")
             print("Opea_time:", Opea_time, "time:", time, "已完成采样")
             glo_var.Save_flag = "采集完成"
-            self.time_th._running = False
+            self.time_th.stop()
             self.ser.pause()
 
 

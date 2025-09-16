@@ -25,7 +25,7 @@ class FrameData():
 
     # 将数据包中的数据部分全部设置为0，并更新校验和。
     def setDataToOff(self):
-        for i in range(3, self.pkgLen - 2):
+        for i in range(3, self.pkgLen - 1):
             self.buf[i] = '00'
 
     # 将数据包中的数据部分全部设置为255，并更新校验和。

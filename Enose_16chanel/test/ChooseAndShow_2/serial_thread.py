@@ -107,7 +107,6 @@ class myserial():
                             text = frame.hex(' ').upper()
                             # 其它字节 → 标准 HEX 字符串
                             # text = frame.hex().upper()  # ← 这里改成无空格的即可
-                            print(text)
                         fun(text)
 
             # except Exception as e:
@@ -158,7 +157,6 @@ class myserial():
                     text = self.d.packBytes(flag)
                     self.ser.write(text)
                     self.busy = False
-                    # print( self.ser.readline())#read会阻塞
                 except serial.serialutil.SerialException:
                     self.no_error = False
 

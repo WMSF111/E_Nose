@@ -133,9 +133,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.Collectbegin_Button.setEnabled(True)
             print("继续采集")
         if self.time_th and self.time_th._running == True:
-            self.time_th._running = False
+            self.time_th.stop()
         if self.time_th.opea and self.time_th.opea.time_th._running == True:
-            self.time_th.opea.time_th._running = False
+            self.time_th.opea.time_th.stop()
 
     def process_data(self, data):
         if (g_var.Save_flag == "采集完成"):
