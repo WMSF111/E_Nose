@@ -68,8 +68,9 @@ class Ui_Gragh_show(object):
         self.Cleartime_spinBox.setObjectName(u"Cleartime_spinBox")
         self.Cleartime_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Cleartime_spinBox.setMinimum(30)
         self.Cleartime_spinBox.setMaximum(256)
-        self.Cleartime_spinBox.setValue(60)
+        self.Cleartime_spinBox.setValue(30)
 
         self.horizontalLayout_7.addWidget(self.Cleartime_spinBox)
 

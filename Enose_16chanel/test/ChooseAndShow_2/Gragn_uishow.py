@@ -107,9 +107,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Collectbegin_Button.setEnabled(False)
         self.open_serial(self.process_data)
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
-                      g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
+                      (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1))  # 切换到下一个样品位置
         self.ser1.serialSend(True)
-        self.ser1.d.setDataTodo(1, 1, int(self.Heattep_SpinBox.value())) # 加热1通道
+        self.ser1.d.setDataTodo(1, g_var.channal[1], int(self.Heattep_SpinBox.value())) # 加热1通道
         self.ser1.serialSend(True)
         g_var.target_temp = self.Heattep_SpinBox.value()
         self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象

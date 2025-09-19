@@ -37,7 +37,7 @@ class time_thread(): # 时间相关的线程
             # 线程安全：把值读出来再比较
             target = glo_var.target_temp
             print("现在温度是：", glo_var.now_temp)
-            self.ser1.d.setDataTodo(2, 1)
+            self.ser1.d.setDataTodo(2, glo_var.channal[1])
             self.ser1.serialSend()
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
@@ -89,7 +89,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
     def __init__(self, ui, temptime, ser, ser1, gettime = 10):
         print("temptime:", temptime, "cleartime:", ui.Cleartime_spinBox.value(), "standtime:", ui.Standtime_spinBox.value())
         self.ui = ui
-        self.nul_num = 4
+        self.nul_num = 2
         self.temptime = temptime # 达到目标温度的时间
         self.cleartime = ui.Cleartime_spinBox.value() # 洗气时常
         self.standtime = ui.Standtime_spinBox.value() # 保持温度时常
@@ -109,45 +109,53 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         # self.push_opea(t) 是一个函数调用表达式，会立即执行并返回结果，而 thread_looparri_fun需要的是一个可调用对象（函数对象）
         # self.time_th.thread_looparri_fun(lambda t: self.push_opea(t)) # 适用于需要参数的函数，提供了更大的灵活性。
 
-    def push_opea(self, time): # 一系列执行操作
+    def push_opea(self, the_time): # 一系列执行操作
         # print("time: ",time)
-        Opea_time = self.time_adjust(time) # 进行时间调整
-        if time % self.waittime == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
+        Opea_time = self.time_adjust(the_time) # 进行时间调整
+        if the_time % self.waittime == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
             self.channal_heat()
-            print("Opea_time:", Opea_time, "time:", time, "通道" + str(glo_var.now_chan) + "开始加热")
+            print("Opea_time:", Opea_time, "time:", the_time, "通道" + str(glo_var.now_chan) + "(实" + str(glo_var.channal[glo_var.now_chan]) + ")开始加热")
 
-        if (((Opea_time + self.nul_num) == (self.standtime + self.temptime) or # 达到保持时长开始1、2次采集
-             (Opea_time + self.nul_num) == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
-            print("Opea_time:", Opea_time, "time:", time,"插入样品"+ str(glo_var.now_Sam + 1))
-            self.pos_down() # 插入
+        # if (((Opea_time + self.nul_num) == (self.standtime + self.temptime) or # 达到保持时长开始1、2次采集
+        #      (Opea_time + self.nul_num) == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
+        #     print("Opea_time:", Opea_time, "time:", time,"插入样品"+ str(glo_var.now_Sam + 1))
+        #     self.pos_down() # 插入
         if ((Opea_time == (self.standtime + self.temptime) or # 达到保持时长开始1、2次采集
                 Opea_time == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
-            print("Opea_time:", Opea_time, "time:", time, "样品" + str(glo_var.now_Sam + 1) + "开始采集")
+            print("Opea_time:", Opea_time, "time:", the_time, "插入样品" + str(glo_var.now_Sam + 1))
+            self.pos_down()  # 插入
+            print("Opea_time:", Opea_time, "time:", the_time, "样品" + str(glo_var.now_Sam + 1) + "开始采集")
             self.sample_collect()
 
 
         if (self.is_clear_time(Opea_time)): #第一次采集结束
-            print("Opea_time:", Opea_time, "time:", time, "气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
+            print("Opea_time:", Opea_time, "time:", the_time, "气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
             self.room_clear()
         if (self.is_clear_time(Opea_time - self.nul_num)): #第一次采集结束
-            print("Opea_time:", Opea_time, "time:", time, "拔出样品" + str(glo_var.now_Sam))
+            print("Opea_time:", Opea_time, "time:", the_time, "拔出样品" + str(glo_var.now_Sam))
             self.pos_top_before()
         if (self.is_clear_time(Opea_time - self.nul_num*2)): #第一次采集结束
-            print("Opea_time:", Opea_time, "time:", time, "转移位置到下一个样品" + str(glo_var.now_Sam + 1))
+            print("Opea_time:", Opea_time, "time:", the_time, "转移位置到下一个样品" + str(glo_var.now_Sam + 1))
             self.pos_top()
 
 
 
-        if time == (self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime:
+        if ((self.ui.Simnum_spinBox.value() == 1 and (the_time == self.gettime + self.temptime + self.standtime)) or
+        (the_time == (self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime)):
             self.ui.statues_label.setText("已完成采样")
-            print("Opea_time:", Opea_time, "time:", time, "已完成采样")
+            print("Opea_time:", Opea_time, "time:", the_time, "已完成采样")
             self.time_th._running = False
             self.ui.Collectbegin_Button.setEnabled(True)
+            self.pos_top_before()
+            time.sleep(2)
+            self.ser1.d.setDataTodo('0C')
+            self.ser1.serialSend(True)
+
 
 
     def time_adjust(self, time): # 保证每次操作可循环
         if time >= self.alltime:
-            return (time - (self.temptime + self.standtime)) % self.waittime + self.temptime + self.standtime - 2
+            return (time - (self.temptime + self.standtime)) % self.waittime + self.temptime + self.standtime
         else:
             return time
 
@@ -157,9 +165,9 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
 
     def channal_heat(self): # 通道加热，只需要ser1操作
         glo_var.now_chan += 1
-        self.ser1.d.setDataTodo(1, glo_var.now_chan, int(glo_var.target_temp))  # 开始下一个通道xx加热信号
-        self.ser1.serialSend()
-        self.ui.statues_label.setText("通道" + str(glo_var.now_chan) + "开始加热")
+        self.ser1.d.setDataTodo(1, glo_var.channal[glo_var.now_chan], int(glo_var.target_temp))  # 开始下一个通道xx加热信号
+        self.ser1.serialSend(True)
+        self.ui.statues_label.setText("通道" + str(glo_var.now_chan) + "实（" + str(glo_var.channal[glo_var.now_chan]) + "）开始加热")
 
     def sample_collect(self): # 信号采集
         if glo_var.Save_flag != "开始采集":
