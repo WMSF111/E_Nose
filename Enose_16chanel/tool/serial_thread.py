@@ -15,11 +15,12 @@ def getPortList():
 
 # 自定义串口类
 class myserial():
-    def __init__(self, port="", bund=0):
+    def __init__(self, port="", bund=0, hex_flag = 0):
         # 初始化串口类
         self.read_flag = False  # 读取标志，用于控制读取线程
         self.pause_flag = False  # 暂停标志，用于控制暂停和恢复
         self.busy = False
+        self.hex_flag = hex_flag # 用于判断是不是16进制读取
         self.port = port  # 串口名称
         self.bund = bund  # 波特率
         self.lock = threading.Lock()  # 创建一个锁
@@ -32,6 +33,8 @@ class myserial():
         self.bund = bund
 
     def open(self, fun, flag = 0, stock = 0, timeout=100):
+        # flag == 1, 16进制
+        self.hex_flag = flag
         # 打开串口
         try:
             # 创建串口对象
@@ -45,7 +48,7 @@ class myserial():
                 with self.lock:
                     self.read_flag = True  # 设置读取标志为 True
                     self.pause_flag = False  # 设置暂停标志为 False
-                rt = threading.Thread(target=self.loopRead, args=(fun,flag))  # 创建读取线程
+                rt = threading.Thread(target=self.loopRead, args=(fun))  # 创建读取线程
                 # rt.setDaemon(True)  # 设置为守护线程，确保主线程结束时子线程也会结束
                 # rt.setTerminationEnabled(True)
                 rt.start()  # 启动读取线程
@@ -65,7 +68,7 @@ class myserial():
         else:
             return 0
 
-    def loopRead(self, fun, flag):
+    def loopRead(self, fun):
         """
         自动识别数据类型：
           - 纯可打印 ASCII → utf-8 文本
@@ -84,7 +87,7 @@ class myserial():
                 if self.ser.in_waiting:
                     data = self.ser.read(self.ser.in_waiting)
                     slip_n = b'\r\n'
-                    if flag == 1:
+                    if self.hex_flag == 1:
                         hex_data = ' '.join(f'{b:02X}' for b in data)
                         hex_data = hex_data + ' '
                         data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
@@ -92,23 +95,17 @@ class myserial():
                     buffer.extend(data)
 
                     # 按 \r\n 切帧
-                    while slip_n in buffer:
-                        frame, buffer = buffer.split(slip_n, 1)
-
-                        # 1. 判断是否全是可打印 ASCII
-                        if all(0x20 <= b <= 0x7E for b in frame):
-                            # 文本
-                            try:
-                                text = frame.decode('utf-8', errors='replace')
-                            except Exception:
-                                text = frame.decode('latin-1', errors='replace')
-                        else:
-                            # 2. 十六进制
-                            text = frame.hex(' ').upper()
-                            # 其它字节 → 标准 HEX 字符串
-                            # text = frame.hex().upper()  # ← 这里改成无空格的即可
-                        fun(text)
-
+                    if self.hex_flag == 0:
+                        while slip_n in buffer:
+                            frame, buffer = buffer.split(slip_n, 1)
+                            # 1.  ASCII
+                            text = frame.decode('utf-8', errors='replace')
+                                # 其它字节 → 标准 HEX 字符串
+                                # text = frame.hex().upper()  # ← 这里改成无空格的即可
+                    else: #十六进制接收
+                        # 2. 十六进制
+                        text = frame.hex(' ').upper()
+                    fun(text)
             # except Exception as e:
             #     print(f"读取串口数据时发生错误: {e}")
             #     with self.lock:
