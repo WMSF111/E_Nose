@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ChooseAndShow_2.ui'
+## Form generated from reading UI file 'ChooseAndShow.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.1
 ##
@@ -74,8 +74,9 @@ class Ui_Gragh_show(object):
         self.Cleartime_spinBox.setObjectName(u"Cleartime_spinBox")
         self.Cleartime_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Cleartime_spinBox.setMinimum(10)
         self.Cleartime_spinBox.setMaximum(256)
-        self.Cleartime_spinBox.setValue(60)
+        self.Cleartime_spinBox.setValue(30)
 
         self.horizontalLayout_7.addWidget(self.Cleartime_spinBox)
 
@@ -91,6 +92,16 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout_7.addWidget(self.label_4)
 
+        self.Sample_spinBox = QSpinBox(self.groupBox_3)
+        self.Sample_spinBox.setObjectName(u"Sample_spinBox")
+        self.Sample_spinBox.setFocusPolicy(Qt.WheelFocus)
+        self.Sample_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.Sample_spinBox.setMinimum(10)
+        self.Sample_spinBox.setMaximum(256)
+        self.Sample_spinBox.setValue(30)
+
+        self.horizontalLayout_7.addWidget(self.Sample_spinBox)
+
         self.label_35 = QLabel(self.groupBox_3)
         self.label_35.setObjectName(u"label_35")
         self.label_35.setLayoutDirection(Qt.LeftToRight)
@@ -101,7 +112,8 @@ class Ui_Gragh_show(object):
         self.horizontalLayout_7.setStretch(1, 2)
         self.horizontalLayout_7.setStretch(2, 1)
         self.horizontalLayout_7.setStretch(3, 3)
-        self.horizontalLayout_7.setStretch(4, 3)
+        self.horizontalLayout_7.setStretch(4, 2)
+        self.horizontalLayout_7.setStretch(5, 1)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
@@ -290,6 +302,12 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout.addWidget(self.statues_label)
 
+        self.InitPos_Button = QPushButton(self.widget)
+        self.InitPos_Button.setObjectName(u"InitPos_Button")
+        self.InitPos_Button.setMaximumSize(QSize(100, 32))
+
+        self.horizontalLayout.addWidget(self.InitPos_Button)
+
         self.Clear_Button = QPushButton(self.widget)
         self.Clear_Button.setObjectName(u"Clear_Button")
         self.Clear_Button.setMaximumSize(QSize(100, 32))
@@ -316,9 +334,9 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout.setStretch(0, 1)
         self.horizontalLayout.setStretch(1, 10)
-        self.horizontalLayout.setStretch(3, 1)
         self.horizontalLayout.setStretch(4, 1)
         self.horizontalLayout.setStretch(5, 1)
+        self.horizontalLayout.setStretch(6, 1)
 
         self.gridLayout.addWidget(self.widget, 0, 1, 1, 1)
 
@@ -360,7 +378,7 @@ class Ui_Gragh_show(object):
         self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u6d17\u6c14\u65f6\u957f", None))
         self.label_34.setText(QCoreApplication.translate("Gragh_show", u"s", None))
         self.label_4.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u65f6\u957f: ", None))
-        self.label_35.setText(QCoreApplication.translate("Gragh_show", u"30s", None))
+        self.label_35.setText(QCoreApplication.translate("Gragh_show", u"s", None))
         self.label_10.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u96c6\u4f53\u79ef", None))
         self.label_20.setText(QCoreApplication.translate("Gragh_show", u"ml", None))
         self.label_6.setText(QCoreApplication.translate("Gragh_show", u"\u6837\u54c1\u4e2a\u6570", None))
@@ -373,6 +391,7 @@ class Ui_Gragh_show(object):
         self.groupBox_4.setTitle(QCoreApplication.translate("Gragh_show", u"\u4f20\u611f\u5668\u5217\u8868", None))
         self.label_37.setText(QCoreApplication.translate("Gragh_show", u"\u5f53\u524d\u72b6\u6001:", None))
         self.statues_label.setText("")
+        self.InitPos_Button.setText(QCoreApplication.translate("Gragh_show", u"\u521d\u59cb\u5316\u4f4d\u7f6e", None))
         self.Clear_Button.setText(QCoreApplication.translate("Gragh_show", u"\u57fa\u7ebf\u8c03\u6574", None))
         self.Collectbegin_Button.setText(QCoreApplication.translate("Gragh_show", u"\u5f00\u59cb\u91c7\u96c6", None))
         self.Pause_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6682\u505c\u91c7\u96c6", None))

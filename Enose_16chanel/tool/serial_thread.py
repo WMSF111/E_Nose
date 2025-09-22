@@ -3,6 +3,7 @@ import serial.tools.list_ports
 import threading
 import tool.frame_data as FrameDate
 
+
 # 获取系统中所有可用的串口列表
 def getPortList():
     Com_Dict = {}
@@ -50,15 +51,11 @@ class myserial():
                 rt.start()  # 启动读取线程
 
                 return 0, "打开串口%s成功,波特率%d\n" % (self.port, self.bund)  # 返回成功信息
-            else:
-                self.ser.close()
         except Exception as e:
             # 如果打开串口失败
             with self.lock:
                 self.read_flag = False  # 设置读取标志为 False
             return 1, "打开串口%s失败\n%s\n" % (self.port, str(e))  # 返回失败信息
-
-        # ---------- 3. 重新绑定 ----------
 
     def write(self, text):
         # 向串口写入数据
@@ -83,7 +80,7 @@ class myserial():
                 if self.pause_flag:
                     continue
 
-            try:
+            # try:
                 if self.ser.in_waiting:
                     data = self.ser.read(self.ser.in_waiting)
                     slip_n = b'\r\n'
@@ -112,11 +109,11 @@ class myserial():
                             # text = frame.hex().upper()  # ← 这里改成无空格的即可
                         fun(text)
 
-            except Exception as e:
-                print(f"读取串口数据时发生错误: {e}")
-                with self.lock:
-                    self.read_flag = False
-                break
+            # except Exception as e:
+            #     print(f"读取串口数据时发生错误: {e}")
+            #     with self.lock:
+            #         self.read_flag = False
+            #     break
 
     def pause(self):
         # 暂停串口通信
@@ -151,26 +148,24 @@ class myserial():
             except serial.serialutil.SerialException:
                 self.no_error = False
 
-    def serialSend(self): # 发送 FrameData 对象中的数据到串口。
+    def serialSend(self, flag = False): # 发送 FrameData 对象中的数据到串口。
         # print()
         if not self.busy:
             if hasattr(self, 'ser'):
                 try:
                     self.busy = True
-                    text = self.d.packBytes()
+                    text = self.d.packBytes(flag)
                     self.ser.write(text)
                     self.busy = False
-                    # print( self.ser.readline())#read会阻塞
                 except serial.serialutil.SerialException:
                     self.no_error = False
-
 
 
 class SerialsMng(): # 管理多线程
     # 接收一个列表 lst，列表中包含串口的配置信息
     # list=[name,bps,pixStyle,width,  name,bps,pixStyle,width,]
     # ["COM3",250000,0x13, 45,"COM4",250000,0x13, 45]
-    def __init__(self, lst): # 设置串口的port和bound
+    def __init__(self, lst):
 
         self.ser_count = int(len(lst) / 2) # 计算串口设备的数量，每个设备占用 4 个配置项。
         self.ser_arr = [] # 初始化一个空列表，用于存储串口设备对象。
@@ -180,7 +175,7 @@ class SerialsMng(): # 管理多线程
             sop = myserial(lst[idx], lst[idx + 1])
             print(lst[idx], lst[idx + 1])
             self.ser_arr.append(sop)
-        print("ser_arr:", self.ser_arr) # 打印串口设备对象列表。
+        print(self.ser_arr) # 打印串口设备对象列表。
 
     def setdataAndsend(self, idx, data): # 设置指定串口设备的数据并发送。
         sop = self.ser_arr[idx]

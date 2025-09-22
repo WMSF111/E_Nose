@@ -21,6 +21,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         super(GraphShowWindow, self).__init__()
         self.setupUi(self)  # 设置 UI 界面
         self.setWindowTitle("串口数据实时显示")
+
         self.data_len = len(g_var.sensors)
         # # 初始化串口
         self.serial_setting()
@@ -58,6 +59,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Pause_Button.clicked.connect(self.pause_serial)
         self.pushButton.clicked.connect(self.set_serial)
         self.Save_Button.clicked.connect(self.savefile)
+        self.InitPos_Button.clicked.connect(self.Stra)
+
+    def Stra(self): # 运动轴回到原点
+        self.ser1.d.setDataTodo('0C')
+        self.ser1.serialSend(True)
 
     def serial_setting(self):
         if (g_var.Port_select2 == "" or g_var.Port_select == ""):
@@ -87,7 +93,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def open_serial1(self, Signal): # 确保串口初始化
         if not self.ser1.read_flag: # 如果串口存在
-            d = self.ser1.open(Signal, flag=1)
+            d = self.ser1.open(Signal, flag=1) # 阻塞
             print("控制串口初始化成功：", d)
 
     def clear_data(self): # 基线阶段
@@ -98,12 +104,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data = [[] for _ in range(self.data_len)]
 
     def start_serial(self): # 开始采集
+        self.Collectbegin_Button.setEnabled(False)
         self.open_serial(self.process_data)
         self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
-                      g_var.posxyz[g_var.now_Sam + 1][2])  # 切换到下一个样品位置
-        self.ser1.serialSend()
-        self.time_th = SO.time_thread(self.ser, self.ser1) # 创建time线程对象
-        self.time_th.thread_loopfun(self.time_th.loop_to_target_temp(self)) # 循环直到达到指定温度
+                      (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1))  # 切换到下一个样品位置
+        self.ser1.serialSend(True)
+        self.ser1.d.setDataTodo(1, g_var.channal[1], int(self.Heattep_SpinBox.value())) # 加热1通道
+        self.ser1.serialSend(True)
+        g_var.target_temp = self.Heattep_SpinBox.value()
+        self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象
+        self.time_th.thread_loopfun(self.time_th.loop_to_target_temp)  # 循环直到达到指定温度
 
     def show_set(self, time):
         self.open_serial(self.process_data)
@@ -120,7 +130,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         else:
             self.ser.resume()
             self.Pause_Button.setText("暂停采集")
+            self.Collectbegin_Button.setEnabled(True)
             print("继续采集")
+        if self.time_th and self.time_th._running == True:
+            self.time_th.stop()
+        if self.time_th.opea and self.time_th.opea.time_th._running == True:
+            self.time_th.opea.time_th.stop()
 
     def process_data(self, data):
         if (g_var.Save_flag == "采集完成"):
@@ -131,6 +146,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             print(g_var.Save_flag)
             self.data = [[] for _ in range(self.data_len)]
             g_var.Save_flag = "正在采集"
+        if self.Currtem_spinBox.value() == 1 and g_var.now_temp != 1:
+            self.Currtem_spinBox.setValue(g_var.now_temp)
         # 解析数据
         values = re.findall(r'\d+',data)
         # values = self.decode_data(data)

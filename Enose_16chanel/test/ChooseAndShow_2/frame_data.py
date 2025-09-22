@@ -25,7 +25,7 @@ class FrameData():
 
     # 将数据包中的数据部分全部设置为0，并更新校验和。
     def setDataToOff(self):
-        for i in range(3, self.pkgLen - 2):
+        for i in range(3, self.pkgLen - 1):
             self.buf[i] = '00'
 
     # 将数据包中的数据部分全部设置为255，并更新校验和。
@@ -46,9 +46,10 @@ class FrameData():
         if(opea != "0A" and opea != "0B" and opea != "0C" and opea != "0D"):
             opea = f"{opea:02x}"
         self.buf[2] = opea
-        print("setDataTodo:", opea, opea1, opea2)
+        # print("setDataTodo:", opea, opea1, opea2)
         if (opea == '01'): # 加热xx(01-08)通道到目标温度yyyy(00C8---0384)
             self.buf[3] = f"{opea1 & 0xff:02x}"
+            opea2 *= 10
             hex_string = f"{opea2:04x}"
             self.buf[4] = hex_string[:2]
             self.buf[5] = hex_string[-2:]
@@ -77,8 +78,9 @@ class FrameData():
             self.buf[8] = hex_string[-2:]
 
 
-    def packBytes(self):
-        print("packBytes:",self.buf)
+    def packBytes(self, printf = False):
+        if printf == True:
+            print("packBytes:",self.buf)
         hex_string = ' '.join(self.buf)
         byte_data = bytes.fromhex(hex_string.replace(' ', ''))
         return byte_data

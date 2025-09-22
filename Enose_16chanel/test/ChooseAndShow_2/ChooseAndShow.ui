@@ -85,11 +85,14 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
+               <property name="minimum">
+                <number>30</number>
+               </property>
                <property name="maximum">
                 <number>256</number>
                </property>
                <property name="value">
-                <number>60</number>
+                <number>30</number>
                </property>
               </widget>
              </item>
@@ -380,7 +383,7 @@
      </item>
      <item row="0" column="1">
       <widget class="QWidget" name="widget" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10,0,1,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10,0,0,1,1,1">
         <property name="topMargin">
          <number>0</number>
         </property>
@@ -407,6 +410,19 @@
          <widget class="QLabel" name="statues_label">
           <property name="text">
            <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="InitPos_Button">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>初始化位置</string>
           </property>
          </widget>
         </item>
