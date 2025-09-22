@@ -124,6 +124,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
                 Opea_time == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
             print("Opea_time:", Opea_time, "time:", the_time, "插入样品" + str(glo_var.now_Sam + 1))
             self.pos_down()  # 插入
+            time.sleep(1)
             print("Opea_time:", Opea_time, "time:", the_time, "样品" + str(glo_var.now_Sam + 1) + "开始采集")
             self.sample_collect()
 
