@@ -74,7 +74,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser = self.smng.ser_arr[0]
         self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
         self.ser1 = self.smng.ser_arr[1]
-        self.SO = SO.Serial1opea(self, self.ser)
         self.SO1 = SO.Serial1opea(self, self.ser1)
         self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
         self.open_serial1(self.SO1.GetSigal1)
@@ -123,11 +122,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
         self.Collectbegin_Button.setEnabled(False)
         self.ser.resume()
-        self.ser1.d.setDataTodo("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
-                      (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1))  # 切换到下一个样品位置
-        self.ser1.serialSend(True)
-        self.ser1.d.setDataTodo(1, g_var.channal[1], int(self.Heattep_SpinBox.value())) # 加热1通道
-        self.ser1.serialSend(True)
+        self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
+                      (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1), flag = True) # 切换到下一个样品位置
+        self.ser1.serialSend(1, g_var.channal[1], int(self.Heattep_SpinBox.value()), flag=True)
 
         g_var.target_temp = self.Heattep_SpinBox.value()
         self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象

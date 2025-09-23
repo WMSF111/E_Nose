@@ -76,6 +76,7 @@ class FrameData():
             hex_string = f"{opea3:04x}"
             self.buf[7] = hex_string[:2]
             self.buf[8] = hex_string[-2:]
+        return self.buf
 
 
     def packBytes(self, printf = False):

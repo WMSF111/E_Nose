@@ -48,7 +48,7 @@ class myserial():
                 with self.lock:
                     self.read_flag = True  # 设置读取标志为 True
                     self.pause_flag = False  # 设置暂停标志为 False
-                rt = threading.Thread(target=self.loopRead, args=(fun))  # 创建读取线程
+                rt = threading.Thread(target=self.loopRead, args=(fun,))  # 创建读取线程
                 # rt.setDaemon(True)  # 设置为守护线程，确保主线程结束时子线程也会结束
                 # rt.setTerminationEnabled(True)
                 rt.start()  # 启动读取线程
@@ -63,10 +63,27 @@ class myserial():
     def write(self, text):
         # 向串口写入数据
         if self.ser:
-            result = self.ser.write(text.encode('utf-8'))  # 将字符串编码为字节并写入串口
+            if self.hex_flag == 0:
+                result = self.ser.write(text.encode('utf-8'))  # 将字符串编码为字节并写入串口
+            else:
+                text = self.hexarrytobytes(text) # hex
+                result = self.ser.write(text)
             return result  # 返回写入的字节数
         else:
             return 0
+
+    def serialSend(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, flag = False): # 发送 FrameData 对象中的数据到串口。
+        # print()
+        if not self.busy:
+            if hasattr(self, 'ser'):
+                try:
+                    self.busy = True
+                    text = self.d.setDataTodo(opea, opea1, opea2, opea3)  # 切换到下一个样品位置
+                    if (flag): print(text)
+                    self.write(text)
+                    self.busy = False
+                except serial.serialutil.SerialException:
+                    self.no_error = False
 
     def loopRead(self, fun):
         """
@@ -75,7 +92,7 @@ class myserial():
           - 含非打印或 0x00 → 十六进制字符串
         fun(line: str) 回调收到的内容
         """
-        buffer = bytearray()
+        buffer = bytearray() # 创建 可变字节数组
         while True:
             with self.lock:
                 if not self.read_flag:
@@ -87,11 +104,11 @@ class myserial():
                 if self.ser.in_waiting:
                     data = self.ser.read(self.ser.in_waiting)
                     slip_n = b'\r\n'
-                    if self.hex_flag == 1:
-                        hex_data = ' '.join(f'{b:02X}' for b in data)
-                        hex_data = hex_data + ' '
-                        data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
-                        slip_n = b'0A '
+                    # if self.hex_flag == 1:
+                    #     # 为 data 中的每个字节生成一个十六进制字符串, 数组转string
+                    #     hex_data = ' '.join(f'{b:02X}' for b in data)
+                    #     data = hex_data + ' '
+                        # data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
                     buffer.extend(data)
 
                     # 按 \r\n 切帧
@@ -103,14 +120,17 @@ class myserial():
                                 # 其它字节 → 标准 HEX 字符串
                                 # text = frame.hex().upper()  # ← 这里改成无空格的即可
                     else: #十六进制接收
-                        # 2. 十六进制
-                        text = frame.hex(' ').upper()
+                        # 查找 '55 AA' 在字节数组中的位置
+                        start_index = data.find(b'\x55\xAA')  # b'\x55\xAA' 是字节表示的 55 AA
+
+                        if start_index != -1:
+                            # 提取从 '55 AA' 开始的后面 8 个字节
+                            data = data[start_index:start_index + 10]  # 10 = 2 (55 AA) + 8 (后面的字节)
+                        #为 data 中的每个字节生成一个十六进制字符串, 数组转string
+                        hex_data = ' '.join(f'{b:02X}' for b in data)
+                        text = hex_data + ' '
                     fun(text)
-            # except Exception as e:
-            #     print(f"读取串口数据时发生错误: {e}")
-            #     with self.lock:
-            #         self.read_flag = False
-            #     break
+
 
     def pause(self):
         # 暂停串口通信
@@ -136,26 +156,12 @@ class myserial():
         for i in range(0, self.pkgLen):
             self.buf[i] = arr[i]
 
-    def serialSendData(self, dat): # 发送数据到串口，先将数据打包成字节串，然后写入串口。
-        req = ' '.join(dat)
+    def hexarrytobytes(self, dat): # 发送数据到串口，先将数据打包成字节串，然后写入串口。
+        req = ' '.join(dat) # 数组转字符串
+        # 将字符串 req 中的十六进制表示的内容转换为字节（bytes）类型。
         req = bytes.fromhex(req.replace(' ', ''))
-        if hasattr(self, 'ser'):
-            try:
-                self.ser.write(req)
-            except serial.serialutil.SerialException:
-                self.no_error = False
+        return req
 
-    def serialSend(self, flag = False): # 发送 FrameData 对象中的数据到串口。
-        # print()
-        if not self.busy:
-            if hasattr(self, 'ser'):
-                try:
-                    self.busy = True
-                    text = self.d.packBytes(flag)
-                    self.ser.write(text)
-                    self.busy = False
-                except serial.serialutil.SerialException:
-                    self.no_error = False
 
 
 class SerialsMng(): # 管理多线程
@@ -174,11 +180,6 @@ class SerialsMng(): # 管理多线程
             self.ser_arr.append(sop)
         print(self.ser_arr) # 打印串口设备对象列表。
 
-    def setdataAndsend(self, idx, data): # 设置指定串口设备的数据并发送。
-        sop = self.ser_arr[idx]
-        if not sop.busy:
-            sop.d.setDataToArray(data)
-            sop.serialSend()
 
 
     def splitData(self, data, sidx=0, eidx=0): # 根据起始索引和结束索引，从数据列表中截取子列表。

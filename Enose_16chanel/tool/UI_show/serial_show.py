@@ -167,10 +167,11 @@ class Serial_Init(QWidget):
         if not (text == "") or not (text is None):
             if self.ser.read_flag:
                 if text[0:2] == "55":
-                    self.ser1.serialSendData(text)
+                    self.ser1.write(text)
+                    ms.print.emit(text + '\n')
                 else:
                     self.ser.write(text)
-                ms.print.emit(text)
+                    ms.print.emit(text)
                 ms._lineClear.emit()
 
     def showAbout(self):

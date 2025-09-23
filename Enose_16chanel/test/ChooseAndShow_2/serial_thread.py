@@ -148,7 +148,8 @@ class myserial():
             except serial.serialutil.SerialException:
                 self.no_error = False
 
-    def serialSend(self, flag = False): # 发送 FrameData 对象中的数据到串口。
+    def serialSend(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, flag = False): # 发送 FrameData 对象中的数据到串口。
+        self.ser1.d.setDataTodo(opea, opea1, opea2, opea3, flag=True)  # 切换到下一个样品位置
         # print()
         if not self.busy:
             if hasattr(self, 'ser'):

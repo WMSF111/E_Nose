@@ -8,6 +8,8 @@ folder_path = ' '
 # 算法
 filter_preprocess = ' '
 
+thepos = [[0,0,0],
+    [944, 3184, 15480]]
 posxyz = [
     [0,0,0],
     [944, 3184, 15480],
@@ -41,7 +43,7 @@ posxyz = [
 Com_select = " "
 Port_select = ""
 Bund_select = 115200
-now_temp = 1
+now_temp = 1.0
 target_temp = 0
 target_temp_time = 0
 room_temp = 1
