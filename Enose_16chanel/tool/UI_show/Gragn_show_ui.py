@@ -2,7 +2,7 @@ import  sys, re, random
 from PySide6.QtCore import (
     Qt, QCoreApplication
 )
-import copy
+import copy, time
 import tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
@@ -105,23 +105,26 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
         self.alldata = copy.deepcopy(self.data)
-        self.draw = SO.time_thread(self.ser, self.ser1, ui = self, stoptime = 30)
-        self.draw.thread_looparri_fun(self.updata)
         # 启动串口
         self.ser.resume()
-        text = ("#Base1$\r\n")
-        self.ser.write(text)
+        while self.ser.status not in ["1","1"]:
+            text = ("11\n\r")
+            self.ser.write(text)
+            time.sleep(1)
+
+        self.draw = SO.time_thread(self.ser, self.ser1, ui=self, stoptime=30)
+        self.draw.thread_looparri_fun(self.updata)
 
 
     def start_serial(self): # 开始采集
+        self.ser.resume()
+
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
         self.alldata = copy.deepcopy(self.data)
-
         self.draw = SO.time_thread(self.ser, self.ser1)
         self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
         self.Collectbegin_Button.setEnabled(False)
-        self.ser.resume()
         self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1), flag = True) # 切换到下一个样品位置
         self.ser1.serialSend(1, g_var.channal[1], int(self.Heattep_SpinBox.value()), flag=True)
@@ -166,16 +169,19 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if self.Currtem_spinBox.value() == 1 and g_var.now_temp != 1:
             self.Currtem_spinBox.setValue(g_var.now_temp)
         # 解析数据
-        # values = re.findall(r'\d+',data)
-        values = self.decode_data(data)
-        if len(values) == self.data_len:
-            values = [int(v) for v in values]
-            for i, value in enumerate(values):
-                self.alldata[i].append(value)
-                if len(self.alldata[i]) > 300:  # 限制数据长度
-                    self.alldata[i].pop(0)
-            # self.redraw()  # 更新图表
-            # self.update_table()  # 更新表格
+        if(data[0] == "1" or data[0] == "2" or data[0] == "3"):
+            self.ser.status = ["1", data[1]]
+            print("ser的状态为", self.ser.status)
+        else:
+            values = self.decode_data(data)
+            if len(values) == self.data_len:
+                values = [int(v) for v in values]
+                for i, value in enumerate(values):
+                    self.alldata[i].append(value)
+                    if len(self.alldata[i]) > 300:  # 限制数据长度
+                        self.alldata[i].pop(0)
+                # self.redraw()  # 更新图表
+                # self.update_table()  # 更新表格
 
     def updata(self, time):
         if self.alldata[0]: # 如果读取到了数据

@@ -146,35 +146,11 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         ms._ClearDraw.connect(self.a._ClearDraw)
 
     def push_opea(self, the_time): # 一系列执行操作
-        # Opea_time = self.time_adjust(the_time) # 进行时间调整
-        # if the_time % self.waittime == 0 and glo_var.now_chan < round(self.ui.Simnum_spinBox.value() / 2) : # 达到下一个通道加热的时间
-        #     self.channal_heat()
-        #     print("Opea_time:", Opea_time, "time:", the_time, "通道" + str(glo_var.now_chan) + "(实" + str(glo_var.channal[glo_var.now_chan]) + ")开始加热")
-        #
-        # if ((Opea_time == (self.standtime + self.temptime) or # 达到保持时长开始1、2次采集
-        #         Opea_time == (self.standtime + self.temptime + self.gettime + self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())):
-        #     print("Opea_time:", Opea_time, "time:", the_time, "插入样品" + str(glo_var.now_Sam + 1))
-        #     self.pos_down()  # 插入
-        #     print("Opea_time:", Opea_time, "time:", the_time, "样品" + str(glo_var.now_Sam + 1) + "开始采集")
-        #     self.sample_collect() # 采样
-        #
-        #
-        # if (self.is_clear_time(Opea_time)): #第一次采集结束
-        #     print("Opea_time:", Opea_time, "time:", the_time, "气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
-        #     self.room_clear()
-        # if (self.is_clear_time(Opea_time - self.nul_num)): #第一次采集结束
-        #     print("Opea_time:", Opea_time, "time:", the_time, "拔出样品" + str(glo_var.now_Sam))
-        #     self.pos_top_before()
-        # if (self.is_clear_time(Opea_time - self.nul_num*2)): #第一次采集结束
-        #     print("Opea_time:", Opea_time, "time:", the_time, "转移位置到下一个样品" + str(glo_var.now_Sam + 1))
-        #     self.pos_top()
 
 
-
-        if ((self.ui.Simnum_spinBox.value() == 1 and (the_time == self.gettime + self.temptime + self.standtime)) or
-        (the_time == (self.waittime) * round(self.ui.Simnum_spinBox.value() / 2) + self.temptime + self.standtime - self.cleartime)):
+        if (self.ui.Simnum_spinBox.value() == glo_var.now_Sam):
             ms.statues_label.emit("已完成采样")
-            print("Opea_time:", Opea_time, "time:", the_time, "已完成采样")
+            print( "time:", the_time, "已完成采样")
             self.time_th._running = False
             self.ui.Collectbegin_Button.setEnabled(True)
             self.pos_top_before()
@@ -241,11 +217,12 @@ class Serial1opea():
         self.ser.serialSend(1, self.Getchannel_spinBox.value(), int(self.Heattep_SpinBox_2.value()*10), flag = True)
 
     def GetSigal1(self, text): # 获取信号
-        print("收到的信号:",text)
         parts = text.split()  # ['55','AA', ...]
         Frame = frame_data.FrameData()
         parts = parts[2 : Frame.pkgLen - 1]
         Frame.setDataToArray(parts)
+        self.ser.getSignal = Frame.buf
+        print("收到的信号:", self.GetSigal)
         if (Frame.buf[2] == '02'): # 获取温度
             num = int.from_bytes(bytes.fromhex(Frame.buf[4] + Frame.buf[5]), byteorder='big')  # 1000
             text = num / 10.0

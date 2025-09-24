@@ -18,6 +18,9 @@ class myserial():
     def __init__(self, port="", bund=0, hex_flag = 0):
         # 初始化串口类
         self.read_flag = False  # 读取标志，用于控制读取线程
+        self.sendSignal = None
+        self.getSignal = None
+
         self.pause_flag = False  # 暂停标志，用于控制暂停和恢复
         self.busy = False
         self.hex_flag = hex_flag # 用于判断是不是16进制读取
@@ -61,6 +64,8 @@ class myserial():
             return 1, "打开串口%s失败\n%s\n" % (self.port, str(e))  # 返回失败信息
 
     def write(self, text):
+        self.sendSignal = text
+        print("self.sendSignal: ", self.sendSignal)
         # 向串口写入数据
         if self.ser:
             if self.hex_flag == 0:
@@ -73,7 +78,6 @@ class myserial():
             return 0
 
     def serialSend(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, flag = False): # 发送 FrameData 对象中的数据到串口。
-        # print()
         if not self.busy:
             if hasattr(self, 'ser'):
                 try:
@@ -129,6 +133,9 @@ class myserial():
                         #为 data 中的每个字节生成一个十六进制字符串, 数组转string
                         hex_data = ' '.join(f'{b:02X}' for b in data)
                         text = hex_data + ' '
+                    self.getSignal = text
+                    print("self.getSignal: ", self.getSignal)
+                    print("是否相等：",self.getSignal == self.sendSignal)
                     fun(text)
 
 
@@ -161,6 +168,8 @@ class myserial():
         # 将字符串 req 中的十六进制表示的内容转换为字节（bytes）类型。
         req = bytes.fromhex(req.replace(' ', ''))
         return req
+
+
 
 
 
