@@ -37,6 +37,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.curves = []
         self.alldata = [[] for _ in range(self.data_len)]
         self.data = copy.deepcopy(self.alldata)
+        self.draw = None
         self.get_time = 60
         self._data_lines = dict()  # 已存在的绘图线
         self._data_items = dict()  # 数据查看器的数据
@@ -112,26 +113,35 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.ser.write(text)
             time.sleep(1)
 
-        self.draw = SO.time_thread(self.ser, self.ser1, ui=self, stoptime=30)
+        self.draw = SO.time_thread(self.ser, self.ser1, ui = self, stoptime=30)
         self.draw.thread_looparri_fun(self.updata)
 
 
     def start_serial(self): # 开始采集
+        if self.draw:
+            self.draw._running = False
         self.ser.resume()
 
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
         self.alldata = copy.deepcopy(self.data)
-        self.draw = SO.time_thread(self.ser, self.ser1)
+        self.draw = SO.time_thread(self.ser, self.ser1, ui = self)
         self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
         self.Collectbegin_Button.setEnabled(False)
+        # 到达1号位置
         self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                       (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1), flag = True) # 切换到下一个样品位置
+        # 加热通道1
         self.ser1.serialSend(1, g_var.channal[1], int(self.Heattep_SpinBox.value()), flag=True)
 
-        g_var.target_temp = self.Heattep_SpinBox.value()
+        g_var.target_temp = self.Heattep_SpinBox.value() # 设置目标温度
+        # self.get_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 开始计时
+        # self.get_th.thread_looparri_fun(self.print_time)  # 循环函数
         self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象
         self.time_th.thread_loopfun(self.time_th.loop_to_target_temp)  # 循环直到达到指定温度
+
+    # def print_time(self, thetime):
+    #     SO.ms._print.emit(thetime)
 
     def show_set(self, time):
         self.open_serial(self.process_data)

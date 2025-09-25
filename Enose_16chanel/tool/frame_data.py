@@ -49,7 +49,7 @@ class FrameData():
         # print("setDataTodo:", opea, opea1, opea2)
         if (opea == '01'): # 加热xx(01-08)通道到目标温度yyyy(00C8---0384)
             self.buf[3] = f"{opea1 & 0xff:02x}"
-            opea2 *= 10
+            opea2 = int(10 * opea2)
             hex_string = f"{opea2:04x}"
             self.buf[4] = hex_string[:2]
             self.buf[5] = hex_string[-2:]

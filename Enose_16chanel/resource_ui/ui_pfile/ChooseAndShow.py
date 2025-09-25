@@ -76,7 +76,7 @@ class Ui_Gragh_show(object):
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Cleartime_spinBox.setMinimum(10)
         self.Cleartime_spinBox.setMaximum(256)
-        self.Cleartime_spinBox.setValue(30)
+        self.Cleartime_spinBox.setValue(10)
 
         self.horizontalLayout_7.addWidget(self.Cleartime_spinBox)
 
@@ -96,9 +96,9 @@ class Ui_Gragh_show(object):
         self.Sample_spinBox.setObjectName(u"Sample_spinBox")
         self.Sample_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Sample_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.Sample_spinBox.setMinimum(10)
+        self.Sample_spinBox.setMinimum(0)
         self.Sample_spinBox.setMaximum(256)
-        self.Sample_spinBox.setValue(30)
+        self.Sample_spinBox.setValue(10)
 
         self.horizontalLayout_7.addWidget(self.Sample_spinBox)
 

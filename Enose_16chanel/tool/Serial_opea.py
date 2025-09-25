@@ -13,6 +13,7 @@ class MySignals(QObject):
     _Currtem_spinBox = Signal(float) # 更新当前温度
     _statues_label = Signal(str)
     _ClearDraw = Signal()
+    _print = Signal(int)
 
 
 ms = MySignals()
@@ -32,12 +33,17 @@ class Action():
         self.ui.data = [[] for _ in range(self.ui.data_len)]
         self.ui.alldata = copy.deepcopy(self.ui.data)
 
+    def _print(self, time: int):
+        print(time)
+
 
 class time_thread(): # 时间相关的线程
     # 初始化输入两个串口， 停止时间与初始时间
     def __init__(self,ser, ser1,  ui = None, stoptime = 0, starttime = 0):
         self.time = starttime
         self.ui = ui
+        self.a = Action(self.ui)
+        self.initMS()
         self.stoptime = stoptime
         self.lock = threading.Lock()  # 创建一个锁
         self._stop_evt = threading.Event()  # 用来打断 sleep
@@ -47,8 +53,14 @@ class time_thread(): # 时间相关的线程
         self.ser1 = ser1
         self.timeout = 1000; # 循环时间
 
+    def initMS(self):
+        ms._Currtem_spinBox.connect(self.a._Currtem_spinBox)
+        ms._statues_label.connect(self.a._statues_label)
+        ms._ClearDraw.connect(self.a._ClearDraw)
+        ms._print.connect(self.a._print)
+
     def thread_loopfun(self, fun, timeout=1000): # 输入要循环的函数和循环时间
-        self.time = 0
+        # self.time = 0
         try:
             with self.lock:
                 self.timeout = timeout
@@ -65,12 +77,12 @@ class time_thread(): # 时间相关的线程
     def loop_to_target_temp(self): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
         while self._running:
             # 线程安全：把值读出来再比较
-            target = glo_var.target_temp
-            print("现在温度是：", glo_var.now_temp)
+            target = self.ui.Heattep_SpinBox.value()
+            # print("现在温度是：", glo_var.now_temp)
+            ms._Currtem_spinBox.emit(glo_var.now_temp)
             self.ser1.serialSend(2, glo_var.channal[1])
             self.time += 1
             if target <= glo_var.now_temp:  # 当目标温度达成
-                glo_var.target_temp = target # 赋值目标温度到全局
                 print("达到目标温度需要时间：",self.time)
                 self.ui.attendtime_spinBox.setValue(self.time)
                 self.opea = time_opea(self.ui, self.time, self.ser,self.ser1,
@@ -79,8 +91,12 @@ class time_thread(): # 时间相关的线程
                 break
             time.sleep(self.timeout / 1000)
 
+    def run_time(self): # 每1s读取一次温度，直到达到合适温度glo_var.target_temp
+        while self._running:
+            self.time += 1
+            time.sleep(self.timeout / 1000)
+
     def thread_looparri_fun(self, fun, timeout=1000): # 输入要调用循环函数返回结果的函数fun和循环时间
-        # self.time = 0
         try:
             with self.lock:
                 self.timeout = timeout
@@ -111,19 +127,15 @@ class time_thread(): # 时间相关的线程
             self._running = False
             self._stop_evt.set()  # 立即唤醒正在 sleep 的线程
             self.time = 0
-            self.temptime = 0
             glo_var.now_temp = 0
-            glo_var.target_temp = 0
             glo_var.now_chan = 1
             glo_var.now_Sam = 0
-            glo_var.target_Sam = 1
 
 class time_opea(): # 得到达温时间后，正式开启采样过程
     def __init__(self, ui, temptime, ser, ser1, gettime = 10):
         print("temptime:", temptime, "cleartime:", ui.Cleartime_spinBox.value(), "standtime:", ui.Standtime_spinBox.value())
         self.ui = ui
-        self.a = Action(self.ui)
-        self.initMS()
+        self.start_flag = True
         self.temptime = temptime # 达到目标温度的时间
         self.cleartime = ui.Cleartime_spinBox.value() # 洗气时常
         self.standtime = ui.Standtime_spinBox.value() # 保持温度时常
@@ -137,25 +149,33 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
             raise ValueError("底层串口句柄为 None，请检查串口是否打开成功")
         if self.ser1.ser is None:
             raise ValueError("底层串口句柄为 None，请检查串口是否打开成功")
-        self.time_th = time_thread(ser, ser1, starttime = temptime) # 开始计时
-        self.time_th.thread_looparri_fun(self.push_opea) # 适用于不需要参数的函数
-
-    def initMS(self):
-        ms._Currtem_spinBox.connect(self.a._Currtem_spinBox)
-        ms._statues_label.connect(self.a._statues_label)
-        ms._ClearDraw.connect(self.a._ClearDraw)
-
-    def push_opea(self, the_time): # 一系列执行操作
+        self.time_th = time_thread(ser, ser1, ui = ui, starttime = temptime) # 开始计时
+        self.time_th.thread_loopfun(self.time_th.run_time) # 循环函数
+        self.push_opea()
 
 
-        if (self.ui.Simnum_spinBox.value() == glo_var.now_Sam):
-            ms.statues_label.emit("已完成采样")
-            print( "time:", the_time, "已完成采样")
-            self.time_th._running = False
-            self.ui.Collectbegin_Button.setEnabled(True)
+    def push_opea(self): # 一系列执行操作
+        for i in range(1, glo_var.target_Sam + 1):  # target_Sam个样品循环操作
+            print("开始操作:glo_var.now_Sam", glo_var.now_Sam)
+            glo_var.now_Sam = i   # 更新当前样品的索引
+
+            self.pos_down()  # 插入
+            print("time:", self.time_th.time, "插入样品" + str(i))
+
+            self.sample_collect()  # 采集
+            print("time:", self.time_th.time, "样品" + str(i) + "开始采集")
+
+            self.room_clear()
+            print("time:", self.time_th.time, "气室正在清洗, 下一个为样品" + str(i + 1))
+
             self.pos_top_before()
-            time.sleep(2)
-            self.ser1.serialSend('0C', flag = True)
+            print("time:", self.time_th.time, "拔出样品" + str(i))
+
+            self.pos_top()  # 转移位置到下一个样品
+            print("time:", self.time_th.time, "转移位置到下一个样品" + str(i + 1))
+
+            # 一旦循环结束，可以设置start_flag为True，表示可以开始下一次循环
+        self.start_flag = True
 
 
     def is_clear_time(self, Opea_time):
@@ -163,45 +183,72 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
          Opea_time == (self.alltime - self.cleartime)) and glo_var.now_Sam < int(self.ui.Simnum_spinBox.value())
 
     def channal_heat(self): # 通道加热，只需要ser1操作
+        target_temp = self.ui.Heattep_SpinBox.value()
         glo_var.now_chan += 1
-        self.ser1.serialSend(1, glo_var.channal[glo_var.now_chan], int(glo_var.target_temp), flag = True)  # 开始下一个通道xx加热信号
-        ms.statues_label.emit("通道" + str(glo_var.now_chan) + "实（" + str(glo_var.channal[glo_var.now_chan]) + "）开始加热")
+        self.ser_opea(1, glo_var.channal[glo_var.now_chan], target_temp)
+        self.time_th.time = 0 #重新开始计算时间
+        self.ui._statues_label.setText("通道" + str(glo_var.now_chan) + "）开始加热")
 
     def sample_collect(self): # 信号采集
         if glo_var.Save_flag != "开始采集":
             glo_var.Save_flag = "开始采集"
         # 清空采集数据
         ms._ClearDraw.emit()
-        glo_var.now_Sam += 1
-        text = ("#Sample1$\r\n")
-        self.ser_opea(text, 3, self.gettime)  # 信号发出采集信号
-        ms.statues_label.emit("样品" + str(glo_var.now_Sam) + "开始采集")
+        while True:
+            if glo_var.now_Sam == 1 or self.ser.getSignal == "32":  # 清洗完成
+                text = ("21\n\r")
+                self.ser_opea(3, self.gettime, text=text)
+                ms._statues_label.emit("样品" + str(glo_var.now_Sam) + "开始采集")
+                break
+
 
     def room_clear(self):
         if glo_var.Save_flag != "采集完成":
             glo_var.Save_flag = "采集完成"
         print("清空绘图面板")
         ms._ClearDraw.emit()
-        text = ("#Clear1$\r\n")
-        ms.statues_label.emit("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
-        self.ser.write(text)  # 开始采集信号
-        self.ser1.serialSend(4, self.cleartime, flag = True)
+        while True:
+            if self.ser.getSignal == "22":  # 采样完成
+                ms._statues_label.emit("样品" + str(glo_var.now_Sam + 1) + "正在采样")
+                text = ("31\n\r")
+                ms._statues_label.emit("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
+                self.ser_opea(4, self.cleartime, text=text)
+                break
+
 
     def pos_top(self):
-        self.ser1.serialSend("0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1],
-                                (int)(glo_var.posxyz[glo_var.now_Sam + 1][2] * 0.1), flag = True)
+        if(glo_var.now_Sam != glo_var.target_Sam):
+            self.ser_opea("0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1],
+                                (int)(glo_var.posxyz[glo_var.now_Sam + 1][2] * 0.1))
+        else:
+            self.Stra()
 
     def pos_top_before(self):
-        self.ser1.serialSend("0A", glo_var.posxyz[glo_var.now_Sam][0], glo_var.posxyz[glo_var.now_Sam][1],
-                                (int)(glo_var.posxyz[glo_var.now_Sam][2] * 0.1),flag = True)
+        self.ser_opea("0A", glo_var.posxyz[glo_var.now_Sam][0], glo_var.posxyz[glo_var.now_Sam][1],
+                                (int)(glo_var.posxyz[glo_var.now_Sam][2] * 0.1))
 
     def pos_down(self):
-        self.ser1.serialSend("0A", glo_var.posxyz[glo_var.now_Sam + 1][0], glo_var.posxyz[glo_var.now_Sam + 1][1],
-                                (int)(glo_var.posxyz[glo_var.now_Sam + 1][2]), flag = True)
+        self.ser_opea("0A", glo_var.posxyz[glo_var.now_Sam][0], glo_var.posxyz[glo_var.now_Sam][1],
+                                (int)(glo_var.posxyz[glo_var.now_Sam][2]))
 
-    def ser_opea(self, text, opea, opea1, opea2 = 0, opea3 = 0): # ser与ser1发送信号
-        self.ser.write(text)  # 开始采集信号
-        self.ser1.serialSend(opea, opea1, opea2, opea3, flag = True)
+    def Stra(self): # 运动轴回到原点
+
+        self.ser_opea('0C')
+
+    def ser_opea(self, opea, opea1, opea2 = 0, opea3 = 0, text = None): # ser与ser1发送信号
+        if text != None:
+            while True:  # 没到回复
+                self.ser.write(text)  # 开始采集信号
+                time.sleep(1)
+                if self.ser.sameSignal == True:
+                    break
+        while True:  # 没到回复
+            self.ser1.serialSend(opea, opea1, opea2, opea3, flag = True)
+            time.sleep(1)
+            if self.ser1.sameSignal == True:
+                break
+
+
 
 
 class Serial1opea():
@@ -221,13 +268,10 @@ class Serial1opea():
         Frame = frame_data.FrameData()
         parts = parts[2 : Frame.pkgLen - 1]
         Frame.setDataToArray(parts)
-        self.ser.getSignal = Frame.buf
-        print("收到的信号:", self.GetSigal)
         if (Frame.buf[2] == '02'): # 获取温度
             num = int.from_bytes(bytes.fromhex(Frame.buf[4] + Frame.buf[5]), byteorder='big')  # 1000
             text = num / 10.0
             glo_var.now_temp = text # 更新现在的温度
-            ms._Currtem_spinBox.emit(text)
         if (Frame.buf[2] == '0B'): # 读取当前坐标
             x = int.from_bytes(bytes.fromhex(Frame.buf[3] + Frame.buf[4]), byteorder='big')  # 1000
             y = int.from_bytes(bytes.fromhex(Frame.buf[5] + Frame.buf[6]), byteorder='big')  # 1000

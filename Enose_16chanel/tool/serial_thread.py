@@ -18,8 +18,10 @@ class myserial():
     def __init__(self, port="", bund=0, hex_flag = 0):
         # 初始化串口类
         self.read_flag = False  # 读取标志，用于控制读取线程
+
         self.sendSignal = None
         self.getSignal = None
+        self.sameSignal = False
 
         self.pause_flag = False  # 暂停标志，用于控制暂停和恢复
         self.busy = False
@@ -64,15 +66,19 @@ class myserial():
             return 1, "打开串口%s失败\n%s\n" % (self.port, str(e))  # 返回失败信息
 
     def write(self, text):
-        self.sendSignal = text
-        print("self.sendSignal: ", self.sendSignal)
         # 向串口写入数据
         if self.ser:
             if self.hex_flag == 0:
                 result = self.ser.write(text.encode('utf-8'))  # 将字符串编码为字节并写入串口
+                self.sendSignal = text.strip()
             else:
+                # 转换为大写并用空格连接
+                self.sendSignal = ' '.join(b.upper() for b in text[:])
+                self.sendSignal = self.sendSignal.strip()  # 去除首尾的空白字符、换行符、回车符
                 text = self.hexarrytobytes(text) # hex
                 result = self.ser.write(text)
+            print("self.sendSignal: ", self.sendSignal)
+            self.sameSignal = False
             return result  # 返回写入的字节数
         else:
             return 0
@@ -133,9 +139,10 @@ class myserial():
                         #为 data 中的每个字节生成一个十六进制字符串, 数组转string
                         hex_data = ' '.join(f'{b:02X}' for b in data)
                         text = hex_data + ' '
-                    self.getSignal = text
+                    self.getSignal = text.strip()
                     print("self.getSignal: ", self.getSignal)
-                    print("是否相等：",self.getSignal == self.sendSignal)
+                    self.sameSignal = (self.getSignal == self.sendSignal)
+                    print("是否相等：",self.sameSignal)
                     fun(text)
 
 
