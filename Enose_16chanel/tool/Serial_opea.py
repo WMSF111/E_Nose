@@ -78,7 +78,7 @@ class time_thread(): # 时间相关的线程
         while self._running:
             # 线程安全：把值读出来再比较
             target = self.ui.Heattep_SpinBox.value()
-            # print("现在温度是：", glo_var.now_temp)
+            print("现在温度是：", glo_var.now_temp)
             ms._Currtem_spinBox.emit(glo_var.now_temp)
             self.ser1.serialSend(2, glo_var.channal[1])
             self.time += 1
@@ -135,7 +135,7 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
     def __init__(self, ui, temptime, ser, ser1, gettime = 10):
         print("temptime:", temptime, "cleartime:", ui.Cleartime_spinBox.value(), "standtime:", ui.Standtime_spinBox.value())
         self.ui = ui
-        self.start_flag = True
+        self.over_flag = False
         self.temptime = temptime # 达到目标温度的时间
         self.cleartime = ui.Cleartime_spinBox.value() # 洗气时常
         self.standtime = ui.Standtime_spinBox.value() # 保持温度时常
@@ -158,24 +158,29 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         for i in range(1, glo_var.target_Sam + 1):  # target_Sam个样品循环操作
             print("开始操作:glo_var.now_Sam", glo_var.now_Sam)
             glo_var.now_Sam = i   # 更新当前样品的索引
+            time.sleep(4)
 
             self.pos_down()  # 插入
             print("time:", self.time_th.time, "插入样品" + str(i))
+            time.sleep(4)
 
             self.sample_collect()  # 采集
             print("time:", self.time_th.time, "样品" + str(i) + "开始采集")
 
             self.room_clear()
             print("time:", self.time_th.time, "气室正在清洗, 下一个为样品" + str(i + 1))
+            if glo_var.Save_flag == "等待下次采集":
+                print("清空绘图面板")
+                ms._ClearDraw.emit()
 
             self.pos_top_before()
             print("time:", self.time_th.time, "拔出样品" + str(i))
+            time.sleep(2)
 
             self.pos_top()  # 转移位置到下一个样品
             print("time:", self.time_th.time, "转移位置到下一个样品" + str(i + 1))
 
-            # 一旦循环结束，可以设置start_flag为True，表示可以开始下一次循环
-        self.start_flag = True
+
 
 
     def is_clear_time(self, Opea_time):
@@ -193,23 +198,21 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
         if glo_var.Save_flag != "开始采集":
             glo_var.Save_flag = "开始采集"
         # 清空采集数据
-        ms._ClearDraw.emit()
+        # ms._ClearDraw.emit()
         while True:
             if glo_var.now_Sam == 1 or self.ser.getSignal == "32":  # 清洗完成
                 text = ("21\n\r")
-                self.ser_opea(3, self.gettime, text=text)
+                self.ser_opea(3, self.gettime, text=text,
+                              re = "55 AA 03 00 01 00 00 00 00 0A")
                 ms._statues_label.emit("样品" + str(glo_var.now_Sam) + "开始采集")
                 break
 
 
     def room_clear(self):
-        if glo_var.Save_flag != "采集完成":
-            glo_var.Save_flag = "采集完成"
-        print("清空绘图面板")
-        ms._ClearDraw.emit()
         while True:
             if self.ser.getSignal == "22":  # 采样完成
-                ms._statues_label.emit("样品" + str(glo_var.now_Sam + 1) + "正在采样")
+                if glo_var.Save_flag != "采集完成":
+                    glo_var.Save_flag = "采集完成"
                 text = ("31\n\r")
                 ms._statues_label.emit("气室正在清洗" + "下一个为样品" + str(glo_var.now_Sam + 1))
                 self.ser_opea(4, self.cleartime, text=text)
@@ -222,6 +225,9 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
                                 (int)(glo_var.posxyz[glo_var.now_Sam + 1][2] * 0.1))
         else:
             self.Stra()
+            self.time_th._running = False # 关闭计时
+            self.ui.Collectbegin_Button.setEnabled(True)
+            self.ui.pause_serial() # 关闭所有线程
 
     def pos_top_before(self):
         self.ser_opea("0A", glo_var.posxyz[glo_var.now_Sam][0], glo_var.posxyz[glo_var.now_Sam][1],
@@ -232,20 +238,29 @@ class time_opea(): # 得到达温时间后，正式开启采样过程
                                 (int)(glo_var.posxyz[glo_var.now_Sam][2]))
 
     def Stra(self): # 运动轴回到原点
-
         self.ser_opea('0C')
 
-    def ser_opea(self, opea, opea1, opea2 = 0, opea3 = 0, text = None): # ser与ser1发送信号
+    def ser_opea(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, text = None, re = None): # ser与ser1发送信号
+        num = 0
         if text != None:
             while True:  # 没到回复
                 self.ser.write(text)  # 开始采集信号
                 time.sleep(1)
+                num += 1
                 if self.ser.sameSignal == True:
                     break
+                if num == 5:
+                    ms._statues_label.emit("信号串口掉线")
+                    break
         while True:  # 没到回复
-            self.ser1.serialSend(opea, opea1, opea2, opea3, flag = True)
+            self.ser1.serialSend(opea, opea1, opea2, opea3, flag = True,
+                                 re = re)
             time.sleep(1)
             if self.ser1.sameSignal == True:
+                break
+            num += 1
+            if num == 5:
+                ms._statues_label.emit("控制串口掉线")
                 break
 
 

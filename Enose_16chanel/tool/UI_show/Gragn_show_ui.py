@@ -37,6 +37,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.curves = []
         self.alldata = [[] for _ in range(self.data_len)]
         self.data = copy.deepcopy(self.alldata)
+        self.now_data = None
         self.draw = None
         self.get_time = 60
         self._data_lines = dict()  # 已存在的绘图线
@@ -82,17 +83,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
-            d = self.ser.open(Signal)
+            d = self.ser.open(Signal, stock=0)
             print("控制串口初始化成功：", d)
 
     def open_serial1(self, Signal): # 确保串口初始化
         if not self.ser1.read_flag: # 如果串口存在
-            d = self.ser1.open(Signal, flag=1) # 16进制
+            d = self.ser1.open(Signal, stock=0,  flag=1) # 16进制
             print("控制串口初始化成功：", d)
 
     def Stra(self): # 运动轴回到原点
-        self.ser1.d.setDataTodo('0C')
-        self.ser1.serialSend(True)
+        self.ser1.serialSend('0C',flag=True)
         self.open_serial(self.process_data)
         text = ("base_time:" + str(30) +
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
@@ -108,25 +108,35 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.alldata = copy.deepcopy(self.data)
         # 启动串口
         self.ser.resume()
-        while self.ser.status not in ["1","1"]:
+        num = 0
+        while self.ser.getSignal != "11":
             text = ("11\n\r")
             self.ser.write(text)
             time.sleep(1)
+            num += 1
+            if num >= 5:
+                self.statues_label.setText("信号串口无应答")
+                break
 
-        self.draw = SO.time_thread(self.ser, self.ser1, ui = self, stoptime=30)
-        self.draw.thread_looparri_fun(self.updata)
+        if self.draw == None:
+            self.draw = SO.time_thread(self.ser, self.ser1, ui = self, stoptime=30)
+            self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
+        else:
+            self.draw._running = True # 开始运行
 
 
     def start_serial(self): # 开始采集
-        if self.draw:
-            self.draw._running = False
+        if self.draw == None:
+            self.draw = SO.time_thread(self.ser, self.ser1, ui = self)
+            self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
+        else:
+            self.draw._running = True # 开始运行
         self.ser.resume()
+        g_var.target_Sam = self.Simnum_spinBox.value()
 
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
         self.alldata = copy.deepcopy(self.data)
-        self.draw = SO.time_thread(self.ser, self.ser1, ui = self)
-        self.draw.thread_looparri_fun(self.updata)  # 每一秒更新一次
         self.Collectbegin_Button.setEnabled(False)
         # 到达1号位置
         self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
@@ -135,8 +145,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser1.serialSend(1, g_var.channal[1], int(self.Heattep_SpinBox.value()), flag=True)
 
         g_var.target_temp = self.Heattep_SpinBox.value() # 设置目标温度
-        # self.get_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 开始计时
-        # self.get_th.thread_looparri_fun(self.print_time)  # 循环函数
         self.time_th = SO.time_thread(self.ser, self.ser1, ui = self)  # 创建time线程对象
         self.time_th.thread_loopfun(self.time_th.loop_to_target_temp)  # 循环直到达到指定温度
 
@@ -152,29 +160,36 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def pause_serial(self): # 暂停采集
         if self.ser.pause_flag == False: # 如果正在采集
-            self.ser.pause()
             self.Pause_Button.setText("继续采集")
             print("暂停采集")
-        else:
-            self.ser.resume()
+            if self.draw and self.draw._running == True:
+                self.draw.stop()
+            if self.time_th and self.time_th._running == True:
+                self.time_th.stop()
+            if self.time_th.opea and self.time_th.opea.time_th._running == True:
+                self.time_th.opea.time_th.stop()
+        else: # 如果采集结束
             self.Pause_Button.setText("暂停采集")
             self.Collectbegin_Button.setEnabled(True)
             print("继续采集")
-        if self.draw and self.draw._running == True:
-            self.draw.stop()
-        if self.time_th and self.time_th._running == True:
-            self.time_th.stop()
-        if self.time_th.opea and self.time_th.opea.time_th._running == True:
-            self.time_th.opea.time_th.stop()
+            if self.draw and self.draw._running == False:
+                self.draw._running = True
+            if self.time_th and self.time_th._running == False:
+                self.time_th._running = True
+            if self.time_th.opea and self.time_th.opea.time_th._running == False:
+                self.time_th.opea.time_th._running = True
+
 
     def process_data(self, data):
         if (g_var.Save_flag == "采集完成"):
             print(g_var.Save_flag)
             self.auto_savefile()
             g_var.Save_flag = "等待下次采集"
+            self.draw._running = False
         if(g_var.Save_flag == "开始采集"):
             print(g_var.Save_flag)
             self.data = [[] for _ in range(self.data_len)]
+            self.draw._running = True
             g_var.Save_flag = "正在采集"
         if self.Currtem_spinBox.value() == 1 and g_var.now_temp != 1:
             self.Currtem_spinBox.setValue(g_var.now_temp)
@@ -183,10 +198,10 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.ser.status = ["1", data[1]]
             print("ser的状态为", self.ser.status)
         else:
-            values = self.decode_data(data)
-            if len(values) == self.data_len:
-                values = [int(v) for v in values]
-                for i, value in enumerate(values):
+            self.now_data = self.decode_data(data)
+            if len(self.now_data) == self.data_len:
+                self.now_data = [int(v) for v in self.now_data]
+                for i, value in enumerate(self.now_data):
                     self.alldata[i].append(value)
                     if len(self.alldata[i]) > 300:  # 限制数据长度
                         self.alldata[i].pop(0)
@@ -194,10 +209,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                 # self.update_table()  # 更新表格
 
     def updata(self, time):
-        if self.alldata[0]: # 如果读取到了数据
-            for i in range(len(self.alldata)):  # 使用索引遍历
-                self.data[i].append(self.alldata[i][-1])  # 获取 alldata 中每个子列表的最后一个元素
-        if self.data[0]:
+        # print("更新图表")
+        if self.now_data: # 如果读取到了数据
+            for i, value in enumerate(self.now_data):
+                self.data[i].append(value)
+                if len(self.data[i]) > 300:  # 限制数据长度
+                    self.data[i].pop(0)
             self.redraw()  # 更新图表
             self.update_table()  # 更新表格
 

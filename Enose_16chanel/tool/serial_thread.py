@@ -37,7 +37,7 @@ class myserial():
         self.port = port
         self.bund = bund
 
-    def open(self, fun, flag = 0, stock = 0, timeout=100):
+    def open(self, fun, flag = 0, stock = 0, timeout=1000):
         # flag == 1, 16进制
         self.hex_flag = flag
         # 打开串口
@@ -83,7 +83,7 @@ class myserial():
         else:
             return 0
 
-    def serialSend(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, flag = False): # 发送 FrameData 对象中的数据到串口。
+    def serialSend(self, opea, opea1 = 0, opea2 = 0, opea3 = 0, flag = False, re = None): # 发送 FrameData 对象中的数据到串口。
         if not self.busy:
             if hasattr(self, 'ser'):
                 try:
@@ -91,6 +91,8 @@ class myserial():
                     text = self.d.setDataTodo(opea, opea1, opea2, opea3)  # 切换到下一个样品位置
                     if (flag): print(text)
                     self.write(text)
+                    if re != None:
+                        self.sendSignal = re
                     self.busy = False
                 except serial.serialutil.SerialException:
                     self.no_error = False
@@ -102,7 +104,9 @@ class myserial():
           - 含非打印或 0x00 → 十六进制字符串
         fun(line: str) 回调收到的内容
         """
-        buffer = bytearray() # 创建 可变字节数组
+        buffer = bytearray()  # 创建可变字节数组
+        slip_n = b'\n\r'  # 用于按行切帧
+
         while True:
             with self.lock:
                 if not self.read_flag:
@@ -110,40 +114,53 @@ class myserial():
                 if self.pause_flag:
                     continue
 
-            # try:
-                if self.ser.in_waiting:
-                    data = self.ser.read(self.ser.in_waiting)
-                    slip_n = b'\r\n'
-                    # if self.hex_flag == 1:
-                    #     # 为 data 中的每个字节生成一个十六进制字符串, 数组转string
-                    #     hex_data = ' '.join(f'{b:02X}' for b in data)
-                    #     data = hex_data + ' '
-                        # data = (hex_data).encode('ascii')  # b'55 AA 02 01 00 00 00 00 00 0A\r\n'
-                    buffer.extend(data)
+            if self.ser.in_waiting:
+                data = self.ser.read(self.ser.in_waiting)
+                buffer.extend(data)
+                # 判断是否是十六进制接收模式
+                if self.hex_flag == 0:
+                    # 判断缓冲区内是否有完整帧
+                    while slip_n in buffer:
+                        frame, buffer = buffer.split(slip_n, 1)  # 按 \r\n 切帧
+                        # 处理 ASCII 数据帧
+                        text = frame.decode('utf-8', errors='replace')
+                        # 回调
+                        fun(text)
+                        text = text.strip()
+                        if text[0] == "1" or text[0] == "2" or text[0] == "3":
+                            # 打印当前接收到的信号与预期信号的比较
+                            self.getSignal = text.strip()
+                            print("self.getSignal: ", self.getSignal)
+                            self.sameSignal = (self.getSignal == self.sendSignal)
+                            print("是否相等：", self.sameSignal)
+                else:  # 十六进制接收模式
+                    # 查找 '55 AA' 在字节数组中的位置
+                    start_index = buffer.find(b'\x55\xAA')
 
-                    # 按 \r\n 切帧
-                    if self.hex_flag == 0:
-                        while slip_n in buffer:
-                            frame, buffer = buffer.split(slip_n, 1)
-                            # 1.  ASCII
-                            text = frame.decode('utf-8', errors='replace')
-                                # 其它字节 → 标准 HEX 字符串
-                                # text = frame.hex().upper()  # ← 这里改成无空格的即可
-                    else: #十六进制接收
-                        # 查找 '55 AA' 在字节数组中的位置
-                        start_index = data.find(b'\x55\xAA')  # b'\x55\xAA' 是字节表示的 55 AA
+                    if start_index != -1:
+                        # 确保帧头之后，接收到至少10字节的数据
+                        if len(buffer) >= start_index + 10:
+                            # 提取完整的数据帧
+                            frame = buffer[start_index:start_index + 10]
 
-                        if start_index != -1:
-                            # 提取从 '55 AA' 开始的后面 8 个字节
-                            data = data[start_index:start_index + 10]  # 10 = 2 (55 AA) + 8 (后面的字节)
-                        #为 data 中的每个字节生成一个十六进制字符串, 数组转string
-                        hex_data = ' '.join(f'{b:02X}' for b in data)
-                        text = hex_data + ' '
-                    self.getSignal = text.strip()
-                    print("self.getSignal: ", self.getSignal)
-                    self.sameSignal = (self.getSignal == self.sendSignal)
-                    print("是否相等：",self.sameSignal)
-                    fun(text)
+                            # 为每个字节生成十六进制字符串
+                            hex_data = ' '.join(f'{b:02X}' for b in frame)
+                            text = hex_data
+
+                            # 打印当前接收到的信号与预期信号的比较
+                            self.getSignal = text.strip()
+                            print("self.getSignal: ", self.getSignal)
+
+                            # 比较接收到的信号与发送信号是否一致
+                            self.sameSignal = (self.getSignal == self.sendSignal)
+                            print("是否相等：", self.sameSignal)
+
+                            # 回调
+                            fun(text)
+
+                            # 清空缓冲区，避免重复处理
+                            buffer = buffer[start_index + 10:]
+
 
 
     def pause(self):
