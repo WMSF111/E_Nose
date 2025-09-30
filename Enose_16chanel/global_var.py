@@ -51,6 +51,10 @@ channal = [0, 4,3,2,1,5,6,7,8]
 now_chan = 1
 now_Sam = 0
 target_Sam = 1
+gettime = 0
+cleartime = 0
+standtime = 0
+
 
 Port_select2 = ""
 Bund_select2 = 9600
