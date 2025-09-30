@@ -77,7 +77,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.data_len = len(g_var.sensors)
         self.now_data = 0
         self.data = [[] for _ in range(self.data_len)]
-        self.alldata = copy.deepcopy(self.data)
+        self.alldata = [[] for _ in range(self.data_len)]
         # # 初始化串口
         self.serial_setting()
 
@@ -170,7 +170,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Clear_Button.setEnabled(False) # 不允许继续
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
-        self.alldata = copy.deepcopy(self.data)
+        self.alldata = [[] for _ in range(self.data_len)]
         # 启动串口
         self.ser.resume()
         num = 0
@@ -191,7 +191,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         # 更新图像并开始画图
         self.data = [[] for _ in range(self.data_len)]
-        self.alldata = copy.deepcopy(self.data)
+        self.alldata = [[] for _ in range(self.data_len)]
         self.Collectbegin_Button.setEnabled(False)
         # 到达1号位置
         self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],

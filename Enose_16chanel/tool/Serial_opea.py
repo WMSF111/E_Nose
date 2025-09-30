@@ -249,17 +249,18 @@ class Serial1opea():
         if text != None:
             while True:  # 没到回复
                 self.ser.write(text)  # 开始采集信号
-                time.sleep(1)
+                time.sleep(2)
                 num += 1
                 if self.ser.sameSignal == True:
                     break
                 if num == 5:
                     self.ms._statues_label.emit("信号串口掉线")
                     break
+        num = 0
         while True:  # 没到回复
             self.ser1.serialSend(opea, opea1, opea2, opea3, flag = True,
                                  re = re)
-            time.sleep(1)
+            time.sleep(2)
             if self.ser1.sameSignal == True:
                 break
             num += 1

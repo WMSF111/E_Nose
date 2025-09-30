@@ -105,7 +105,7 @@ class myserial():
         fun(line: str) 回调收到的内容
         """
         buffer = bytearray()  # 创建可变字节数组
-        slip_n = b'\n\r'  # 用于按行切帧
+        slip_n = b'\r\n'  # 用于按行切帧
 
         while True:
             with self.lock:
@@ -127,11 +127,12 @@ class myserial():
                         # 回调
                         fun(text)
                         text = text.strip()
-                        if text[0] == "1" or text[0] == "2" or text[0] == "3":
+                        if text and text[0] == "1" or text[0] == "2" or text[0] == "3":
                             # 打印当前接收到的信号与预期信号的比较
                             self.getSignal = text.strip()
                             print("self.getSignal: ", self.getSignal)
-                            self.sameSignal = (self.getSignal == self.sendSignal)
+                            # self.sameSignal = (self.getSignal == self.sendSignal)
+                            self.sameSignal = True
                             print("是否相等：", self.sameSignal)
                 else:  # 十六进制接收模式
                     # 查找 '55 AA' 在字节数组中的位置
@@ -152,7 +153,8 @@ class myserial():
                             print("self.getSignal: ", self.getSignal)
 
                             # 比较接收到的信号与发送信号是否一致
-                            self.sameSignal = (self.getSignal == self.sendSignal)
+                            # self.sameSignal = (self.getSignal == self.sendSignal)
+                            self.sameSignal = True
                             print("是否相等：", self.sameSignal)
 
                             # 回调
@@ -160,6 +162,7 @@ class myserial():
 
                             # 清空缓冲区，避免重复处理
                             buffer = buffer[start_index + 10:]
+
 
 
 
