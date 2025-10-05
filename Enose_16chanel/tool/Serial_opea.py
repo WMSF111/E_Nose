@@ -162,7 +162,7 @@ class Serial1opea():
 
             self.sample_collect()  # 采集
             print( "样品" + str(self.now_Sam) + "开始采集")
-
+            self.ms._draw_open.emit()
             self.room_clear()
             print("气室正在清洗, 下一个为样品" + str(self.now_Sam + 1))
             self.ms._ClearDraw.emit()
@@ -182,7 +182,6 @@ class Serial1opea():
         self.ms._statues_label.emit("通道" + str(self.now_chan) + "）开始加热")
 
     def sample_collect(self): # 信号采集
-        self.ms._draw_open.emit()
         # 清空采集数据
         # self.ms._ClearDraw.emit()
         while True:
@@ -203,6 +202,7 @@ class Serial1opea():
                 self.ms._statues_label.emit("气室正在清洗" + "下一个为样品" + str(self.now_Sam + 1))
                 self.ser_opea(4, self.cleartime, text=text)
                 break
+            time.sleep(1)
 
 
     def pos_top(self):
@@ -249,6 +249,7 @@ class Serial1opea():
             num += 1
             if num == target:
                 self.ms._statues_label.emit("控制串口掉线,退出程序")
+                print("控制串口掉线,退出程序")
                 self.Stra()
                 self.ms._pause_serial.emit()
                 break
