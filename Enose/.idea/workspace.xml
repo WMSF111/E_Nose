@@ -5,65 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Serial.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Serial_Show.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Serial_opea.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/file/data_1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/running.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ChooseAndShow/running_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/ChooseAndShow/running_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/.idea/Enose.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/.idea/Enose.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/data_file/alg_tabadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/data_file/alg_tabadd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/data_file/algriothm.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/data_file/algriothm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/data_file/filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/data_file/filter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/data_file/transfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/data_file/transfo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/resource_ui/ui_pfile/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/resource_ui/ui_pfile/ChooseAndShow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/resource_ui/ui_pfile/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/resource_ui/ui_pfile/Gragh_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/ChooseAndShow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/ChooseAndShow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/ChooseAndShow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Gragh_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Gragh_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Gragn_uishow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Gragn_uishow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Serial_Show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Serial_Show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Serial_opea.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Serial_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Serial_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/Serial_uishow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/Serial_uishow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_10.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_10.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_11.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_11.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_12.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_12.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_13.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_13.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_4.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_6.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_6.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_7.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_7.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_8.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_8.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/file/data_9.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/file/data_9.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/frame_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/frame_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/global_var.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/ChooseAndShow_2/serial_thread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/ChooseAndShow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Gragh_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Gragn_uishow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show/frame_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/global_var.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Gragh_show/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/serial_thread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_test/Serial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_test/frame_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/frame_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_test/global_var.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_test/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_ui/Serial_uishow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/Serial_test/serial_thread.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/test/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Alg_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Alg_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/global_var.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/Serial_opea.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/serial_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/serial_thread.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,19 +47,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.MainWindow_show.executor&quot;: &quot;Run&quot;,
-    &quot;Python.The_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/study/Python/PyCharm_study/E_Nose/Enose&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.MainWindow_show.executor": "Run",
+    "Python.The_main.executor": "Run",
+    "Python.running.executor": "Run",
+    "Python.running_main.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "E__Nose2",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
