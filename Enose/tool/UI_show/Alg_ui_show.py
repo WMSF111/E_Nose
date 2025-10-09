@@ -1,15 +1,12 @@
 '''测试算法页面'''
 
-import sys,os
-import pandas as pd
+import sys
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-from Enose.resource_ui.ui_pfile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
-import Enose.data_file.transfo as transfo
-import Enose.data_file.algriothm as algriothm
-import Enose.resource_ui.alg_puifile.alg_show as alg_show
+from resource_ui.alg_puifile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
+import data_file.transfo as transfo
 import matplotlib.pyplot as plt
-import Enose.global_var as glov
-from Enose.data_file.alg_tabadd import ALG_TAB_ADD
+import global_var as glov
+from data_file.alg_tabadd import ALG_TAB_ADD
 
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置字体为 SimHei
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
@@ -36,17 +33,15 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         self.tabWidget.removeTab(index)
 
     def ComboInit(self):
-        self.Di_Re_ComboBox.addItems(["无", "PCA", "LDA", "选项3"])  # 添加选项
-        self.Di_Re_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
-        self.Di_Re_ComboBox.currentIndexChanged.connect(self.tabadd.Di_Re_Combo_select)
-        self.Classify_ComboBox.addItems(["无", "线性回归", "选项2", "选项3"])  # 添加选项
+        self.Classify_ComboBox.addItems(["无", "PCA", "LDA", "选项3"])  # 聚类算法
         self.Classify_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
-        self.Classify_ComboBox.currentIndexChanged.connect(self.tabadd.Classify_Combo_select)
-        self.Cluster_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项
-        self.Cluster_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
-        # self.Cluster_ComboBox.currentIndexChanged.connect(self.Cluster_Combo_select)
-        self.Reg_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项
+        self.Classify_ComboBox.activated.connect(self.tabadd.Di_Re_Combo_select)
+        self.Reg_ComboBox.addItems(["无", "线性回归", "选项2", "选项3"])  # 回归算法
         self.Reg_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
+        self.Reg_ComboBox.activated.connect(self.tabadd.Classify_Combo_select)
+        self.Pre_Button.clicked.connect(self.tabadd.Filter_Combo_select)
+        self.Net_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项
+        self.Net_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         # self.Reg_ComboBox.currentIndexChanged.connect(self.Reg_Combo_select)
 
     def select_file(self):

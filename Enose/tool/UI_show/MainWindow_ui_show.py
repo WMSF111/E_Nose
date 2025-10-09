@@ -1,11 +1,11 @@
 ''' 用来显示主界面和其他界面的关系'''
 
-import Enose.tool.UI_show.serial_show as se
+import tool.UI_show.serial_show as se
 from PySide6.QtWidgets import QMainWindow
-from Enose.resource_ui.ui_pfile.MianWindow import Ui_MainWindow
-from Enose.tool.UI_show.Gragn_show_ui import GraphShowWindow
-from Enose.resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
-from Enose.tool.UI_show.Alg_ui_show import AlgShow_Init
+from resource_ui.ui_pfile.MianWindow import Ui_MainWindow
+from tool.UI_show.Gragn_show_ui import GraphShowWindow
+from resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
+from tool.UI_show.Alg_ui_show import AlgShow_Init
 
 class MianWindow_Init(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -23,14 +23,15 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
         if item.text(column) == "准备阶段":
             self.clear_layout()
         # 检查点击的项目是否是“串口设置”
-        if item.text(column) == "串口设置":
+        if item.text(column) == "传感器设置":
             # 创建并显示串口设置窗口
             self.serial_settings_window = se.Serial_Init()
             self.serial_settings_window.show()  # 显示窗口
+
         # 检查点击的项目是否是“传感器设置”
-        if item.text(column) == "传感器设置":
-            self.SerialSetting_show = SerialSetting_Init()
-            self.SerialSetting_show.show()  # 显示窗口
+        # if item.text(column) == "传感器设置":
+        #     self.SerialSetting_show = SerialSetting_Init()
+        #     self.SerialSetting_show.show()  # 显示窗口
         # 检查点击的项目是否是“测试阶段”
         if item.text(column) == "测试阶段":
             self.clear_layout()
@@ -64,5 +65,8 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
                 item.layout().deleteLater()  # 删除子布局
 
     def closeEvent(self, event):
-        self.test_show.closeEvent(event)
+        if hasattr(self, 'serial_settings_window'): # 检测是否存在 self.serial_settings_window
+            self.serial_settings_window.closeEvent(event)
+        if hasattr(self, 'test_show'):  # 检测是否存在 self.serial_settings_window
+            self.test_show.closeEvent(event)
         event.accept()  # 允许窗口真正关闭

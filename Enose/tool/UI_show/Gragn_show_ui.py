@@ -1,17 +1,79 @@
 import  sys, re, random
+import threading
+
 from PySide6.QtCore import (
-    Qt, QCoreApplication
+    Qt, QObject, Signal, QTimer
 )
-import Enose.tool.serial_thread as mythread
+import copy, time
+
+import global_var
+import tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
 import pyqtgraph as pg
-from Enose.resource_ui.ui_pfile.Gragh_show import Ui_Gragh_show
-import Enose.global_var as g_var
+from resource_ui.ui_pfile.ChooseAndShow import Ui_Gragh_show
+import global_var as g_var
 from itertools import cycle
-import logging
-
+import logging, os
+import tool.Serial_opea as SO
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+class MySignals(QObject):
+    _draw_open = Signal()
+    _draw_close = Signal()
+    _Clear_Button = Signal(bool)
+    _Collectbegin_Button = Signal(bool)
+    _Currtem_spinBox = Signal(float)  # 更新当前温度
+    _statues_label = Signal(str)
+    _ClearDraw = Signal()
+    _print = Signal(int)
+    _pause_serial = Signal()
+    _auto_save = Signal()
+
+
+class Action():
+    def __init__(self, ui: QWidget, ms) -> None:
+        self.ui = ui
+        self.ms = ms
+
+    def _draw_open(self):
+        print("继续绘图", self.ui.draw_flag)
+        self.ui.draw_flag = True
+        print(self.ui.draw_flag)
+
+    def _draw_close(self):
+        print("暂停绘图", self.ui.draw_flag)
+        self.ui.draw_flag = False
+        print(self.ui.draw_flag)
+
+    def _auto_save(self):
+        self.ui.auto_savefile()
+
+    def _Clear_Button(self, value: bool):
+        self.ui.Clear_Button.setEnabled(value)
+
+    def _Collectbegin_Button(self, value: bool):
+        self.ui.Collectbegin_Button.setEnabled(value)
+
+    def _Currtem_spinBox(self, value: float):
+        self.ui.Currtem_spinBox.setValue(value) #不断更新现在温度
+
+
+    def _statues_label(self, text: str):
+        self.ui.statues_label.setText(text)
+
+    def _ClearDraw(self):
+        self.ui.data = [[] for _ in range(self.ui.data_len)]
+        self.ui.alldata = [[] for _ in range(self.ui.data_len)]
+        self.ui.redraw()
+        self.ui.update_table()
+
+    def _print(self, time: int):
+        print(time)
+
+    def _pause_serial(self):
+        self.ui.pause_serial()
+
 
 # 主窗口类
 class GraphShowWindow(QWidget, Ui_Gragh_show):
@@ -19,18 +81,19 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         super(GraphShowWindow, self).__init__()
         self.setupUi(self)  # 设置 UI 界面
         self.setWindowTitle("串口数据实时显示")
-        self.data_len = len(g_var.sensors)
+        self.ms = MySignals()
+        self.a = Action(self, self.ms)
+        self.initMS()
 
-        # 初始化串口
-        # self.serial = myserial()  # 使用自定义的myserial类
-        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]  #
-        self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser1 = self.smng.ser_arr[1]
-        self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率
-        self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率
-        d = self.ser1.open(self.Showtemp, flag = 1)
-        print(d)
+        self.lock = threading.Lock()
+        self.data_len = len(g_var.sensors)
+        self.now_data = 0
+        self.now_num = 0
+        self.data = [[] for _ in range(self.data_len)]
+        self.alldata = [[] for _ in range(self.data_len)]
+        # # 初始化串口
+        self.serial_setting()
+
         # 初始化绘图
         self.plot_widget = pg.PlotWidget()
         self.Linegragh_Layout.addWidget(self.plot_widget)
@@ -39,23 +102,15 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.plot_widget.setLabel('left', 'Value')
         self.plot_widget.setLabel('bottom', 'Time(单位:s)')
 
-
-        self.pie_canvas = None  # 用于持有matplotlib画布引用
-
-
-        # self.plot_widget_2 = pg.PlotWidget()
-        # self.Piegragh_Layout.addWidget(self.plot_widget_2)
-        # self.plot_widget_2.setBackground('w')  # 设置绘图背景为白色
-
         self.curves = []
-        self.data = [[] for _ in range(self.data_len)]
-        self.time = 60
+        self.draw = None
+        self.time_th = None
+        self.draw_flag = False
+        self.get_time = 60
         self._data_lines = dict()  # 已存在的绘图线
-        self._data_items = dict()  # 数据查看器的数据
         self._data_colors = dict()  # 绘图颜色
         self._data_visible = g_var.sensors.copy() # 选择要看的传感器
-
-
+        print("glo_sensors:", g_var.sensors)
         self.colors = self.generate_random_color_list(self.data_len)
         self.color_cycle = cycle(self.colors)
 
@@ -68,85 +123,108 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
 
         # 连接信号
-        self.Dataclear_Button.clicked.connect(self.clear_data)
-        self.Collectbegin_Button.clicked.connect(self.start_serial) # start_serial
-        self.Gettep_Button.clicked.connect(self.Get_temp)  # start_serial
-        self.Heat_Button.clicked.connect(self.Heat_temp)  # start_serial
-        self.Pause_Button.clicked.connect(self.pause_serial)
-        self.Save_Button.clicked.connect(self.Save_file)
-        self.Folder_Button.clicked.connect(self.savefolder)
+        self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
+        self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
+        self.Pause_Button.clicked.connect(self.pause_serial) # 暂停采集
+        self.Save_Button.clicked.connect(self.savefile) # 保存按钮
+        self.InitPos_Button.clicked.connect(self.Stra) #初始化位置
+        self.Folder_Button.clicked.connect(self.savefolder) # 确认保存路径
 
-    def open_serial(self, port, baudrate):
+    def initMS(self):
+        self.ms._draw_open.connect(self.a._draw_open)
+        self.ms._draw_close.connect(self.a._draw_close)
+        self.ms._Currtem_spinBox.connect(self.a._Currtem_spinBox)
+        self.ms._statues_label.connect(self.a._statues_label)
+        self.ms._ClearDraw.connect(self.a._ClearDraw)
+        self.ms._print.connect(self.a._print)
+        self.ms._pause_serial.connect(self.a._pause_serial)
+        self.ms._auto_save.connect(self.a._auto_save)
+
+
+    def serial_setting(self):
+        if (g_var.Port_select == ""):
+            self.statues_label.setText("串口初始化有问题")
+        else:
+            self.statues_label.setText("串口初始化成功")
+        sconfig = [g_var.Port_select, g_var.Bund_select]
+        print(sconfig)
+        self.smng = mythread.SerialsMng(sconfig)
+        self.ser = self.smng.ser_arr[0]
+        self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
+        self.SO1 = SO.Serial1opea(self.ms, self.ser)
+
+    def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
-            d = self.ser.open(self.process_data)  # 打开串口，成功返回0，失败返回1， + str信息
-            print(d)
+            d = self.ser.open(Signal, stock=0)
+            print("控制串口初始化成功：", d)
+
+    def Stra(self): # 运动轴回到原点
+        with global_var.lock:
+            g_var.gettime = (int)(self.Sample_spinBox.value())
+            g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
+            g_var.standtime = 30 # 基线时长
+
+        self.open_serial(self.process_data)
+        text = ("base_time:" + str(30) +
+                ",sample_time:" + str(self.Sample_spinBox.value()) +
+                ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
+        self.ser.write(text)
+        print("clear_data:基线操作:", text)
+        # 开启线程
+        self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
+        self.draw = SO.time_thread(self.ser) # 创建绘图线程
+        self.draw.thread_draw(self.updata)
+        # self.draw.pause()
+
+    def clear_data(self): # 基线阶段
+        with global_var.lock:
+            g_var.Save_flag = "基线阶段"
+        self.ms._Clear_Button.emit(False) # 不允许继续
+        # 启动串口
+        self.time_th.thread_loopfun(self.SO1.base_clear)
+
+    def start_serial(self): # 开始采集
+        g_var.target_Sam = self.Simnum_spinBox.value()
+        self.Collectbegin_Button.setEnabled(False)
+        self.time_th.thread_loopfun(self.SO1.sample_collect)
 
 
-    def pause_serial(self):
-        if self.ser.pause_flag == False:
-            self.ser1.d.setDataTodo(5, 0)
-            self.ser1.serialSend()
-            self.ser.pause()
+    def pause_serial(self): # 暂停采集
+        if self.ser.pause_flag == False: # 如果正在采集
             self.Pause_Button.setText("继续采集")
             print("暂停采集")
-        else:
-            self.ser1.d.setDataTodo(5, 1)
-            self.ser1.serialSend()
+            self.ser.pause()
+            if self.time_th:
+                self.time_th.stop("time_th")
+        else: # 开始采集
             self.ser.resume()
             self.Pause_Button.setText("暂停采集")
+            self.Collectbegin_Button.setEnabled(True)
             print("继续采集")
 
-    def clear_data(self):
-        self.time = self.Cleartime_spinBox.value()
-        self.ser1.d.setDataTodo(4,self.time)
-        print("clear_data:", self.ser1)
-        self.ser1.serialSend()
-        self.data = [[] for _ in range(self.data_len)]
-        # print(self.time)
-        if(self.time != 0):
-            # 设置 x 轴的固定范围
-            self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
-        self.open_serial(g_var.Port_select, g_var.Bund_select)
-
-    def start_serial(self):
-        print("start_serial")
-        self.time = self.Inputtime_spinBox.value()
-        self.volum = self.Volum_spinBox.value()
-        self.ser1.d.setDataTodo(3, self.volum, self.time)
-        self.ser1.serialSend()
-        self.data = [[] for _ in range(self.data_len)]
-        # print(self.time)
-        if (self.time != 0):
-            # 设置 x 轴的固定范围
-            self.plot_widget.setXRange(0, self.time, padding=0)  # 设置 x 轴的范围为 0 到 300
-        self.open_serial(g_var.Port_select, g_var.Bund_select)
-
-    def Get_temp(self):
-        self.ser1.d.setDataTodo(2, self.Getchannel_spinBox.value())
-        self.ser1.serialSend()
-
-    def Heat_temp(self):
-        self.ser1.d.setDataTodo(1, self.Getchannel_spinBox.value(), int(self.Heattep_SpinBox_2.value()*10))
-        self.ser1.serialSend()
-
-    def Showtemp(self, text):
-        print("Shoetemp:",text)
-        parts = text.split()  # ['55','AA', ...]
-        byte4, byte5 = parts[4], parts[5]  # '03', 'EB'
-        num = int.from_bytes(bytes.fromhex(byte4 + byte5), byteorder='big')  # 1000
-        lst_int = [int(x, 16) for x in text.split()]
-        decimal_num = num / 10.0
-        print("lst_int[2]:",lst_int[2],"self.Getchannel_spinBox.value()",self.Getchannel_spinBox.value())
-        if lst_int[3] == self.Getchannel_spinBox.value():
-            self.Gettep_spinBox.setValue(decimal_num)
-
     def process_data(self, data):
-        print("process_data:", data)
         # 解析数据
-        values = re.findall(r'\d+', data)
-        if len(values) == self.data_len:
-            values = [int(v) for v in values]
-            for i, value in enumerate(values):
+        if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3"):
+            print("data:", data)
+        else:
+            now_data = self.decode_data(data)
+            if len(now_data) == self.data_len:
+                now_data = [int(v) for v in now_data]
+                for i, value in enumerate(now_data):
+                    self.alldata[i].append(value)
+                self.now_data = now_data
+
+                    # if len(self.data[i]) > 300:  # 限制数据长度
+                    #     self.data[i].pop(0)
+
+        # self.redraw()  # 更新图表
+        # self.update_table()  # 更新表格
+
+    def updata(self, time):
+        if self.draw_flag == True:
+            now_data = self.now_data
+            print("更新图标")
+            for i, value in enumerate(now_data):
                 self.data[i].append(value)
                 if len(self.data[i]) > 300:  # 限制数据长度
                     self.data[i].pop(0)
@@ -154,12 +232,33 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.update_table()  # 更新表格
 
 
-    def Save_file(self):
-        if self.ser.read_flag:
-            self.ser.stop()
-            self.ser1.d.setDataTodo(5,0)
-            self.ser1.serialSend()
-        self.savefile()
+    def decode_data(self, data):
+        # 在字符串 data 中查找所有与正则表达式 r'\d+' 匹配的子串，并以列表形式返回所有匹配结果。
+        # return re.findall(r'\d+',data)
+        # \d 表示任意一个数字字符（等价于 [0-9]）。
+        # + 表示前面的字符（\d）出现一次或多次。
+        pattern = r'(?P<name>[^=,]+)=(?P<value>\d+)'
+
+        # 假设 data 是输入数据字符串
+        self.pairs = {m.group('name'): int(m.group('value'))
+                      for m in re.finditer(pattern, data)}
+
+        # 只在 self.pairs 非空时进行后续操作
+        if self.pairs:
+            # 如果你仍需要按顺序的 16 个值：
+            ordered_keys = list(self.pairs.keys())  # ['MQ3_1','MQ3_2',...,'base']
+
+            # 确保顺序一致
+            if g_var.sensors[0] != ordered_keys[0]:
+                g_var.sensors = ordered_keys
+                self._data_visible = g_var.sensors.copy()  # 选择要看的传感器
+                # print(g_var.sensors)
+
+            values = [self.pairs[k] for k in ordered_keys]
+            return values
+        else:
+            print("No valid pairs found")
+            return []  # 或者返回一个空列表或其他处理逻辑
 
     def savefolder(self):
         foldername = QFileDialog.getExistingDirectory(None, "Select Folder", "/")
@@ -181,8 +280,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             with open(filename[0], "w") as f:
                 sensor_names_str = " ".join(self._data_visible)
                 f.write(sensor_names_str + "\n")
-                # 筛选出选中的传感器数据
-                selected_data = [self.data[g_var.sensors.index(sensor)] for sensor in self._data_visible]
+                with global_var.lock:
+                    # 筛选出选中的传感器数据
+                    selected_data = [self.alldata[g_var.sensors.index(sensor)] for sensor in self._data_visible]
 
                 # 转置筛选后的数据
                 transposed_data = list(map(list, zip(*selected_data)))
@@ -211,7 +311,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.redraw()
 
     def redraw(self):
-        # print("redraw")
         """
         Process data from store and prefer to draw.
         :return:
@@ -232,11 +331,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                         data_list,
                         pen=pg.mkPen(self.get_currency_color(sensor_name), width=3),
                     )  # 创建新的绘图线
+                    pg.QtGui.QGuiApplication.processEvents()
         # print(len(data_list))
-        if len(data_list) == self.time:
-            self.ser.stop()
-            self.ser.d.setDataTodo(5,0)
-            self.ser1.stop()
+        # if len(data_list) == self.get_time:
+        #     self.ser.d.setDataTodo(5,0)
+        #     self.ser.stop()
 
     def update_table(self):
         for i, sensor_name in enumerate(g_var.sensors):
@@ -250,7 +349,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             item_name.setCheckable(True)  # 设置该传感器名称项为可复选
             item_name.setEditable(False)  # 设置传感器名称不可编辑
             if sensor_name in self._data_visible:
-                item_name.setCheckState(Qt.CheckState.Checked)  # 如果传感器名称在默认显示列表中，则设置其复选框为选中状态
+                # 如果复选框当前不是选中状态，才修改为选中
+                if item_name.checkState() != Qt.CheckState.Checked:
+                    item_name.setCheckState(Qt.CheckState.Checked)  # 如果传感器名称在默认显示列表中，则设置其复选框为选中状态
 
             item_value = QStandardItem(f"{value:.2f}")  # 创建一个item_value对象，用于表示传感器数据
             item_value.setTextAlignment(
@@ -260,6 +361,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.model.setItem(i, 0, item_name)
             self.model.setItem(i, 1, item_value)
 
+    def generate_random_color_list(self, length):
+        """生成一个指定长度的随机十六进制颜色代码列表"""
+        return [self.generate_random_hex_color() for _ in range(length)]
 
     def get_currency_color(self, sensor):
         if sensor not in self._data_colors:
@@ -271,10 +375,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         """生成一个随机的十六进制颜色代码"""
         return "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-    def generate_random_color_list(self, length):
-        """生成一个指定长度的随机十六进制颜色代码列表"""
-        return [self.generate_random_hex_color() for _ in range(length)]
-
     def closeEvent(self, event):
         # 1. 停所有串口线程
         if hasattr(self, 'smng'):
@@ -284,16 +384,25 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     # 如果用了 QThread，也调 quit + wait
                     if hasattr(sop, 'thread') and sop.thread.isRunning():
                         sop.stop()
+                        print("sop.stop()")
                         sop.thread.quit()
                         sop.thread.wait()
+        if self.time_th:
+            self.time_th.stop("time_th")
+        if self.draw:
+            self.draw.stop("draw")
 
         event.accept()  # 允许窗口真正关闭
 
 
-#
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
-#     window = GraphShowWindow()
-#     window.show()
-#     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    try:
+        app = QApplication(sys.argv)
+        window = GraphShowWindow()
+        window.show()
+        sys.exit(app.exec())
+    except KeyboardInterrupt:
+        print("\n用户中断，程序结束。")
+        sys.exit(0)

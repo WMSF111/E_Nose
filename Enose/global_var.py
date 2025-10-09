@@ -1,3 +1,5 @@
+import threading
+
 headers_list = [] # 列头列表
 textEdit_DataFrame = ' ' # 编辑框的文字
 textEdit_nolc_DataFrame = ' ' # 编辑框内无列头行头数据
@@ -9,16 +11,24 @@ folder_path = ' '
 filter_preprocess = ' '
 
 
-
-
-
-
 Com_select = " "
-Port_select = "COM1"
+Port_select = ""
 Bund_select = 115200
+now_temp = 1.0
+target_temp = 0
+target_temp_time = 0
+room_temp = 1
+channal = [0, 4,3,2,1,5,6,7,8]
+draw_flag = False
+now_chan = 1
+now_Sam = 0
+target_Sam = 1
+gettime = 0
+cleartime = 0
+standtime = 0
+lock = threading.Lock()  # 创建一个锁
+Save_flag = 0
 
-Port_select2 = "COM3"
-Bund_select2 = 9600
 
 sensors = [
     "sensor1", "sensor2", "sensor3", "sensor4", "sensor5",

@@ -3,10 +3,12 @@ import scipy.signal as signal
 import numpy as np
 import os, sys
 import pandas as pd
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-import Enose.global_var
+import global_var
 
 script_dir = os.path.dirname(__file__)
+
 
 def file_get():
     try:
@@ -34,8 +36,8 @@ def file_get():
     except Exception as e:
         print("发生错误:", e)
         return None
-    
- 
+
+
 '''
 算术平均滤波法
 参数：
@@ -44,6 +46,8 @@ def file_get():
 返回：
     filtered_output: 滤波后的输出信号列表
 '''
+
+
 # def ArithmeticAverage(inputs,window_size):
 #     filtered_output = []
 # 	 # 对于每个窗口，计算窗口内数据的平均值并添加到输出列表中
@@ -64,10 +68,12 @@ def ArithmeticAverage(inputs, window_size):
         end = min(i + window_size // 2 + 1, len(inputs))
         window = inputs[start:end]
         window_average = sum(window) / len(window)
-        filtered_output.append((int)(window_average))
+        # filtered_output.append((int)(window_average))
+        filtered_output.append((window_average))
 
     return filtered_output
- 
+
+
 '''
 递推平均滤波法
 参数：
@@ -76,6 +82,8 @@ def ArithmeticAverage(inputs, window_size):
 返回：
     filtered_output: 滤波后的输出信号列表
 '''
+
+
 # def SlidingAverage(inputs,window_size):
 #     filtered_output = []
 #     window_sum = sum(inputs[:window_size])  # 初始窗口内数据的总和
@@ -100,12 +108,13 @@ def SlidingAverage(inputs, window_size):
     window_sum = sum(inputs[:window_size])  # 初始窗口内数据的总和
 
     # 初始窗口的平均值作为第一个输出
-    filtered_output.append((int)(window_sum / window_size))
-
+    # filtered_output.append((int)(window_sum / window_size))
+    filtered_output.append((window_sum / window_size))
     # 对于每个后续的数据点，利用递推公式更新窗口内数据的总和，并计算平均值
     for i in range(window_size, len(inputs)):
         window_sum = window_sum - inputs[i - window_size] + inputs[i]  # 更新窗口内数据的总和
-        filtered_output.append((int)(window_sum / window_size))  # 计算平均值并添加到输出列表中
+        # filtered_output.append((int)(window_sum / window_size))  # 计算平均值并添加到输出列表中
+        filtered_output.append(window_sum / window_size)  # 计算平均值并添加到输出列表中
 
     # 计算填充值
     padding_size = window_size // 2
@@ -114,13 +123,13 @@ def SlidingAverage(inputs, window_size):
     front_padding = [filtered_output[0]] * padding_size
     # 后端填充
     back_padding = [filtered_output[-1]] * (window_size - 1 - padding_size
-)
+                                            )
     # 合并填充
     filtered_output = front_padding + filtered_output + back_padding
 
     return filtered_output[:len(inputs)]  # 确保最终输出长度与输入长度一致
 
- 
+
 '''
 中位值平均滤波法
 参数：
@@ -141,7 +150,8 @@ def MedianAverage(inputs, window_size):
     # 对于每个窗口，计算中位值并将其添加到结果列表中
     for i in range(len(inputs) - window_size + 1):
         window = inputs[i:i + window_size]
-        median_value = (int)(np.median(window))
+        # median_value = (int)(np.median(window))
+        median_value = np.median(window)
         filtered_output.append(median_value)
 
     # 边缘情况处理：处理后 window_size//2 个值
@@ -158,16 +168,18 @@ def MedianAverage(inputs, window_size):
 
     return filtered_output
 
- 
+
 '''
 一阶滞后滤波法
     方法：本次滤波结果=（1-a）*本次采样值+a*上次滤波结果。 
 a:滞后程度决定因子，0~1（越大越接近原数据）
 '''
+
+
 # def FirstOrderLag(inputs,a):
-      
+
 # 	filtered_output = inputs
-	  
+
 # 	tmpnum = inputs[0]							#上一次滤波结果
 # 	for index,tmp in enumerate(inputs):
 # 		filtered_output[index] = (int)((1-a)*tmp + a*tmpnum)
@@ -185,7 +197,8 @@ def FirstOrderLag(inputs, a):
 
     # 遍历输入列表并进行滤波
     for index, tmp in enumerate(inputs):
-        filtered_output[index] = (int)((1 - a) * tmp + a * tmpnum)
+        # filtered_output[index] = (int)((1 - a) * tmp + a * tmpnum)
+        filtered_output[index] = (1 - a) * tmp + a * tmpnum
         tmpnum = filtered_output[index]  # 更新上一次滤波结果为当前滤波结果
 
     return filtered_output
@@ -199,6 +212,8 @@ def FirstOrderLag(inputs, a):
     返回：
     filtered_output: 滤波后的输出信号列表
 '''
+
+
 # def WeightBackstepAverage(inputs, alpha):
 
 #     filtered_output = []
@@ -223,25 +238,28 @@ def WeightBackstepAverage(inputs, alpha):
 
     for i in range(1, len(inputs)):
         # 递推式：滤波后的当前值等于上一个滤波后的值乘以(1-alpha)，再加上当前输入值乘以alpha
-        filtered_output[i] = (int)((1 - alpha) * filtered_output[i - 1] + alpha * inputs[i])
+        # filtered_output[i] = (int)((1 - alpha) * filtered_output[i - 1] + alpha * inputs[i])
+        filtered_output[i] = (1 - alpha) * filtered_output[i - 1] + alpha * inputs[i]
 
     return filtered_output
 
- 
+
 '''
 消抖滤波法
     检查是否有连续N个不相同的元素，如果有，则将后续的元素设置为与这N个元素的第一个值。
 N:消抖上限,范围在2以上。
 '''
+
+
 # def ShakeOff(inputs,N):
-    
+
 # 	filtered_output = inputs
 
 # 	usenum = filtered_output[0]								#有效值
 # 	i = 0 											#标记计数器
 # 	for index,tmp in enumerate(filtered_output):
-# 		if tmp != usenum:	
-# 			usenum = filtered_output[index - 1]				
+# 		if tmp != usenum:
+# 			usenum = filtered_output[index - 1]
 # 			i = i + 1
 # 			if i >= N:
 # 				i = 0
@@ -253,14 +271,14 @@ N:消抖上限,范围在2以上。
 def ShakeOff(inputs, N):
     if N <= 0:
         raise ValueError("N must be greater than 0.")
-        
+
     filtered_output = inputs[:]  # 复制输入数据以避免直接修改
     if len(inputs) == 0:
         return filtered_output
 
     usenum = filtered_output[0]  # 有效值
     i = 0  # 标记计数器
-    
+
     for index in range(1, len(filtered_output)):
         tmp = filtered_output[index]
         if tmp != usenum:
@@ -274,6 +292,7 @@ def ShakeOff(inputs, N):
 
     return filtered_output
 
+
 '''
 限幅消抖滤波法
     首先，它检查相邻元素之间的差值是否超过了给定的振幅（Amplitude），
@@ -282,6 +301,8 @@ def ShakeOff(inputs, N):
 Amplitude:限制最大振幅,范围在0 ~ ∞ 建议设大一点
 N:消抖上限,范围在0 ~ ∞
 '''
+
+
 def AmplitudeLimitingShakeOff(inputs, Amplitude, N):
     filtered_output = inputs.copy()
 
@@ -302,9 +323,8 @@ def AmplitudeLimitingShakeOff(inputs, Amplitude, N):
                 filtered_output[index2] = usenum
         else:
             i = 0
-            
-    return filtered_output
 
+    return filtered_output
 
 # # File = pd.read_csv(os.path.join(str(script_dir), 'train', 'trainfile.csv'), header=None, skiprows=1) #读取文件,得到dataframe数据
 # # File = file_get()
