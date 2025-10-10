@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="" />
+    <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/Serial_opea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,14 +60,19 @@
     "Python.running_main.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "E__Nose2",
-    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose/running.py",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose_16chanel",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_pfile" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
     </key>
   </component>
   <component name="RunManager">

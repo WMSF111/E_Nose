@@ -422,6 +422,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                         data_list,
                         pen=pg.mkPen(self.get_currency_color(sensor_name), width=3),
                     )  # 创建新的绘图线
+                    self.plot_widget.repaint() # 手动更新
+
         # print(len(data_list))
         # if len(data_list) == self.get_time:
         #     self.ser.d.setDataTodo(5,0)

@@ -161,7 +161,6 @@ class Serial_Init(QWidget):
 
     def ser_open_look_ui(self, status):
         self.ui.serialComboBox.setEnabled(status)
-        self.ui.serialComboBox2.setEnabled(status)
 
     def closeEvent(self, event):
         """点击右上角 X 时调用"""

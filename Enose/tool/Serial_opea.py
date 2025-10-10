@@ -129,45 +129,14 @@ class Serial1opea():
         self.cleartime = glo_var.cleartime
         self.standtime = glo_var.standtime
         self.gettime = glo_var.gettime  # 采集时常
-
-    def ser_opea(self):  # 一系列执行操作
-        while True:
-            if self._running:
-                # 线程安全：把值读出来再比较
-                print("现在温度是：", glo_var.now_temp)
-                self.ms._Currtem_spinBox.emit(glo_var.now_temp)
-                self.ser1.serialSend(2, glo_var.channal[1])
-                self.time += 1
-                if glo_var.target_temp <= glo_var.now_temp:  # 当目标温度达成
-                    print("达到目标温度需要时间：", self.time)
-                    self.ms._attendtime_spinBox.emit(self.time)
-                    # self.opea = Serial1opea(self.ms, self.ser, self.ser1)
-                    # self.opea.push_opea()
-                    self._running = False
-                    break
-                time.sleep(self.timeout / 1000)
-            if self._stop_evt.is_set():
-                print("Thread stopped by event.")
-                break
-
-    def push_opea(self): # 一系列执行操作
-        if self.ser.getSignal == "11":
-            self.base_clear()  # 基线
-            print( "开始进行基线处理")
-            self.ms._draw_open.emit()
-        if self.ser.getSignal == "21":
-            self.sample_collect()  # 采集
-            print( "样品开始采集")
-            self.ms._draw_open.emit()
-        if self.ser.getSignal == "31":
-            self.room_clear()
-            print("气室正在清洗")
-            self.ms._ClearDraw.emit()
+        self._running =  True
 
     def base_clear(self):
         text = ("11\n\r")
         num = 0
         while True:  # 没到回复
+            if self._running == False:
+                break
             self.ser.write(text)  # 开始采集信号
             time.sleep(2)
             num += 1
@@ -179,11 +148,14 @@ class Serial1opea():
                 break
         num = 0
         while True:  # 收到回复
+            if self._running == False:
+                break
             time.sleep(1)
             num += 1
             if self.ser.getSignal == "12":
                 self.ms._statues_label.emit("基线处理完成")
                 self.ms._Clear_Button.emit(True)  # 允许再次基线处理
+                self.ms._print.emit(num)
                 break
             if num >= glo_var.standtime + 5:
                 self.ms._statues_label.emit("基线处理时长超时")
@@ -193,6 +165,8 @@ class Serial1opea():
         text = ("21\n\r")
         num = 0
         while True:  # 没到回复
+            if self._running == False:
+                break
             self.ser.write(text)  # 开始采集信号
             time.sleep(2)
             num += 1
@@ -206,11 +180,13 @@ class Serial1opea():
                 break
         num = 0
         while True:  # 收到回复
+            if self._running == False:
+                break
             time.sleep(1)
             num += 1
             if self.ser.getSignal == "22":
                 self.ms._statues_label.emit("采样处理完成")
-                self.ms._Clear_Button.emit(True)  # 允许再次基线处理
+                self.ms._Collectbegin_Button.emit(True) # 允许再次采集
                 self.ms._draw_close.emit()
                 break
             if num >= glo_var.gettime + 5:
@@ -223,6 +199,8 @@ class Serial1opea():
         text = ("31\n\r")
         num = 0
         while True:  # 没到回复
+            if self._running == False:
+                break
             self.ser.write(text)  # 开始采集信号
             time.sleep(2)
             num += 1
@@ -234,11 +212,17 @@ class Serial1opea():
                 break
         num = 0
         while True:  # 收到回复
+            if self._running == False:
+                break
             time.sleep(1)
             num += 1
             if self.ser.getSignal == "32":
                 self.ms._statues_label.emit("洗气处理完成")
+                self.ms._Collectbegin_Button.emit(True)
+                self.ms._print.emit(glo_var.gettime + num)
+
                 break
             if num >= glo_var.cleartime + 5:
-                self.ms._statues_label.emit("洗气时长超时:" +  glo_var.cleartime)
+                self.ms._statues_label.emit("洗气时长超时")
+                self.ms._Collectbegin_Button.emit(True)
                 break

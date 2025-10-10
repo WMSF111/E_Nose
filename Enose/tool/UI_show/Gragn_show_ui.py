@@ -23,12 +23,9 @@ class MySignals(QObject):
     _draw_close = Signal()
     _Clear_Button = Signal(bool)
     _Collectbegin_Button = Signal(bool)
-    _Currtem_spinBox = Signal(float)  # 更新当前温度
     _statues_label = Signal(str)
     _ClearDraw = Signal()
     _print = Signal(int)
-    _pause_serial = Signal()
-    _auto_save = Signal()
 
 
 class Action():
@@ -46,18 +43,11 @@ class Action():
         self.ui.draw_flag = False
         print(self.ui.draw_flag)
 
-    def _auto_save(self):
-        self.ui.auto_savefile()
-
-    def _Clear_Button(self, value: bool):
+    def _Clear_Button(self, value: bool): # 清洗按钮
         self.ui.Clear_Button.setEnabled(value)
 
-    def _Collectbegin_Button(self, value: bool):
+    def _Collectbegin_Button(self, value: bool): # 采样按钮
         self.ui.Collectbegin_Button.setEnabled(value)
-
-    def _Currtem_spinBox(self, value: float):
-        self.ui.Currtem_spinBox.setValue(value) #不断更新现在温度
-
 
     def _statues_label(self, text: str):
         self.ui.statues_label.setText(text)
@@ -69,10 +59,8 @@ class Action():
         self.ui.update_table()
 
     def _print(self, time: int):
-        print(time)
+        self.ui.Worktime_spinBox.setValue(time)
 
-    def _pause_serial(self):
-        self.ui.pause_serial()
 
 
 # 主窗口类
@@ -125,7 +113,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         # 连接信号
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
-        self.Pause_Button.clicked.connect(self.pause_serial) # 暂停采集
         self.Save_Button.clicked.connect(self.savefile) # 保存按钮
         self.InitPos_Button.clicked.connect(self.Stra) #初始化位置
         self.Folder_Button.clicked.connect(self.savefolder) # 确认保存路径
@@ -133,13 +120,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def initMS(self):
         self.ms._draw_open.connect(self.a._draw_open)
         self.ms._draw_close.connect(self.a._draw_close)
-        self.ms._Currtem_spinBox.connect(self.a._Currtem_spinBox)
         self.ms._statues_label.connect(self.a._statues_label)
         self.ms._ClearDraw.connect(self.a._ClearDraw)
         self.ms._print.connect(self.a._print)
-        self.ms._pause_serial.connect(self.a._pause_serial)
-        self.ms._auto_save.connect(self.a._auto_save)
-
 
     def serial_setting(self):
         if (g_var.Port_select == ""):
@@ -159,6 +142,15 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             print("控制串口初始化成功：", d)
 
     def Stra(self): # 运动轴回到原点
+        self.plot_widget.repaint() # 刷新图形界面
+        if self.time_th:
+            self.time_th.stop("time_th")
+            self.SO1._running = False
+        if self.draw:
+            self.draw.stop("draw")
+        self.ms._Collectbegin_Button.emit(True)
+        self.ms._Clear_Button.emit(True)
+        print("继续采集")
         with global_var.lock:
             g_var.gettime = (int)(self.Sample_spinBox.value())
             g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
@@ -169,40 +161,27 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
                 ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
         self.ser.write(text)
-        print("clear_data:基线操作:", text)
         # 开启线程
         self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
         self.draw = SO.time_thread(self.ser) # 创建绘图线程
         self.draw.thread_draw(self.updata)
-        # self.draw.pause()
+        self.ms._draw_close.emit()
 
     def clear_data(self): # 基线阶段
-        with global_var.lock:
-            g_var.Save_flag = "基线阶段"
+        self.SO1._running = True
         self.ms._Clear_Button.emit(False) # 不允许继续
         # 启动串口
         self.time_th.thread_loopfun(self.SO1.base_clear)
 
     def start_serial(self): # 开始采集
-        g_var.target_Sam = self.Simnum_spinBox.value()
-        self.Collectbegin_Button.setEnabled(False)
+        self.ms._ClearDraw.emit()
+        self.SO1._running = True
+        self.ms._Collectbegin_Button.emit(False)
         self.time_th.thread_loopfun(self.SO1.sample_collect)
 
 
-    def pause_serial(self): # 暂停采集
-        if self.ser.pause_flag == False: # 如果正在采集
-            self.Pause_Button.setText("继续采集")
-            print("暂停采集")
-            self.ser.pause()
-            if self.time_th:
-                self.time_th.stop("time_th")
-        else: # 开始采集
-            self.ser.resume()
-            self.Pause_Button.setText("暂停采集")
-            self.Collectbegin_Button.setEnabled(True)
-            print("继续采集")
-
     def process_data(self, data):
+        self.now_data = 0
         # 解析数据
         if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3"):
             print("data:", data)
@@ -214,15 +193,10 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     self.alldata[i].append(value)
                 self.now_data = now_data
 
-                    # if len(self.data[i]) > 300:  # 限制数据长度
-                    #     self.data[i].pop(0)
-
-        # self.redraw()  # 更新图表
-        # self.update_table()  # 更新表格
-
     def updata(self, time):
-        if self.draw_flag == True:
+        if self.draw_flag == True and self.now_data != 0:
             now_data = self.now_data
+            self.now_data = 0
             print("更新图标")
             for i, value in enumerate(now_data):
                 self.data[i].append(value)
@@ -331,11 +305,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                         data_list,
                         pen=pg.mkPen(self.get_currency_color(sensor_name), width=3),
                     )  # 创建新的绘图线
-                    pg.QtGui.QGuiApplication.processEvents()
-        # print(len(data_list))
-        # if len(data_list) == self.get_time:
-        #     self.ser.d.setDataTodo(5,0)
-        #     self.ser.stop()
+                    self.plot_widget.repaint() # 手动更新
 
     def update_table(self):
         for i, sensor_name in enumerate(g_var.sensors):

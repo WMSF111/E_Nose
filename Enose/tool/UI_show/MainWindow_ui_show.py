@@ -1,11 +1,14 @@
 ''' 用来显示主界面和其他界面的关系'''
 
 import tool.UI_show.serial_show as se
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QDesktopServices
 from resource_ui.ui_pfile.MianWindow import Ui_MainWindow
 from tool.UI_show.Gragn_show_ui import GraphShowWindow
-from resource_ui.ui_pfile.Serial_setting import SerialSetting_Init
 from tool.UI_show.Alg_ui_show import AlgShow_Init
+
+The_url = "https://www.baidu.com" #要跳转的网页
 
 class MianWindow_Init(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -43,6 +46,28 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
             # 创建并显示串口设置窗口
             self.test_show = AlgShow_Init()
             self.show_Layout.addWidget(self.test_show)
+        if item.text(column) == "大模型分析":
+            url = QUrl(The_url)
+            if not QDesktopServices.openUrl(url):
+                self.show_error_message()
+
+    def show_error_message(self):
+        # 创建一个QMessageBox实例
+        msg = QMessageBox()
+
+        # 设置消息框的类型为错误
+        msg.setIcon(QMessageBox.Critical)
+
+        # 设置消息框的标题和内容
+        msg.setWindowTitle("错误")
+        msg.setText("无法打开链接:")
+        msg.setInformativeText(The_url)  # 显示链接信息
+
+        # 设置消息框的按钮
+        msg.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg.exec()
 
     def clear_layout(self):
         # 清除布局中的所有内容
