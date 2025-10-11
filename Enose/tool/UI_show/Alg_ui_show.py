@@ -2,6 +2,7 @@
 
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
+from PySide6.QtGui import QKeySequence, QAction
 from resource_ui.alg_puifile.Alg_show import Ui_Alg_show  # 导入生成的 UI 类
 import data_file.transfo as transfo
 import matplotlib.pyplot as plt
@@ -43,7 +44,6 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         self.Net_ComboBox.addItems(["无", "选项1", "选项2", "选项3"])  # 添加选项
         self.Net_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         # self.Reg_ComboBox.currentIndexChanged.connect(self.Reg_Combo_select)
-
     def select_file(self):
         """弹出文件夹选择对话框"""
         folder_path = QFileDialog.getExistingDirectory(
@@ -54,9 +54,9 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         if folder_path:  # 如果用户选择了文件夹（而不是取消）
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
             glov.folder_path = folder_path
-            transfo.UI_TXT_TO.unit_traintxt(glov.folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
-            textEdit_DataFrame = transfo.UI_TXT_TO.txt_to_dataframe(glov.trainfile_txt_path) # 读取trainfile.txt并显示到数据源看板
-            self.DataBroad.append(textEdit_DataFrame.to_string(index=False))
+            textEdit_DataFrame = transfo.UI_TXT_TO.merge_files_to_dataframe(glov.folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
+            self.tabadd.tabset.add_text_tab(textEdit_DataFrame, "原始数据", html=True)
+
 
 
 if __name__ == "__main__":

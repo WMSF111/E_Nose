@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
+from io import StringIO
 # from mplcursors import cursor as mplcursors
 class ADDTAB():
     def __init__(self, The_QTabWidget):
@@ -93,7 +94,10 @@ class ADDTAB():
     #     self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
 
     # 创建一个新的文本Tab
-    def add_text_tab(self, finaldata, title="Plot"):
+    def add_text_tab(self, finaldata, title="Plot", html = False):
+        showdata = finaldata
+        if html == True:
+            showdata = finaldata.to_html(index=False)  # 转换为HTML表格格式
         new_tab = QWidget()
         layout = QVBoxLayout(new_tab)
         new_textedit = QTextEdit()
@@ -102,13 +106,13 @@ class ADDTAB():
         layout.addWidget(new_textedit)
         title = title
 
-        new_textedit.append(finaldata)
+        new_textedit.append(showdata)
 
         # 添加新的 Tab 到 QTabWidget
         self.The_QTabWidget.addTab(new_tab, title)
         self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)  # 切换到新添加的 Tab
         # 设置保存快捷键
-        self.set_save_shortcut(new_tab, str(finaldata))
+        self.set_save_shortcut(new_tab, finaldata)
 
     def set_save_shortcut(self, new_tab, text):
         """为新 Tab 设置保存快捷键"""
@@ -121,15 +125,43 @@ class ADDTAB():
         new_tab.addAction(save_action)
 
     def save_text(self, text):
-        """保存当前图表"""
-        file_path, _ = QFileDialog.getSaveFileName(None, "Save result", global_var.folder_path, "TXT Files (*.txt);;All Files (*)")
-        with open(file_path, "w", encoding="utf-8") as f:
-            # text = re.sub(r'\s+', ' ', text)
-            f.write(text)
-            print(f"Plot saved to {file_path}")
-        # if file_path:
-        #     file_path.write(text)
-        #     print(f"Plot saved to {file_path}")
+        """保存当前文本"""
+        # 确保text是DataFrame
+        if isinstance(text, str):  # 如果传入的是字符串，尝试转回DataFrame
+            text = pd.read_csv(StringIO(text))  # 从文本恢复DataFrame
+        # 设置文件类型过滤器，增加xlsx格式
+        filter_options = "TXT Files (*.txt);;CSV Files (*.csv);;Excel Files (*.xlsx);;All Files (*)"
+
+        # 打开保存文件对话框，用户选择文件类型
+        file_path, selected_filter = QFileDialog.getSaveFileName(None, "Save result", global_var.folder_path,
+                                                                 filter_options)
+
+        if file_path:
+            # 根据选择的文件类型添加适当的扩展名（如果用户没有输入文件扩展名）
+            if selected_filter == "CSV Files (*.csv)" and not file_path.endswith('.csv'):
+                file_path += ".csv"
+            elif selected_filter == "TXT Files (*.txt)" and not file_path.endswith('.txt'):
+                file_path += ".txt"
+            elif selected_filter == "Excel Files (*.xlsx)" and not file_path.endswith('.xlsx'):
+                file_path += ".xlsx"
+
+            # 根据文件类型保存
+            if selected_filter == "Excel Files (*.xlsx)":
+                # 使用pandas保存为Excel文件
+                text.to_excel(file_path, index=False)  # 不保存索引列
+                print(f"Excel file saved to {file_path}")
+
+            elif selected_filter == "CSV Files (*.csv)":
+                # 使用pandas保存为CSV文件
+                text.to_csv(file_path, index=False, encoding='utf-8-sig')  # 不保存索引列，制定编码方式
+                print(f"CSV file saved to {file_path}")
+
+            else:  # 保存为TXT
+                # 将DataFrame转换为CSV格式的文本，然后写入TXT文件
+                text_str = text.to_csv(index=False, sep=' ')
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(text_str)  # 保存为TXT文件
+                print(f"Text file saved to {file_path}")
 
 def draw_scatter(ax, name, num, target, finalData, data=None):
     """

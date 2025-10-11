@@ -6,15 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/Serial_opea.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Enose_16chanel/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_file/transfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/transfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Alg_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/Alg_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Alg_show.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/Alg_show.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Alg_show.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Alg_show.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/serial_thread.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/resource/严重漏液.txt" beforeDir="false" afterPath="$PROJECT_DIR$/train/resource/严重漏液.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/resource/电池完好.txt" beforeDir="false" afterPath="$PROJECT_DIR$/train/resource/电池完好.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/resource/轻微漏液.txt" beforeDir="false" afterPath="$PROJECT_DIR$/train/resource/轻微漏液.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/其他/trainfile.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,15 +64,17 @@
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose_16chanel",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose/resource_ui/alg_puifile",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_pfile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />

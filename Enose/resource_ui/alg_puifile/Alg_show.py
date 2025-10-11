@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
     QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QTabWidget, QTextBrowser,
-    QTextEdit, QToolButton, QVBoxLayout, QWidget)
+    QToolButton, QVBoxLayout, QWidget)
 
 class Ui_Alg_show(object):
     def setupUi(self, Alg_show):
@@ -49,21 +49,6 @@ class Ui_Alg_show(object):
 
         self.tabWidget = QTabWidget(Alg_show)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.Line_Show = QWidget()
-        self.Line_Show.setObjectName(u"Line_Show")
-        self.gridLayout_5 = QGridLayout(self.Line_Show)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.Linegragh_Layout = QVBoxLayout()
-        self.Linegragh_Layout.setObjectName(u"Linegragh_Layout")
-        self.DataBroad = QTextEdit(self.Line_Show)
-        self.DataBroad.setObjectName(u"DataBroad")
-
-        self.Linegragh_Layout.addWidget(self.DataBroad)
-
-
-        self.gridLayout_5.addLayout(self.Linegragh_Layout, 0, 0, 1, 1)
-
-        self.tabWidget.addTab(self.Line_Show, "")
 
         self.gridLayout.addWidget(self.tabWidget, 1, 1, 1, 1)
 
@@ -175,7 +160,7 @@ class Ui_Alg_show(object):
 
         self.retranslateUi(Alg_show)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(-1)
 
 
         QMetaObject.connectSlotsByName(Alg_show)
@@ -184,7 +169,6 @@ class Ui_Alg_show(object):
     def retranslateUi(self, Alg_show):
         Alg_show.setWindowTitle(QCoreApplication.translate("Alg_show", u"Form", None))
         self.Begin_Button.setText(QCoreApplication.translate("Alg_show", u"\u5f00\u59cb\u5904\u7406", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Line_Show), QCoreApplication.translate("Alg_show", u"\u6570\u636e\u770b\u677f", None))
         self.groupBox.setTitle(QCoreApplication.translate("Alg_show", u"\u5b9e\u9a8c\u4fe1\u606f", None))
         self.label.setText(QCoreApplication.translate("Alg_show", u"\u6587\u4ef6\u8def\u5f84", None))
         self.toolButton.setText(QCoreApplication.translate("Alg_show", u"...", None))
