@@ -51,23 +51,20 @@ class READ_FILE():
         return path_folder
 
 class UI_TXT_TO():
-
-    def merge_files_to_dataframe(script_dir):
-        # 创建一个空的 DataFrame，用于存储所有文件的数据
-        combined_df = pd.DataFrame()
-        path_folder = READ_FILE.read_allfile(script_dir)
+    def read_file_header(first_file, all_flag = True):
+        file_extension = os.path.splitext(first_file)[1].lower()
 
         try:
-            first_file = path_folder[0]  # 获取第一个文件
-            file_extension = os.path.splitext(first_file)[1].lower()
-
             # 初始化列名
             if file_extension == '.txt':
                 with open(first_file, 'r') as infile:
                     trainfile_txt_text = infile.read()
                     rows = trainfile_txt_text.split('\n')
                     rows_list = [row.split() for row in rows if row.strip()]
-                    header = rows_list[0][1:]
+                    if all_flag == True: # 合并
+                        header = rows_list[0][:] #第一行就是头
+                    else:
+                        header = rows_list[0][1:] #第一行从第二个开始就是头
                     global_var.sensors = header.copy()
 
             elif file_extension == '.csv':
@@ -80,39 +77,78 @@ class UI_TXT_TO():
                 header = df.columns[1:].tolist()
                 global_var.sensors = header.copy()
 
+            else:
+                raise ValueError(f"Unsupported file type: {file_extension}")
+
+        except Exception as e:
+            show_error_message(f"Error reading {first_file}: {str(e)}")
+            return None
+
+    def read_file_to_dataframe(file_path, combined_df, all_flag = True): # 从那一行开始记录
+        file_name = os.path.basename(file_path).replace(os.path.splitext(file_path)[1], "")
+        file_extension = os.path.splitext(file_path)[1].lower()  # 读取第一个文件种类
+        # 创建一个空的 DataFrame，用于存储所有文件的数据
+        if file_extension == '.txt':
+            with open(file_path, 'r') as infile:
+                lines = infile.readlines()
+                file_data = []
+                for line in lines[1:]:
+                    stripped = line.rstrip()
+                    if not stripped:
+                        continue
+                    # 分割每行数据
+                    split_data = stripped.split()
+
+                    # 将可能是数字的部分转换成数字类型
+                    converted_data = []
+
+                    for item in split_data:
+                        try:
+                            # 尝试转换为整数，如果失败则转换为浮动数
+                            converted_data.append(int(item))
+                        except ValueError:
+                            try:
+                                converted_data.append(float(item))  # 如果整数转换失败，尝试浮动数
+                            except ValueError:
+                                converted_data.append(item)  # 如果两者都无法转换，保留原始字符串
+                    # 将 file_name 作为第一列，添加到最终数据中
+                    if (all_flag == True):
+                        file_data.append([file_name] + converted_data)
+                    else:
+                        file_data.append(converted_data)
+
+                df_txt = pd.DataFrame(file_data, columns=['Target'] + global_var.sensors)
+                combined_df = pd.concat([combined_df, df_txt], ignore_index=True)
+
+        elif file_extension == '.csv':
+            df_csv = pd.read_csv(file_path)
+            if all_flag == True:
+                df_csv['Target'] = file_name
+                df_csv = df_csv[['Target'] + global_var.sensors]  # Reorder columns
+            combined_df = pd.concat([combined_df, df_csv], ignore_index=True)
+
+        elif file_extension == '.xlsx':
+            df_xlsx = pd.read_excel(file_path)
+            if all_flag == True:
+                df_xlsx['Target'] = file_name
+                df_xlsx = df_xlsx[['Target'] + global_var.sensors]  # Reorder columns
+            combined_df = pd.concat([combined_df, df_xlsx], ignore_index=True)
+        return combined_df
+
+
+    def merge_files_to_dataframe(script_dir):
+        path_folder = READ_FILE.read_allfile(script_dir)
+        combined_df = pd.DataFrame()
+        try:
+            first_file = path_folder[0]  # 获取第一个文件
+            UI_TXT_TO.read_file_header(first_file, all_flag=True)
+
             print("global_var.sensors:", global_var.sensors)
 
             # 遍历所有文件，读取并合并到 DataFrame
             for file_path in path_folder:
                 try:
-                    file_name = os.path.basename(file_path).replace(os.path.splitext(file_path)[1], "")
-                    file_extension = os.path.splitext(file_path)[1].lower()
-
-                    if file_extension == '.txt':
-                        with open(file_path, 'r') as infile:
-                            lines = infile.readlines()
-                            file_data = []
-                            for line in lines[1:]:  # Skip header row
-                                stripped = line.rstrip()
-                                if not stripped:
-                                    continue
-                                file_data.append([file_name] + stripped.split())
-
-                            df_txt = pd.DataFrame(file_data, columns=['FileName'] + global_var.sensors)
-                            combined_df = pd.concat([combined_df, df_txt], ignore_index=True)
-
-                    elif file_extension == '.csv':
-                        df_csv = pd.read_csv(file_path)
-                        df_csv['FileName'] = file_name
-                        df_csv = df_csv[['FileName'] + global_var.sensors]  # Reorder columns
-                        combined_df = pd.concat([combined_df, df_csv], ignore_index=True)
-
-                    elif file_extension == '.xlsx':
-                        df_xlsx = pd.read_excel(file_path)
-                        df_xlsx['FileName'] = file_name
-                        df_xlsx = df_xlsx[['FileName'] + global_var.sensors]  # Reorder columns
-                        combined_df = pd.concat([combined_df, df_xlsx], ignore_index=True)
-
+                    combined_df = UI_TXT_TO.read_file_to_dataframe(file_path, combined_df, all_flag=True)
                 except Exception as e:
                     show_error_message(f"处理文件 {file_path} 时发生错误: {str(e)}")
                     continue  # 如果有文件处理失败，跳过该文件继续处理下一个文件
@@ -121,84 +157,19 @@ class UI_TXT_TO():
             show_error_message(f"合并文件时发生错误: {str(e)}")
         return combined_df
 
-    # 遍历有resource文件夹的文件夹中的.txt合并成带文件名的trainfile.txt存在train文件夹中
-    def unit_traintxt(script_dir):
-        print("running write_traintxt")
-
-        path_folder = READ_FILE.read_allfile(script_dir)
-        global_var.trainfile_txt_path = os.path.join(script_dir, "trainfile.txt")  # 中间存储的.txt路径
-
+    def read_files_to_dataframe(script_dir):
+        # file_path = READ_FILE.read_allfile(script_dir)
+        combined_df = pd.DataFrame()
         try:
-            # 读取文件夹，将.txt, .csv, .xlsx 合并成一个，第一列是文件名
-            with open(global_var.trainfile_txt_path, "a") as outfile:
-                # 第一行是列名
-                try:
-                    first_file = path_folder[0]  # 获取第一个文件
-                    file_extension = os.path.splitext(first_file)[1].lower()
-
-                    if file_extension == '.txt':
-                        with open(first_file, 'r') as infile:  # 写入列名
-                            trainfile_txt_text = infile.read()
-                            rows = trainfile_txt_text.split('\n')  # 每行代表表格中的一行数据
-                            rows_list = [row.split() for row in rows if row.strip()]  # 去除空行和多余空格
-                            print(rows_list[0])
-                            header = rows_list[0][1:]
-                            global_var.sensors = header.copy()
-
-                    elif file_extension == '.csv':
-                        df = pd.read_csv(first_file)
-                        header = df.columns[1:].tolist()
-                        global_var.sensors = header.copy()
-
-                    elif file_extension == '.xlsx':
-                        df = pd.read_excel(first_file)
-                        header = df.columns[1:].tolist()
-                        global_var.sensors = header.copy()
-
-                    print("global_var.sensors:", global_var.sensors)
-                    headers_str = " ".join(map(str, global_var.sensors))
-                    outfile.write("target " + headers_str + '\n')
-
-                except Exception as e:
-                    show_error_message(f"读取文件 {first_file} 时发生错误: {str(e)}")
-                    raise
-
-                # 遍历所有文件
-                for file_path in path_folder:
-                    try:
-                        file_name = os.path.basename(file_path).replace(os.path.splitext(file_path)[1], "")
-
-                        file_extension = os.path.splitext(file_path)[1].lower()
-
-                        if file_extension == '.txt':
-                            with open(file_path, 'r') as infile:
-                                lines = infile.readlines()  # 读取每个文件的所有行
-                                for line in lines[1:]:
-                                    stripped = line.rstrip()  # 去掉行尾空白和换行
-                                    if not stripped:  # 空行直接跳过
-                                        print(f"{file_name} 有空行")
-                                        continue
-                                    # 确保每一行最后都有且只有一个 \n
-                                    outfile.write(f"{file_name} {stripped}\n")
-
-                        elif file_extension == '.csv':
-                            df = pd.read_csv(file_path)
-                            for index, row in df.iterrows():
-                                stripped = ' '.join(map(str, row[1:]))
-                                outfile.write(f"{file_name} {stripped}\n")
-
-                        elif file_extension == '.xlsx':
-                            df = pd.read_excel(file_path)
-                            for index, row in df.iterrows():
-                                stripped = ' '.join(map(str, row[1:]))
-                                outfile.write(f"{file_name} {stripped}\n")
-
-                    except Exception as e:
-                        show_error_message(f"处理文件 {file_path} 时发生错误: {str(e)}")
-                        continue  # 如果有文件处理失败，跳过该文件继续处理下一个文件
-
+            UI_TXT_TO.read_file_header(script_dir, all_flag = False) # 获取传感器名称, 从第二列开始
+            print("global_var.sensors:", global_var.sensors)
+            try:
+                combined_df = UI_TXT_TO.read_file_to_dataframe(script_dir, combined_df, all_flag=False)
+            except Exception as e:
+                show_error_message(f"处理文件 {script_dir} 时发生错误: {str(e)}")
         except Exception as e:
-            show_error_message(f"合并文件时发生错误: {str(e)}")
+            show_error_message(f"读取文件时发生错误: {str(e)}")
+        return combined_df
 
     def txt_to_dataframe(the_path):
         # 读取trainfile.txt并显示到数据源看板，将.txt存储为dataFrame

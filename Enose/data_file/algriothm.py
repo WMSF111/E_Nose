@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import data_file.filter as filter
+
+from sklearn.svm import SVC
+from scipy import io as spio
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
@@ -14,7 +17,7 @@ class choose_alg():
     def __init__(self, ui, textEdit_DataFrame):
         self.ui = ui
         self.df = textEdit_DataFrame  # 读取文件
-        self.data = pd.DataFrame(self.df.iloc[:, 1:])
+        self.data = pd.DataFrame(self.df.iloc[:, 1:]) # 除第一行外的所有数据
 
     def choose_al(self, al, num):
         print(al)
@@ -54,10 +57,10 @@ class choose_alg():
         # 应用 PCA
         pca_f = PCA(n_components=num, svd_solver="full")
         pca_f = pca_f.fit(data_scaled)
+
         self.finalData = pca_f.transform(data_scaled)
         df = pd.DataFrame(self.finalData) # 转化成DataFrame
-        df.insert(0, 'target', self.df['target'].values)# 将 new_column 添加到 DataFrame 的第一列
-        self.finalData = df.to_numpy()# 如果需要，你可以将 df 转回 NumPy 数组
+        df.insert(0, self.df.columns[0], self.df[self.df.columns[0]].values)# 将 new_column 添加到 DataFrame 的第一列
 
 
         variance_ratios = pca_f.explained_variance_ratio_  # 贡献率
@@ -79,15 +82,15 @@ class choose_alg():
         else:
             self.ui.textBrowser.append(
                 f"\n {num} 个主成分无法达到累积贡献率 {target_variance * 100:.2f}% 以上，请增加维度尝试，或者切换算法。")
-        return self.finalData, variance_ratios
+        return df, variance_ratios
 
 
     def lda(self, num, target_variance):
         lda_model = LinearDiscriminantAnalysis(n_components=num)
-        self.finalData = lda_model.fit_transform(self.data, self.df['target'].values)
+        self.finalData = lda_model.fit_transform(self.data, self.df[self.df.columns[0]].values)
         df = pd.DataFrame(self.finalData)  # 转化成DataFrame
-        df.insert(0, 'target', self.df['target'].values)  # 将 new_column 添加到 DataFrame 的第一列
-        self.finalData = df.to_numpy()  # 如果需要，你可以将 df 转回 NumPy 数组
+        df.insert(0, self.df.columns[0], self.df[self.df.columns[0]].values)# 将 new_column 添加到 DataFrame 的第一列
+        # self.finalData = df.to_numpy()  # 如果需要，你可以将 df 转回 NumPy 数组
 
         # 获取解释方差比
         explained_variance_ratio = lda_model.explained_variance_ratio_
@@ -117,7 +120,9 @@ class choose_alg():
             self.ui.textBrowser.append(
                 f"\n {num} 个主成分无法达到累积贡献率 {target_variance:.2f}% 以上，请增加维度尝试，或者切换算法。")
 
-        return self.finalData, explained_variance_ratio
+        return df, explained_variance_ratio # dataframe格式返回
+
+
 
 class TRAIN():
     # 输入： finalData=数据级 target =数据标签 test_size = 训练集数量（0.1-0.9）
@@ -156,6 +161,49 @@ class TRAIN():
         # print("模型准确率", accuracy_score(y_test, y_pred))
         # print("混淆矩阵", confusion_matrix(y_test, y_pred))
         # print("分类报告", classification_report(y_test, y_pred))
+
+    def svm(self, test_size):
+        '''SVM 线性与非线性分类'''
+        x_train, x_test, y_train, y_test = (  # 划分训练集与测试集
+            train_test_split(self.finalData, self.target, test_size=test_size, random_state=1, stratify=self.target))
+        """
+        train_test_split()函数: 用于将数据集划分为训练集train和测试集test
+        test_size: 0~1表示测试集样本占比、整数表示测试集样本数量
+        random_state: 随机数种子。在需要重复实验的时候保证得到一组一样的随机数据。每次填1(其他参数一样)，每次得到的随机数组一样；每次填0/不填，每次都不一样
+        stratify=y: 划分数据集时保证每个类别在训练集和测试集中的比例与原数据集中的比例相同
+        """
+        # ? 标准化训练集和测试集
+        sc = StandardScaler()  # 定义一个标准缩放器
+        sc.fit(x_train)  # 计算均值、标准差
+        X_train_std = sc.transform(x_train)  # 使用计算出的均值和标准差进行标准化
+        X_test_std = sc.transform(x_test)  # 使用计算出的均值和标准差进行标准化
+
+        X_combined_std = np.vstack((X_train_std, X_test_std))  # 竖直堆叠
+        y_combined = np.hstack((y_train, y_test))  # 水平拼接
+        """
+        np.vstack(tup): tup为一个元组，返回一个竖直堆叠后的数组
+        np.hstack(tup): tup为一个元组，返回一个水平拼接后的数组
+        """
+
+        # ? 训练线性支持向量机
+        svm = SVC(kernel='linear', C=1.0, random_state=1)  # 定义线性支持向量分类器 (linear为线性核函数)
+        svm.fit(X_train_std, y_train)  # 根据给定的训练数据拟合训练SVM模型
+
+
+        y_pred = svm.predict(X_test_std)# 用训练好的分类器svm预测数据X_test_std的标签
+        y_pred[:20]
+        accuracy = accuracy_score(y_test, y_pred)  # 查看模型准确度
+        confusion = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
+        classification = classification_report(y_test, y_pred, zero_division=0)  # 提供分类报告，避免出现零分母警告
+
+        labels = sorted(set(y_test) | set(y_pred))  # 获取所有出现的类别
+        err_str = ""
+        for label in labels:
+            y_true_label = [1 if y == label else 0 for y in y_test]
+            y_pred_label = [1 if y == label else 0 for y in y_pred]
+            if sum(y_pred_label) == 0:
+                err_str += f"类别 {label} 没有被预测到，精度为 0\n"
+        return X_combined_std, y_combined, svm, range(105, 150)
 
 class Pre_Alg():
     def __init__(self, ui, textEdit_DataFrame, select):
@@ -196,7 +244,7 @@ class Pre_Alg():
         return self.result
 
     def Val_Choose(self): # 返回Dataframe
-        self.result.set_index('target', inplace=True)
+        self.result.set_index(self.result.columns[0], inplace=True)#第一列作为索引
         self.result = self.result.apply(pd.to_numeric, errors='coerce') # 全部转化为数字
         if(self.select == "平均值"):
             df_new = self.result.groupby(self.result.index).median() # 按平均值新建dataframe
@@ -207,8 +255,9 @@ class Pre_Alg():
             # iloc[0] 用来选取第一个众数（如果有多个众数）
             df_new = (self.result.groupby(self.result.index).
                       agg(lambda x: x.mode().iloc[0]))
-        # self.result.iloc[:, 0].dtype：获取第一列数据类型
+        # 确保返回的 DataFrame 与原始数据类型一致
         df_new = df_new.astype(self.result.iloc[:, 0].dtype)
+
         # 取消索引，将 'target' 列恢复为普通列
         df_new.reset_index(inplace=True)
         return df_new

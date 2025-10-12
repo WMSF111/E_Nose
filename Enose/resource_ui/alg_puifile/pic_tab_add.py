@@ -12,6 +12,9 @@ import pandas as pd
 from matplotlib import cm
 import matplotlib.pyplot as plt
 from io import StringIO
+from matplotlib.colors import ListedColormap
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
 # from mplcursors import cursor as mplcursors
 class ADDTAB():
     def __init__(self, The_QTabWidget):
@@ -68,30 +71,6 @@ class ADDTAB():
         # 切换到新添加的 Tab
         self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
 
-    # def add_plot_tab(self, Dnum = 2, title="Plot", plot_function=None, *args, **kwargs):
-    #     new_tab = QWidget()
-    #     layout = QVBoxLayout(new_tab)
-    #
-    #     # 创建 Matplotlib 图表
-    #     fig = Figure(figsize=(6, 4))
-    #     canvas = FigureCanvas(fig)
-    #     # 将图表添加到布局
-    #     if Dnum == 3:
-    #         ax = fig.add_subplot(111, projection='3d')
-    #     else:
-    #         ax = fig.add_subplot(111)
-    #
-    #     # 如果提供了绘图函数，调用它
-    #     if plot_function:
-    #         plot_function(ax, *args, **kwargs)
-    #
-    #     # 将图表添加到布局
-    #     layout.addWidget(canvas)
-    #
-    #     # 添加新的 Tab 到 QTabWidget
-    #     self.The_QTabWidget.addTab(new_tab, title)
-    #     # 切换到新添加的 Tab
-    #     self.The_QTabWidget.setCurrentIndex(self.The_QTabWidget.count() - 1)
 
     # 创建一个新的文本Tab
     def add_text_tab(self, finaldata, title="Plot", html = False):
@@ -336,6 +315,82 @@ class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
 
         # 添加网格
         ax.grid()
+
+
+class SVMSHOW(QDialog, Regression_uishow):
+    def __init__(self, parent=None):
+        super(SVMSHOW, self).__init__(parent)  # 设置父窗口
+        self.setupUi(self)  # 设置 UI 界面
+        self.label.setText("SVM维度（2-传感器数）")
+        self.ButInit()
+        self.desize = self.doubleSpinBox.value()
+
+    def ButInit(self):
+        # 绑定按钮点击事件
+        self.pushButton_2.clicked.connect(self.num_select)
+        self.toolButton.clicked.connect(self.select_file)
+
+    def num_select(self):
+        """选择了选择模型：关闭对话框"""
+        self.desize = self.doubleSpinBox.value()
+        self.accept()  # 关闭对话框并返回 QDialog.Accepted
+
+    def select_file(self):
+        """弹出文件夹选择对话框"""
+        folder_path, _ = QFileDialog.getOpenFileName(None, "Open File", "", "All Files (*)")
+        if folder_path:  # 如果用户选择了文件夹（而不是取消）
+            self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
+            self.file_path = folder_path
+
+    # ? 绘制决策边界图 函数
+    def plot_decision_regions(self, ax, X, y, classifier, test_idx=None, resolution=0.02):
+        # 初始化 LabelEncoder
+        label_encoder = LabelEncoder()
+
+        # 对训练标签进行编码
+        y_train_encoded = label_encoder.fit_transform(y)
+        # ? 设置标记生成器和颜色图
+        markers = ('s', '^', 'o', 'x', 'v')  # 标记生成器
+        colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')  # 定义颜色图
+        cmap = ListedColormap(colors[:len(np.unique(y_train_encoded))])
+
+        # ? 绘制决策曲面
+        x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1  # x轴范围 x1_min ~ x1_max
+        x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1  # y轴范围 x2_min ~ x2_max
+        xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution),  # 生成网络点坐标矩阵
+                               np.arange(x2_min, x2_max, resolution))
+        Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+        Z_encoded = label_encoder.fit_transform(Z)
+        Z_encoded = Z_encoded.reshape(xx1.shape)  # 对不同分类进行标记
+        # 将编码后的预测结果转换回标签
+
+        ax.contourf(xx1, xx2, Z_encoded, alpha=0.3, cmap=cmap)  # 生成边界图
+        ax.set_xlim(xx1.min(), xx1.max())
+        ax.set_ylim(xx2.min(), xx2.max())
+
+        # ? 绘制 所有样本 散点图
+        for idx, cl in enumerate(np.unique(y)):
+            ax.scatter(x=X[y == cl, 0],  # 散点的x坐标(分类标签==cl)
+                       y=X[y == cl, 1],  # 散点的y坐标(分类标签==cl)
+                       alpha=0.8,  # 散点的透明度
+                       c=colors[idx],  # 散点的颜色
+                       marker=markers[idx],  # 散点的样式
+                       label=cl,  # 散点的图例名称
+                       edgecolor='black')  # 散点的边缘颜色
+
+        # ? 绘制 测试样本 散点图
+        if test_idx:  # 默认test_idx=None 如果未设置该参数，则不绘制测试样本
+            X_test, y_test = X[test_idx, :], y[test_idx]
+
+            ax.scatter(X_test[:, 0],  # 散点的横坐标
+                       X_test[:, 1],  # 散点的纵坐标
+                       c='y',  # 散点的颜色【黄色】
+                       edgecolor='black',  # 散点的边缘颜色【黑色】
+                       alpha=1.0,  # 散点的透明度【1】
+                       linewidth=1,  # 散点的边缘线宽【1】
+                       marker='*',  # 散点的样式【圆圈】
+                       s=150,  # 散点的面积【150】
+                       label='test set')  # 散点的图例名称【test set】
 
 
 class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog

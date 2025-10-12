@@ -1,4 +1,4 @@
-target sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16
+sensor1 sensor2 sensor3 sensor4 sensor5 sensor6 sensor7 sensor8 sensor9 sensor10 sensor11 sensor12 sensor13 sensor14 sensor15 sensor16
 1699 3359 4980 1894 1503 2539 3339 2011 2343 1972 1699 1816 2773 2792 2167 2773
 1699 3339 4980 1894 1503 2539 3339 1992 2343 1972 1679 1816 2753 2773 2148 2753
 1699 3359 4980 1894 1503 2539 3339 1992 2343 1972 1679 1816 2753 2773 2148 2753
