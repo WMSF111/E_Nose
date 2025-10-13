@@ -2,10 +2,9 @@ import  sys, re, random
 import threading
 
 from PySide6.QtCore import (
-    Qt, QObject, Signal, QTimer
+    Qt, QObject, Signal, QEvent
 )
-import copy, time
-
+import pandas as pd
 import global_var
 import tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
@@ -17,15 +16,18 @@ from itertools import cycle
 import logging, os
 import tool.Serial_opea as SO
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+import resource_ui.alg_puifile.pic_tab_add as Tab_add
 
 class MySignals(QObject):
     _draw_open = Signal()
     _draw_close = Signal()
     _Clear_Button = Signal(bool)
     _Collectbegin_Button = Signal(bool)
+    _Clearroom_Button = Signal(bool)
     _statues_label = Signal(str)
     _ClearDraw = Signal()
     _print = Signal(int)
+    _read_state = Signal()
 
 
 class Action():
@@ -44,10 +46,16 @@ class Action():
         print(self.ui.draw_flag)
 
     def _Clear_Button(self, value: bool): # 清洗按钮
+        self.ui.state_open(self.ui.Clear_Button, not value)
         self.ui.Clear_Button.setEnabled(value)
 
     def _Collectbegin_Button(self, value: bool): # 采样按钮
+        self.ui.state_open(self.ui.Collectbegin_Button, not value)
         self.ui.Collectbegin_Button.setEnabled(value)
+
+    def _Clearroom_Button(self, value: bool): # 采样按钮
+        self.ui.state_open(self.ui.Clearroom_Button, not value)
+        self.ui.Clearroom_Button.setEnabled(value)
 
     def _statues_label(self, text: str):
         self.ui.statues_label.setText(text)
@@ -61,6 +69,8 @@ class Action():
     def _print(self, time: int):
         self.ui.Worktime_spinBox.setValue(time)
 
+    def _read_state(self):
+        return self.ui.Auto_state
 
 
 # 主窗口类
@@ -79,8 +89,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.now_num = 0
         self.data = [[] for _ in range(self.data_len)]
         self.alldata = [[] for _ in range(self.data_len)]
-        # # 初始化串口
-        self.serial_setting()
 
         # 初始化绘图
         self.plot_widget = pg.PlotWidget()
@@ -89,6 +97,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.plot_widget.setBackground('w')  # 设置绘图背景为白色
         self.plot_widget.setLabel('left', 'Value')
         self.plot_widget.setLabel('bottom', 'Time(单位:s)')
+        # 启动事件过滤器来监听键盘事件
+        self.plot_widget.installEventFilter(self)
 
         self.curves = []
         self.draw = None
@@ -109,20 +119,29 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.Senser_stableView.setModel(self.model)
         self.Senser_stableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+        # 初始化串口
+        self.serial_setting()
 
         # 连接信号
+        self.Auto_state = "idle"  # 初始状态为 "idle"
+        self.Auto_Button.clicked.connect(self.Choose_Model)
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
-        self.Collectbegin_Button.clicked.connect(self.start_serial) # 开始处理
-        self.Save_Button.clicked.connect(self.savefile) # 保存按钮
+        self.Collectbegin_Button.clicked.connect(self.start_serial) # 采集阶段
+        self.Clearroom_Button.clicked.connect(self.clear_room)
         self.InitPos_Button.clicked.connect(self.Stra) #初始化位置
         self.Folder_Button.clicked.connect(self.savefolder) # 确认保存路径
+        self.Stop_Button.clicked.connect(self.Stop)  # 确认保存路径
 
     def initMS(self):
         self.ms._draw_open.connect(self.a._draw_open)
         self.ms._draw_close.connect(self.a._draw_close)
+        self.ms._Clear_Button.connect(self.a._Clear_Button)
+        self.ms._Clearroom_Button.connect(self.a._Clearroom_Button)
+        self.ms._Collectbegin_Button.connect(self.a._Collectbegin_Button)
         self.ms._statues_label.connect(self.a._statues_label)
         self.ms._ClearDraw.connect(self.a._ClearDraw)
         self.ms._print.connect(self.a._print)
+        self.ms._read_state.connect(self.a._read_state)
 
     def serial_setting(self):
         if (g_var.Port_select == ""):
@@ -135,56 +154,122 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ser = self.smng.ser_arr[0]
         self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
         self.SO1 = SO.Serial1opea(self.ms, self.ser)
+        # 完成串口信号初始化
+        self.open_serial(self.process_data)
+
+        self.draw = SO.time_thread(self.ser)  # 创建绘图线程
+        self.draw.thread_draw(self.updata)
 
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
             d = self.ser.open(Signal, stock=0)
             print("控制串口初始化成功：", d)
 
-    def Stra(self): # 运动轴回到原点
-        self.plot_widget.repaint() # 刷新图形界面
+    def Stop(self):
         if self.time_th:
-            self.time_th.stop("time_th")
+            self.SO1.stop("time_th调用函数")
+            self.SO1._running = False
+        self.ms._draw_close.emit()
+        if self.Auto_state == "auto":
+            self.button_init(False)
+
+    def Stra(self): # 暂停或者正式开始
+        if self.time_th:
+            self.SO1.stop("time_th调用函数")
             self.SO1._running = False
         if self.draw:
-            self.draw.stop("draw")
+            # self.draw.stop("draw")
+            self.ms._draw_close.emit()
+        # 初始化界面、线程、按钮
+        self.plot_widget.repaint() # 刷新图形界面
         self.ms._Collectbegin_Button.emit(True)
         self.ms._Clear_Button.emit(True)
+        self.ms._Clearroom_Button.emit(True)
         print("继续采集")
         with global_var.lock:
             g_var.gettime = (int)(self.Sample_spinBox.value())
             g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
             g_var.standtime = 30 # 基线时长
-
-        self.open_serial(self.process_data)
         text = ("base_time:" + str(30) +
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
                 ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
         self.ser.write(text)
         # 开启线程
         self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
-        self.draw = SO.time_thread(self.ser) # 创建绘图线程
-        self.draw.thread_draw(self.updata)
         self.ms._draw_close.emit()
+        if self.Auto_state == "auto":
+            self.Auto_Model()
+
+
+    def Auto_Model(self):
+        self.SO1._running = True
+        self.button_init(False)
+        # 启动串口
+        self.time_th.thread_loopfun(self.SO1.auto)
 
     def clear_data(self): # 基线阶段
         self.SO1._running = True
-        self.ms._Clear_Button.emit(False) # 不允许继续
         # 启动串口
         self.time_th.thread_loopfun(self.SO1.base_clear)
 
     def start_serial(self): # 开始采集
         self.ms._ClearDraw.emit()
         self.SO1._running = True
-        self.ms._Collectbegin_Button.emit(False)
         self.time_th.thread_loopfun(self.SO1.sample_collect)
 
+    def clear_room(self): # 开始采集
+        self.SO1._running = True
+        self.time_th.thread_loopfun(self.SO1.room_clear)
+
+    def Choose_Model(self):
+        if self.Auto_state == "idle": #选择了自动模式
+            self.Auto_state = "auto"
+            self.state_open(self.Auto_Button, True)
+            self.button_init(False)
+        else:
+            self.Auto_state = "idle"
+            self.state_open(self.Auto_Button, False)
+            self.button_init(True)
+
+    def button_init(self, value):
+        self.Clear_Button.setEnabled(value)
+        self.Collectbegin_Button.setEnabled(value)
+        self.Clearroom_Button.setEnabled(value)
+
+
+    def state_open(self, Button, state):
+        if state == False:
+            Button.setStyleSheet("")  # 设置成默认
+        else:
+            Button.setStyleSheet("background-color: green; color: white;")  # 激活状态颜色
 
     def process_data(self, data):
         self.now_data = 0
         # 解析数据
-        if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3"):
-            print("data:", data)
+        if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3" or data[0] == "4" or data[0] == "0"):
+            if(data == "11"):
+                self.ms._Clear_Button.emit(False)
+            if (data == "12"):
+                self.ms._Clear_Button.emit(True)
+            if (data == "21"):
+                self.ms._Collectbegin_Button.emit(False)
+                self.ms._statues_label.emit("样品开始采集")
+                self.ms._draw_open.emit()
+            if (data == "22"):
+                self.ms._Collectbegin_Button.emit(True)
+                self.ms._statues_label.emit("样品采集完成")
+                self.ms._draw_close.emit()
+            if (data == "31"):
+                self.ms._Clearroom_Button.emit(False)
+            if (data == "32"):
+                self.ms._Clearroom_Button.emit(True)
+            if (data == "41"): # 自动模式
+                self.state_open(self.Auto_Button, True)
+            if (data == "42"):
+                self.state_open(self.Auto_Button, False)
+            if (data == "00"): # 暂停
+                self.Stop()
+
         else:
             now_data = self.decode_data(data)
             if len(now_data) == self.data_len:
@@ -242,29 +327,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             print("用户取消了选择")
 
     def savefile(self):
-        folder_path = self.Folder_lineEdit.text().strip()  # 获取文本内容并去除首尾空格
-        if folder_path:  # 如果有内容
-            filename = QFileDialog.getSaveFileName(None, "open file", folder_path, "TEXT Files(*.txt)")
-        else:  # 如果没有内容
-            filename = QFileDialog.getSaveFileName(None, "open file", "/", "TEXT Files(*.txt)")
-        # print(filename)
-        if filename[0] == "" or filename is None:
-            return
         try:
-            with open(filename[0], "w") as f:
-                sensor_names_str = " ".join(self._data_visible)
-                f.write(sensor_names_str + "\n")
-                with global_var.lock:
-                    # 筛选出选中的传感器数据
-                    selected_data = [self.alldata[g_var.sensors.index(sensor)] for sensor in self._data_visible]
+            with global_var.lock:
+                # 筛选出选中的传感器数据
+                selected_data = [self.alldata[g_var.sensors.index(sensor)] for sensor in self._data_visible]
+            # 转置筛选后的数据
+            transposed_data = list(map(list, zip(*selected_data)))
+            # 假设 selected_data 是一个包含多个传感器数据的二维列表或数组
+            selected_data_df = pd.DataFrame(transposed_data, columns=self._data_visible)  # 将数据转换为 DataFrame
+            Tab_add.ADDTAB.save_text(selected_data_df)
 
-                # 转置筛选后的数据
-                transposed_data = list(map(list, zip(*selected_data)))
-
-                # 将转置后的数据写入文件
-                for row in transposed_data:
-                    row_str = " ".join(map(str, row))
-                    f.write(row_str + "\n")
         except Exception as e:
             print("保存失败: " + str(e))
 
@@ -364,6 +436,14 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         event.accept()  # 允许窗口真正关闭
 
+    def eventFilter(self, source, event):
+        # 过滤来自plot_widget的事件
+        if source is self.plot_widget and event.type() == QEvent.KeyPress:
+            if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_S:
+                # 如果按下CTRL + S，调用保存函数
+                self.savefile()
+                return True  # 表示事件已处理
+        return super().eventFilter(source, event)
 
 
 

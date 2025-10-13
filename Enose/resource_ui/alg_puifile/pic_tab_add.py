@@ -98,12 +98,12 @@ class ADDTAB():
         # 创建一个 QAction
         save_action = QAction("Save", self.The_QTabWidget)
         save_action.setShortcut(QKeySequence("Ctrl+S"))
-        save_action.triggered.connect(lambda: self.save_text(text))
+        save_action.triggered.connect(lambda: ADDTAB.save_text(text))
 
         # 将 QAction 添加到新 Tab 的上下文菜单
         new_tab.addAction(save_action)
 
-    def save_text(self, text):
+    def save_text(text):
         """保存当前文本"""
         # 确保text是DataFrame
         if isinstance(text, str):  # 如果传入的是字符串，尝试转回DataFrame

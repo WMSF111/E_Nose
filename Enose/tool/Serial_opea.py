@@ -131,7 +131,13 @@ class Serial1opea():
         self.gettime = glo_var.gettime  # 采集时常
         self._running =  True
 
+    def auto(self):
+        self.base_clear()
+        self.sample_collect()
+        self.room_clear()
+
     def base_clear(self):
+        self.ms._Clear_Button.emit(False)  # 不允许继续
         text = ("11\n\r")
         num = 0
         while True:  # 没到回复
@@ -154,14 +160,16 @@ class Serial1opea():
             num += 1
             if self.ser.getSignal == "12":
                 self.ms._statues_label.emit("基线处理完成")
-                self.ms._Clear_Button.emit(True)  # 允许再次基线处理
                 self.ms._print.emit(num)
                 break
             if num >= glo_var.standtime + 5:
                 self.ms._statues_label.emit("基线处理时长超时")
                 break
+        if (self.ms._read_state.emit() != "auto"):
+            self.ms._Clear_Button.emit(True)  # 允许再次基线处理
 
     def sample_collect(self): # 信号采集
+        self.ms._Collectbegin_Button.emit(False)
         text = ("21\n\r")
         num = 0
         while True:  # 没到回复
@@ -186,16 +194,18 @@ class Serial1opea():
             num += 1
             if self.ser.getSignal == "22":
                 self.ms._statues_label.emit("采样处理完成")
-                self.ms._Collectbegin_Button.emit(True) # 允许再次采集
                 self.ms._draw_close.emit()
                 break
             if num >= glo_var.gettime + 5:
                 self.ms._statues_label.emit("采样时长超时")
                 self.ms._draw_close.emit()
                 break
-        self.room_clear()
+        if (self.ms._read_state.emit() != "auto"):
+            self.ms._Collectbegin_Button.emit(True)  # 允许再次采集
+
 
     def room_clear(self):
+        self.ms._Clearroom_Button.emit(False)
         text = ("31\n\r")
         num = 0
         while True:  # 没到回复
@@ -218,11 +228,19 @@ class Serial1opea():
             num += 1
             if self.ser.getSignal == "32":
                 self.ms._statues_label.emit("洗气处理完成")
-                self.ms._Collectbegin_Button.emit(True)
                 self.ms._print.emit(glo_var.gettime + num)
 
                 break
             if num >= glo_var.cleartime + 5:
                 self.ms._statues_label.emit("洗气时长超时")
-                self.ms._Collectbegin_Button.emit(True)
+                self.ms._Clearroom_Button.emit(True)
                 break
+        if(self.ms._read_state.emit() != "auto"):
+            self.ms._Clearroom_Button.emit(True)
+
+    def stop(self, name = None):
+        self._running = False  # 设置读取标志为 False
+        if name != None:
+            print(name + "线程已结束")
+        else:
+            print("线程已结束")

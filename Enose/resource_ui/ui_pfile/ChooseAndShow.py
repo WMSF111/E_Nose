@@ -165,6 +165,23 @@ class Ui_Gragh_show(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_8)
 
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.Auto_Button = QPushButton(self.groupBox_3)
+        self.Auto_Button.setObjectName(u"Auto_Button")
+        self.Auto_Button.setMaximumSize(QSize(100, 32))
+
+        self.horizontalLayout_4.addWidget(self.Auto_Button)
+
+        self.InitPos_Button = QPushButton(self.groupBox_3)
+        self.InitPos_Button.setObjectName(u"InitPos_Button")
+        self.InitPos_Button.setMaximumSize(QSize(100, 32))
+
+        self.horizontalLayout_4.addWidget(self.InitPos_Button)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+
 
         self.verticalLayout.addWidget(self.groupBox_3)
 
@@ -204,12 +221,6 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout.addWidget(self.statues_label)
 
-        self.InitPos_Button = QPushButton(self.widget)
-        self.InitPos_Button.setObjectName(u"InitPos_Button")
-        self.InitPos_Button.setMaximumSize(QSize(100, 32))
-
-        self.horizontalLayout.addWidget(self.InitPos_Button)
-
         self.Clear_Button = QPushButton(self.widget)
         self.Clear_Button.setObjectName(u"Clear_Button")
         self.Clear_Button.setMaximumSize(QSize(100, 32))
@@ -222,16 +233,20 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout.addWidget(self.Collectbegin_Button)
 
-        self.Save_Button = QPushButton(self.widget)
-        self.Save_Button.setObjectName(u"Save_Button")
-        self.Save_Button.setMaximumSize(QSize(100, 32))
+        self.Clearroom_Button = QPushButton(self.widget)
+        self.Clearroom_Button.setObjectName(u"Clearroom_Button")
+        self.Clearroom_Button.setMaximumSize(QSize(100, 32))
 
-        self.horizontalLayout.addWidget(self.Save_Button)
+        self.horizontalLayout.addWidget(self.Clearroom_Button)
+
+        self.Stop_Button = QPushButton(self.widget)
+        self.Stop_Button.setObjectName(u"Stop_Button")
+        self.Stop_Button.setMaximumSize(QSize(100, 32))
+
+        self.horizontalLayout.addWidget(self.Stop_Button)
 
         self.horizontalLayout.setStretch(0, 1)
         self.horizontalLayout.setStretch(1, 10)
-        self.horizontalLayout.setStretch(4, 1)
-        self.horizontalLayout.setStretch(5, 1)
 
         self.gridLayout.addWidget(self.widget, 0, 1, 1, 1)
 
@@ -277,13 +292,15 @@ class Ui_Gragh_show(object):
         self.label_9.setText(QCoreApplication.translate("Gragh_show", u"\u57fa\u7ebf\u65f6\u957f", None))
         self.label_36.setText(QCoreApplication.translate("Gragh_show", u"s", None))
         self.label_14.setText(QCoreApplication.translate("Gragh_show", u"\u5de5\u4f5c\u65f6\u95f4", None))
+        self.Auto_Button.setText(QCoreApplication.translate("Gragh_show", u"\u81ea\u52a8\u6a21\u5f0f", None))
+        self.InitPos_Button.setText(QCoreApplication.translate("Gragh_show", u"\u5f00\u59cb/\u521d\u59cb\u5316", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Gragh_show", u"\u4f20\u611f\u5668\u5217\u8868", None))
         self.label_37.setText(QCoreApplication.translate("Gragh_show", u"\u5f53\u524d\u72b6\u6001:", None))
         self.statues_label.setText("")
-        self.InitPos_Button.setText(QCoreApplication.translate("Gragh_show", u"\u521d\u59cb\u5316", None))
         self.Clear_Button.setText(QCoreApplication.translate("Gragh_show", u"\u57fa\u7ebf\u8c03\u6574", None))
         self.Collectbegin_Button.setText(QCoreApplication.translate("Gragh_show", u"\u5f00\u59cb\u91c7\u96c6", None))
-        self.Save_Button.setText(QCoreApplication.translate("Gragh_show", u"\u4fdd\u5b58\u6570\u636e", None))
+        self.Clearroom_Button.setText(QCoreApplication.translate("Gragh_show", u"\u6e05\u6d17\u6c14\u5ba4", None))
+        self.Stop_Button.setText(QCoreApplication.translate("Gragh_show", u"\u4e00\u952e\u6682\u505c", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Line_Show), QCoreApplication.translate("Gragh_show", u"\u66f2\u7ebf\u56fe", None))
     # retranslateUi
 

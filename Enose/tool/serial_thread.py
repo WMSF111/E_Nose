@@ -105,7 +105,7 @@ class myserial():
         fun(line: str) 回调收到的内容
         """
         buffer = bytearray()  # 创建可变字节数组
-        slip_n = b'\n\r'  # 用于按行切帧
+        slip_n = b'\r\n'  # 用于按行切帧
 
         while True:
             with self.lock:

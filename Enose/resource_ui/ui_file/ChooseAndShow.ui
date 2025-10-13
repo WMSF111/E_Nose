@@ -225,6 +225,36 @@
              </item>
             </layout>
            </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QPushButton" name="Auto_Button">
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>自动模式</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="InitPos_Button">
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>开始/初始化</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
         </item>
@@ -258,7 +288,7 @@
      </item>
      <item row="0" column="1">
       <widget class="QWidget" name="widget" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10,0,0,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,10,0,0,0,0">
         <property name="topMargin">
          <number>0</number>
         </property>
@@ -289,19 +319,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="InitPos_Button">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>32</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>初始化</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="Clear_Button">
           <property name="maximumSize">
            <size>
@@ -328,7 +345,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="Save_Button">
+         <widget class="QPushButton" name="Clearroom_Button">
           <property name="maximumSize">
            <size>
             <width>100</width>
@@ -336,7 +353,20 @@
            </size>
           </property>
           <property name="text">
-           <string>保存数据</string>
+           <string>清洗气室</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Stop_Button">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>一键暂停</string>
           </property>
          </widget>
         </item>
