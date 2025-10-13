@@ -1,5 +1,8 @@
 from PySide6.QtWidgets import QDialog
-import data_file.algriothm as algr
+import data_file.regression as regression
+import data_file.dimension as dimension
+import data_file.classify as classify
+import data_file.prealg as prealg
 import resource_ui.alg_puifile.pic_tab_add as alg_show
 import data_file.transfo as transfo
 
@@ -16,7 +19,7 @@ class ALG_TAB_ADD():
             print(pre_plot.PreAlg, pre_plot.ValAlg)
             Dataframe = transfo.UI_TXT_TO.read_files_to_dataframe(pre_plot.file_path)  # 读取txt转数组
             if(pre_plot.PreAlg != "不选"):
-                pre_alg = algr.Pre_Alg(self, Dataframe, pre_plot.PreAlg) #创建预处理算法对象
+                pre_alg = prealg.Pre_Alg(self, Dataframe, pre_plot.PreAlg) #创建预处理算法对象
                 result = pre_alg.Filter_Choose()
                 print(result)
                 # .strip()去除前后不必要空格
@@ -33,7 +36,7 @@ class ALG_TAB_ADD():
             if(pre_plot.ValAlg != "不选"):
                 if(pre_plot.PreAlg != "不选"):
                     Dataframe = result # 对滤波后的数据进行处理
-                pre_alg = algr.Pre_Alg(self, Dataframe, pre_plot.ValAlg)  # 创建选择数据对象
+                pre_alg = prealg.Pre_Alg(self, Dataframe, pre_plot.ValAlg)  # 创建选择数据对象
                 val_text = pre_alg.Val_Choose()
                 self.tabset.add_text_tab(
                     finaldata=val_text,
@@ -41,7 +44,7 @@ class ALG_TAB_ADD():
                     html=True)
 
     def Di_Re_Combo_select(self, index):
-        selected_item = self.ui.Classify_ComboBox.itemText(index)
+        selected_item = self.ui.Dimension_ComboBox.itemText(index)
         if selected_item == "PCA":
             pca = alg_show.PCASHOW()  # PCA弹窗
             self.process_data_and_plot(selected_item="PCA", dialog=pca, transfo=transfo,
@@ -53,19 +56,14 @@ class ALG_TAB_ADD():
                                        plot_title="LDA", plot_function=lda.plot_lda_variance_ratio)
 
 
-
-
-    def Classify_Combo_select(self, index): #回归算法
+    def Region_Combo_select(self, index): #回归算法
         selected_item = self.ui.Reg_ComboBox.itemText(index)
         if (selected_item == "线性回归"):
             lr = alg_show.LRSHOW() # LR弹窗
             self.ui.Reg_ComboBox.setCurrentIndex(0)
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(lr.file_path)  # 读取txt转数组
-                Target = DataFrame.iloc[1:, 0]
-                # 将剩余的列作为数据 (features)
-                Data = DataFrame.iloc[1:, 1:]
-                train = algr.TRAIN(self.ui, Target, Data)
+                train = regression.TRAIN(self.ui, DataFrame)
                 accuracy, confusion, classification, err_str = train.LG_train(lr.desize)
                 accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
                 confusion_str = "混淆矩阵:\n" + "\n".join(" ".join(map(str, row)) for row in confusion)
@@ -78,7 +76,7 @@ class ALG_TAB_ADD():
                 )
                 # 去除重复标签并保持原有顺序
                 unique_labels = []
-                for label in Target:
+                for label in train.target:
                     if label not in unique_labels:
                         unique_labels.append(label)
                 self.tabset.add_plot_tab(
@@ -86,14 +84,13 @@ class ALG_TAB_ADD():
                     plot_function = lr.plot_confusion,
                     confusion = confusion,
                     labels_name = list(set(unique_labels)))
+    def Classify_Combo_select(self, index):
+        selected_item = self.ui.Classify_ComboBox.itemText(index)
         if selected_item == "SVM":
             svm_show = alg_show.SVMSHOW()  # SVM弹窗
             if svm_show.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(svm_show.file_path)  # 读取txt转数组
-                Target = DataFrame.iloc[1:, 0]
-                # 将剩余的列作为数据 (features)
-                Data = DataFrame.iloc[1:, 1:]
-                S_class = algr.TRAIN(self.ui, Target, Data)  # 创建预处理算法对象
+                S_class = classify.TRAIN(self.ui, DataFrame)  # 创建预处理算法对象
                 X_combined_std, y_combined, svm, range = S_class.svm(svm_show.desize)
                 self.tabset.add_plot_tab(
                     title=f"SVM混淆矩阵",
@@ -103,6 +100,21 @@ class ALG_TAB_ADD():
                     classifier = svm,
                     test_idx = range
                     )
+        if selected_item == "KNN":
+            knn_show = alg_show.KNNSHOW()  # SVM弹窗
+            if knn_show.exec() == QDialog.Accepted:  # 等待弹窗关闭
+                DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(knn_show.file_path)  # 读取txt转数组
+                S_class = classify.TRAIN(self.ui, DataFrame)  # 创建预处理算法对象
+                X_combined_std, y_combined, svm, range = S_class.knn(knn_show.nb_num)
+                self.tabset.add_plot_tab(
+                    title=f"SVM混淆矩阵",
+                    plot_function=svm_show.plot_decision_regions,
+                    X = X_combined_std,
+                    y = y_combined,
+                    classifier = svm,
+                    test_idx = range
+                    )
+
 
     def process_data_and_plot(self, selected_item, dialog, transfo, plot_title, plot_function):
         self.ui.Classify_ComboBox.setCurrentIndex(0)
@@ -111,7 +123,7 @@ class ALG_TAB_ADD():
             # 读取txt并显示到数据源看板
             DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(dialog.file_path)
             # 选择算法
-            alg = algr.choose_alg(self.ui, DataFrame)
+            alg = dimension.DIMENSION(self.ui, DataFrame)
 
             # 根据选项进行PCA或LDA的计算
             if selected_item == "PCA":

@@ -98,10 +98,10 @@ class Ui_Alg_show(object):
 
         self.gridLayout_4.addWidget(self.label_4, 1, 0, 1, 1)
 
-        self.Net_ComboBox = QComboBox(self.groupBox_3)
-        self.Net_ComboBox.setObjectName(u"Net_ComboBox")
+        self.Classify_ComboBox = QComboBox(self.groupBox_3)
+        self.Classify_ComboBox.setObjectName(u"Classify_ComboBox")
 
-        self.gridLayout_4.addWidget(self.Net_ComboBox, 7, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.Classify_ComboBox, 7, 1, 1, 1)
 
         self.label_3 = QLabel(self.groupBox_3)
         self.label_3.setObjectName(u"label_3")
@@ -120,10 +120,10 @@ class Ui_Alg_show(object):
 
         self.gridLayout_4.addWidget(self.label_5, 7, 0, 1, 1)
 
-        self.Classify_ComboBox = QComboBox(self.groupBox_3)
-        self.Classify_ComboBox.setObjectName(u"Classify_ComboBox")
+        self.Dimension_ComboBox = QComboBox(self.groupBox_3)
+        self.Dimension_ComboBox.setObjectName(u"Dimension_ComboBox")
 
-        self.gridLayout_4.addWidget(self.Classify_ComboBox, 3, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.Dimension_ComboBox, 3, 1, 1, 1)
 
         self.Pre_Button = QPushButton(self.groupBox_3)
         self.Pre_Button.setObjectName(u"Pre_Button")
@@ -176,7 +176,7 @@ class Ui_Alg_show(object):
         self.label_4.setText(QCoreApplication.translate("Alg_show", u"\u9884\u5904\u7406", None))
         self.label_3.setText(QCoreApplication.translate("Alg_show", u"\u56de\u5f52\u9884\u6d4b", None))
         self.label_2.setText(QCoreApplication.translate("Alg_show", u"\u964d\u7ef4\u7b97\u6cd5", None))
-        self.label_5.setText(QCoreApplication.translate("Alg_show", u"\u795e\u7ecf\u7f51\u7edc", None))
+        self.label_5.setText(QCoreApplication.translate("Alg_show", u"\u5206\u7c7b\u7b97\u6cd5", None))
         self.Pre_Button.setText(QCoreApplication.translate("Alg_show", u"\u7b97\u6cd5\u9009\u62e9", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Alg_show", u"\u6570\u636e\u9009\u62e9", None))
     # retranslateUi

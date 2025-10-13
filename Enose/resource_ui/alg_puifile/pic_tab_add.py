@@ -392,6 +392,31 @@ class SVMSHOW(QDialog, Regression_uishow):
                        s=150,  # 散点的面积【150】
                        label='test set')  # 散点的图例名称【test set】
 
+class KNNSHOW(QDialog, Regression_uishow):
+    def __init__(self, parent=None):
+        super(KNNSHOW, self).__init__(parent)  # 设置父窗口
+        self.setupUi(self)  # 设置 UI 界面
+        self.label.setText("邻居数")
+        self.ButInit()
+        self.nb_num = self.doubleSpinBox.value()
+
+    def ButInit(self):
+        # 绑定按钮点击事件
+        self.pushButton_2.clicked.connect(self.num_select)
+        self.toolButton.clicked.connect(self.select_file)
+
+    def num_select(self):
+        """选择了选择模型：关闭对话框"""
+        self.nb_num = self.doubleSpinBox.value()
+        self.accept()  # 关闭对话框并返回 QDialog.Accepted
+
+    def select_file(self):
+        """弹出文件夹选择对话框"""
+        folder_path, _ = QFileDialog.getOpenFileName(None, "Open File", "", "All Files (*)")
+        if folder_path:  # 如果用户选择了文件夹（而不是取消）
+            self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
+            self.file_path = folder_path
+
 
 class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
     def __init__(self, parent=None):

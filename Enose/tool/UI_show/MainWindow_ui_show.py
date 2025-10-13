@@ -30,11 +30,6 @@ class MianWindow_Init(QMainWindow, Ui_MainWindow):
             # 创建并显示串口设置窗口
             self.serial_settings_window = se.Serial_Init()
             self.serial_settings_window.show()  # 显示窗口
-
-        # 检查点击的项目是否是“传感器设置”
-        # if item.text(column) == "传感器设置":
-        #     self.SerialSetting_show = SerialSetting_Init()
-        #     self.SerialSetting_show.show()  # 显示窗口
         # 检查点击的项目是否是“测试阶段”
         if item.text(column) == "测试阶段":
             self.clear_layout()

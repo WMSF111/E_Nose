@@ -126,7 +126,7 @@
             </widget>
            </item>
            <item row="7" column="1">
-            <widget class="QComboBox" name="Net_ComboBox"/>
+            <widget class="QComboBox" name="Classify_ComboBox"/>
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="label_3">
@@ -151,12 +151,12 @@
            <item row="7" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>神经网络</string>
+              <string>分类算法</string>
              </property>
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QComboBox" name="Classify_ComboBox"/>
+            <widget class="QComboBox" name="Dimension_ComboBox"/>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="Pre_Button">
