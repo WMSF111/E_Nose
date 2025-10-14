@@ -5,19 +5,290 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/data_file/classify.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_file/dimension.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_file/prealg.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_file/regression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-3d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-4k.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-account-logout.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-action-redo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-action-undo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-airplane-mode-off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-airplane-mode.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-alarm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-align-center.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-align-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-align-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-bottom-2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-bottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-circle-bottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-circle-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-circle-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-circle-top.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-arrow-top.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-at.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-av-timer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-ban.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-battery-0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-battery-3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-battery-5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-battery-alert.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-battery-slash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-bell.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-bluetooth.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-briefcase.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-browser.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-calendar-check.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-camera-roll.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-camera.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-caret-bottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-caret-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-caret-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-caret-top.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cast.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chart-line.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chart-pie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chat-bubble.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-check-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-check-circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-check.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-bottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-circle-down-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-circle-left-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-circle-right-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-circle-up-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-double-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-double-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-double-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-double-up-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-double-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-chevron-top.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-clipboard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-clock.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-clone.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-closed-captioning.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cloud-download.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cloud-upload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cloudy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-code.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-coffee.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-comment-bubble.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-comment-square.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-credit-card.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cursor-move.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cursor.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-cut.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-data-transfer-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-data-transfer-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-deaf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-description.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-devices.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-dialpad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-dog.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-door.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-double-quote-sans-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-double-quote-sans-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-drop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-envelope-closed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-envelope-letter.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-envelope-open.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-equalizer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-ethernet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-exit-to-app.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-expand-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-expand-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-expand-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-expand-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-exposure.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-external-link.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-face-dead.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-featured-playlist.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-file.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-find-in-page.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-fingerprint.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-fire.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-flip-to-back.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-folder-open.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-folder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-frown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-gamepad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hand-point-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hand-point-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hand-point-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hand-point-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-hdr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-headphones.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-heart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-highligt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-history.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-home.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-house.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-image-plus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-image1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-infinity.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-input-power.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-input.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-justify-center.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-justify-left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-justify-right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-keyboard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-laptop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-layers.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-level-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-level-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-library-add.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-library.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-lightbulb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-link-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-link-broken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-link.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-location-pin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-lock-locked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-lock-unlocked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-loop-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-loop-circular.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-loop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-low-vision.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-magnifying-glass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-map.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-eject.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-play.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-skip-backward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-skip-forward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-step-backward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-step-forward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-media-stop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-medical-cross.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-meh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-menu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-microphone.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-minus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mobile-landscape.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mobile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mood-bad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mood-good.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mood-very-bad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mood-very-good.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-moon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mouse.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-move.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-movie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mug-tea.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-mug.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-notes.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-options-horizontal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-options.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-paint-bucket.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-paper-plane.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-paperclip.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-paragraph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-pen-alt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-pencil.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-people.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-phone.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-pin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-plus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-power-standby.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-print.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-rectangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-reload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-remove.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-rss.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-satelite.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-save.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-screen-desktop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-screen-smartphone.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-share-boxed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-share.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-signal-cellular-0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-signal-cellular-3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-size-grip.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-smile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-speaker.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-speech.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-speedometer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-star.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-tags.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-task.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-terminal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-text-size.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-text-square.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-text.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-thumb-down.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-thumb-up.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-transfer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-triangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-truck.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-user-female.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-user-follow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-user-unfollow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-vertical-align-bottom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-view-column.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-view-module.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-view-quilt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-view-stream.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-voice-over-record.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-volume-high.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-volume-low.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-volume-off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wallet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-watch.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wifi-signal-0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wifi-signal-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wifi-signal-2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wifi-signal-4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wifi-signal-off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-window-maximize.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-window-minimize.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-window-restore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-wrap-text.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-x-circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-zoom-in.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/cil-zoom-out.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_close.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_maximize.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_menu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_minimize.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_restore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/icons/icon_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/images/PyDracula.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/images/PyDracula_horizontal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/images/images/PyDracula_vertical.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/main.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/app_functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/app_settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/main.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/resources_rc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/modules/ui_functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/resources.qrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/setup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/themes/py_dracula_dark.qss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/themes/py_dracula_light.qss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/ui_file/resources.qrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/widgets/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/widgets/custom_grips/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource_ui/widgets/custom_grips/custom_grips.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/alg_tabadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/alg_tabadd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/algriothm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Alg_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/Alg_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Alg_show.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/Alg_show.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/MainWindow_ui_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/modules/app_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/modules/app_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/modules/ui_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/modules/ui_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/resources.qrc" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/resources.qrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Modern_GUI_PyDracula_PySide6_or_PyQt6/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,32 +326,64 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.MainWindow_show.executor&quot;: &quot;Run&quot;,
-    &quot;Python.The_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/study/Python/PyCharm_study/E_Nose/Enose/resource_ui/alg_puifile&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.MainWindow_show.executor": "Run",
+    "Python.The_main.executor": "Run",
+    "Python.app_functions.executor": "Run",
+    "Python.app_settings.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.running.executor": "Run",
+    "Python.running_main.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.ui_functions.executor": "Run",
+    "Python.ui_main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose/resource_ui/modules",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\modules" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\modules" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_pfile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
     </key>
   </component>
   <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
+      <module name="Enose" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="E-nose" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/resource_ui/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="running" type="PythonConfigurationType" factoryName="Python">
       <module name="Enose" />
       <option name="ENV_FILES" value="" />
@@ -104,6 +407,10 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.running" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -138,5 +445,15 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/resource_ui/setup.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
