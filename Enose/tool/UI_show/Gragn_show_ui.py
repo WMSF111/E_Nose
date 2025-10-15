@@ -241,7 +241,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if state == False:
             Button.setStyleSheet("")  # 设置成默认
         else:
-            Button.setStyleSheet("background-color: green; color: white;")  # 激活状态颜色
+            Button.setStyleSheet("background-color: #215b5d; color: white;")  # 激活状态颜色
 
     def process_data(self, data):
         self.now_data = 0

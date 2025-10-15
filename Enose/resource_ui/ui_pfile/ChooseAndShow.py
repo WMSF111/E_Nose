@@ -169,13 +169,13 @@ class Ui_Gragh_show(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.Auto_Button = QPushButton(self.groupBox_3)
         self.Auto_Button.setObjectName(u"Auto_Button")
-        self.Auto_Button.setMaximumSize(QSize(100, 32))
+        self.Auto_Button.setMaximumSize(QSize(200, 32))
 
         self.horizontalLayout_4.addWidget(self.Auto_Button)
 
         self.InitPos_Button = QPushButton(self.groupBox_3)
         self.InitPos_Button.setObjectName(u"InitPos_Button")
-        self.InitPos_Button.setMaximumSize(QSize(100, 32))
+        self.InitPos_Button.setMaximumSize(QSize(200, 32))
 
         self.horizontalLayout_4.addWidget(self.InitPos_Button)
 
@@ -192,7 +192,11 @@ class Ui_Gragh_show(object):
         self.Senser_stableView = QTableView(self.groupBox_4)
         self.Senser_stableView.setObjectName(u"Senser_stableView")
         self.Senser_stableView.setMinimumSize(QSize(226, 0))
-        self.Senser_stableView.setMaximumSize(QSize(226, 16777215))
+        self.Senser_stableView.setMaximumSize(QSize(500, 16777215))
+        font1 = QFont()
+        font1.setPointSize(8)
+        font1.setBold(False)
+        self.Senser_stableView.setFont(font1)
 
         self.gridLayout_2.addWidget(self.Senser_stableView, 0, 0, 1, 1)
 

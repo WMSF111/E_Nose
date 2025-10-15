@@ -15,7 +15,16 @@ from io import StringIO
 from matplotlib.colors import ListedColormap
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-# from mplcursors import cursor as mplcursors
+from resource_ui.modules import *
+
+def type_set(a):
+    useCustomTheme = True
+    themeFile = "resource_ui\\themes\py_dracula_light.qss"
+
+    if useCustomTheme:
+        with open(themeFile, 'r') as file:
+            theme = file.read()  # 读取QSS文件内容
+            a.setStyleSheet(theme)  # 将样式应用到当前窗口
 class ADDTAB():
     def __init__(self, The_QTabWidget):
         self.The_QTabWidget = The_QTabWidget
@@ -228,6 +237,7 @@ class PCASHOW(QDialog, Classify_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(PCASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
+        type_set(self)
         self.ButInit()
         self.Dinum = self.Di_spinBox.value()
         self.Contrnum = self.Di_spinBox_2.value()
@@ -269,6 +279,7 @@ class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LDASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
+        type_set(self)
         self.label.setText("LDA维度（2-传感器数）")
         self.ButInit()
         self.Dinum = self.Di_spinBox.value()
@@ -321,7 +332,8 @@ class SVMSHOW(QDialog, Regression_uishow):
     def __init__(self, parent=None):
         super(SVMSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
-        self.label.setText("SVM维度（2-传感器数）")
+        type_set(self)
+        self.label.setText("SVM维度")
         self.ButInit()
         self.desize = self.doubleSpinBox.value()
 
@@ -396,6 +408,7 @@ class KNNSHOW(QDialog, Regression_uishow):
     def __init__(self, parent=None):
         super(KNNSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
+        type_set(self)
         self.label.setText("邻居数")
         self.ButInit()
         self.nb_num = self.doubleSpinBox.value()
@@ -422,7 +435,9 @@ class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LRSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
+        self.label.setText("测试集占比(0.2)")
         self.ButInit()
+        type_set(self)
         self.desize = self.doubleSpinBox.value()
 
 
@@ -476,6 +491,7 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
     def __init__(self, parent=None):
         super(PRESHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
+        type_set(self)
         self.ButInit()
         self.Pre_ComboBox.addItems(["不选", "算术平均滤波法", "递推平均滤波法", "中位值平均滤波法",
                            "一阶滞后滤波法", "加权递推平均滤波法", "消抖滤波法", "限幅消抖滤波法"])

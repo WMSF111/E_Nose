@@ -175,10 +175,3 @@ class Serial_Init(QWidget):
         # QCoreApplication.quit()
         event.accept()  # 允许窗口真正关闭
 
-
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
-#     window = Serial_Init()
-#     window.show()
-#     sys.exit(app.exec())
