@@ -179,16 +179,16 @@ background-repeat: no-repeat;
              <property name="geometry">
               <rect>
                <x>70</x>
-               <y>8</y>
+               <y>15</y>
                <width>160</width>
                <height>20</height>
               </rect>
              </property>
              <property name="text">
-              <string>PyDracula</string>
+              <string>实验平台</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </widget>
@@ -899,11 +899,26 @@ p, li { white-space: pre-wrap; }
                     <height>45</height>
                    </size>
                   </property>
+                  <property name="font">
+                   <font>
+                    <family>宋体</family>
+                    <pointsize>14</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
                   <property name="text">
-                   <string>PyDracula APP - Theme with colors based on Dracula for Python.</string>
+                   <string>智能电子鼻实验及算法平台</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                  <property name="indent">
+                   <number>2</number>
                   </property>
                  </widget>
                 </item>
@@ -1583,7 +1598,7 @@ p, li { white-space: pre-wrap; }
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>351</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>

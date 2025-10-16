@@ -33,10 +33,11 @@ class MainWindow(QMainWindow):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "PyDracula - Modern GUI"
-        description = "PyDracula APP - Theme with colors based on Dracula for Python."
+        title = "实验平台"
+        description = "智能电子鼻实验及算法平台"
         # APPLY TEXTS
         self.setWindowTitle(title)
+        widgets.titleLeftApp.setText(title)
         widgets.titleRightInfo.setText(description)
 
         # TOGGLE MENU
@@ -122,11 +123,30 @@ class MainWindow(QMainWindow):
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet())) # SELECT MENU
 
         if btnName == "btn_ai":
-            print("Save BTN clicked!")
+            url = QUrl(The_url)
+            if not QDesktopServices.openUrl(url):
+                self.show_error_message()
 
         # PRINT BTN NAME
         print(f'Button "{btnName}" pressed!')
 
+    def show_error_message(self):
+        # 创建一个QMessageBox实例
+        msg = QMessageBox()
+
+        # 设置消息框的类型为错误
+        msg.setIcon(QMessageBox.Critical)
+
+        # 设置消息框的标题和内容
+        msg.setWindowTitle("错误")
+        msg.setText("无法打开链接:")
+        msg.setInformativeText(The_url)  # 显示链接信息
+
+        # 设置消息框的按钮
+        msg.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg.exec()
 
     # RESIZE EVENTS
     # ///////////////////////////////////////////////////////////////

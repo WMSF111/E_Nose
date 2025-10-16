@@ -5,26 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iris.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/irit.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pca2.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Classify.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/Classify.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Predict.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/Predict.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Regression.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/Regression.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/main.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/modules/app_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/modules/app_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resource_ui/modules/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/modules/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resource_ui/modules/main.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/modules/main.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/modules/ui_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/modules/ui_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/modules/ui_main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/themes/py_dracula_light.qss" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/themes/py_dracula_light.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/train/pca2 .xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/~$背景颜色.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/背景颜色.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/背景颜色.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +56,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.MainWindow_show.executor": "Run",
     "Python.The_main.executor": "Run",
     "Python.app_functions.executor": "Run",
@@ -77,27 +69,27 @@
     "Python.ui_main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose/resource_ui",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose/train",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\train" />
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\modules" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\alg_puifile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_pfile" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\modules" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\ui_file" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.running">
+  <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="Enose" />
       <option name="ENV_FILES" value="" />
