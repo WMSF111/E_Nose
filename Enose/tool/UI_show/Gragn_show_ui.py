@@ -61,10 +61,11 @@ class Action():
         self.ui.statues_label.setText(text)
 
     def _ClearDraw(self):
+        print("清除draw")
         self.ui.data = [[] for _ in range(self.ui.data_len)]
         self.ui.alldata = [[] for _ in range(self.ui.data_len)]
-        self.ui.redraw()
-        self.ui.update_table()
+        # self.ui.redraw()
+        # self.ui.update_table()
 
     def _print(self, time: int):
         self.ui.Worktime_spinBox.setValue(time)
@@ -108,7 +109,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self._data_lines = dict()  # 已存在的绘图线
         self._data_colors = dict()  # 绘图颜色
         self._data_visible = g_var.sensors.copy() # 选择要看的传感器
-        print("glo_sensors:", g_var.sensors)
         self.colors = self.generate_random_color_list(self.data_len)
         self.color_cycle = cycle(self.colors)
 
@@ -159,13 +159,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         self.draw = SO.time_thread(self.ser)  # 创建绘图线程
         self.draw.thread_draw(self.updata)
+        # 开启线程
+        self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
 
     def open_serial(self, Signal): # 确保串口初始化
         if not self.ser.read_flag: # 如果串口存在
-            d = self.ser.open(Signal, stock=0)
+            d = self.ser.open(Signal, stock=1)
             print("控制串口初始化成功：", d)
 
     def Stop(self):
+        self.ser.write("00")
         if self.time_th:
             self.SO1.stop("time_th调用函数")
             self.SO1._running = False
@@ -189,19 +192,16 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         with global_var.lock:
             g_var.gettime = (int)(self.Sample_spinBox.value())
             g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
-            g_var.standtime = 30 # 基线时长
-        text = ("base_time:" + str(30) +
+            g_var.standtime = self.Basetime_spinBox.value() # 基线时长
+        text = ("base_time:" + str(g_var.standtime) +
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
                 ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
         self.ser.write(text)
-        # 开启线程
-        self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
         self.ms._draw_close.emit()
-        if self.Auto_state == "auto":
-            self.Auto_Model()
 
 
     def Auto_Model(self):
+        self.Stra()
         self.SO1._running = True
         self.button_init(False)
         # 启动串口
@@ -213,7 +213,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.time_th.thread_loopfun(self.SO1.base_clear)
 
     def start_serial(self): # 开始采集
-        self.ms._ClearDraw.emit()
+        print("start_serial")
         self.SO1._running = True
         self.time_th.thread_loopfun(self.SO1.sample_collect)
 
@@ -226,6 +226,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.Auto_state = "auto"
             self.state_open(self.Auto_Button, True)
             self.button_init(False)
+            self.Auto_Model()
         else:
             self.Auto_state = "idle"
             self.state_open(self.Auto_Button, False)
@@ -246,30 +247,39 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def process_data(self, data):
         self.now_data = 0
         # 解析数据
-        if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3" or data[0] == "4" or data[0] == "0"):
+        if data != "" and (data[0] == "1"):
+            print(data)
             if(data == "11"):
                 self.ms._Clear_Button.emit(False)
-            if (data == "12"):
+            elif (data == "12"):
                 self.ms._Clear_Button.emit(True)
+        if data != "" and data[0] == "2":
+            print(data)
             if (data == "21"):
-                self.ms._Collectbegin_Button.emit(False)
-                self.ms._statues_label.emit("样品开始采集")
+                self.data = [[] for _ in range(self.data_len)]
+                self.alldata = [[] for _ in range(self.data_len)]
+                self.Collectbegin_Button.setEnabled(False)
+                self.statues_label.setText("样品开始采集")
                 self.ms._draw_open.emit()
-            if (data == "22"):
-                self.ms._Collectbegin_Button.emit(True)
-                self.ms._statues_label.emit("样品采集完成")
+            elif (data == "22"):
+                self.Collectbegin_Button.setEnabled(True)
+                self.statues_label.setText("样品采集完成")
                 self.ms._draw_close.emit()
+        if data != "" and (data[0] == "3" or data[0] == "4" or data[0] == "0"):
+            print(data)
             if (data == "31"):
                 self.ms._Clearroom_Button.emit(False)
-            if (data == "32"):
+            elif (data == "32"):
                 self.ms._Clearroom_Button.emit(True)
-            if (data == "41"): # 自动模式
+            elif (data == "41"): # 自动模式
                 self.state_open(self.Auto_Button, True)
-            if (data == "42"):
+            elif (data == "42"):
                 self.state_open(self.Auto_Button, False)
-            if (data == "00"): # 暂停
+            elif (data == "00"): # 暂停
+                self.ms._Clear_Button.emit(True)
+                self.ms._Collectbegin_Button.emit(True)
+                self.ms._Clearroom_Button.emit(True)
                 self.Stop()
-
         else:
             now_data = self.decode_data(data)
             if len(now_data) == self.data_len:
@@ -282,7 +292,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if self.draw_flag == True and self.now_data != 0:
             now_data = self.now_data
             self.now_data = 0
-            print("更新图标")
             for i, value in enumerate(now_data):
                 self.data[i].append(value)
                 if len(self.data[i]) > 300:  # 限制数据长度
@@ -311,7 +320,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             if g_var.sensors[0] != ordered_keys[0]:
                 g_var.sensors = ordered_keys
                 self._data_visible = g_var.sensors.copy()  # 选择要看的传感器
-                # print(g_var.sensors)
 
             values = [self.pairs[k] for k in ordered_keys]
             return values

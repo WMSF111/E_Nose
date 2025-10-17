@@ -71,6 +71,11 @@ class Ui_Gragh_show(object):
 
         self.Cleartime_spinBox = QSpinBox(self.groupBox_3)
         self.Cleartime_spinBox.setObjectName(u"Cleartime_spinBox")
+        font1 = QFont()
+        font1.setFamilies([u"AcadEref"])
+        font1.setPointSize(8)
+        font1.setBold(False)
+        self.Cleartime_spinBox.setFont(font1)
         self.Cleartime_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Cleartime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Cleartime_spinBox.setMinimum(10)
@@ -93,6 +98,7 @@ class Ui_Gragh_show(object):
 
         self.Sample_spinBox = QSpinBox(self.groupBox_3)
         self.Sample_spinBox.setObjectName(u"Sample_spinBox")
+        self.Sample_spinBox.setFont(font1)
         self.Sample_spinBox.setFocusPolicy(Qt.WheelFocus)
         self.Sample_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Sample_spinBox.setMinimum(0)
@@ -107,11 +113,11 @@ class Ui_Gragh_show(object):
 
         self.horizontalLayout_7.addWidget(self.label_35)
 
-        self.horizontalLayout_7.setStretch(0, 3)
-        self.horizontalLayout_7.setStretch(1, 2)
+        self.horizontalLayout_7.setStretch(0, 2)
+        self.horizontalLayout_7.setStretch(1, 3)
         self.horizontalLayout_7.setStretch(2, 1)
-        self.horizontalLayout_7.setStretch(3, 3)
-        self.horizontalLayout_7.setStretch(4, 2)
+        self.horizontalLayout_7.setStretch(3, 2)
+        self.horizontalLayout_7.setStretch(4, 3)
         self.horizontalLayout_7.setStretch(5, 1)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_7)
@@ -127,10 +133,11 @@ class Ui_Gragh_show(object):
 
         self.Basetime_spinBox = QSpinBox(self.groupBox_3)
         self.Basetime_spinBox.setObjectName(u"Basetime_spinBox")
+        self.Basetime_spinBox.setFont(font1)
         self.Basetime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.Basetime_spinBox.setMinimum(1)
-        self.Basetime_spinBox.setMaximum(60)
-        self.Basetime_spinBox.setValue(1)
+        self.Basetime_spinBox.setMinimum(0)
+        self.Basetime_spinBox.setMaximum(256)
+        self.Basetime_spinBox.setValue(10)
         self.Basetime_spinBox.setDisplayIntegerBase(10)
 
         self.horizontalLayout_8.addWidget(self.Basetime_spinBox)
@@ -149,19 +156,27 @@ class Ui_Gragh_show(object):
 
         self.Worktime_spinBox = QSpinBox(self.groupBox_3)
         self.Worktime_spinBox.setObjectName(u"Worktime_spinBox")
+        self.Worktime_spinBox.setFont(font1)
         self.Worktime_spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.Worktime_spinBox.setMinimum(1)
-        self.Worktime_spinBox.setMaximum(65535)
+        self.Worktime_spinBox.setMaximum(256)
         self.Worktime_spinBox.setValue(1)
         self.Worktime_spinBox.setDisplayIntegerBase(10)
 
         self.horizontalLayout_8.addWidget(self.Worktime_spinBox)
 
-        self.horizontalLayout_8.setStretch(0, 3)
-        self.horizontalLayout_8.setStretch(1, 2)
+        self.label_38 = QLabel(self.groupBox_3)
+        self.label_38.setObjectName(u"label_38")
+        self.label_38.setLayoutDirection(Qt.LeftToRight)
+
+        self.horizontalLayout_8.addWidget(self.label_38)
+
+        self.horizontalLayout_8.setStretch(0, 2)
+        self.horizontalLayout_8.setStretch(1, 3)
         self.horizontalLayout_8.setStretch(2, 1)
-        self.horizontalLayout_8.setStretch(3, 3)
+        self.horizontalLayout_8.setStretch(3, 2)
         self.horizontalLayout_8.setStretch(4, 3)
+        self.horizontalLayout_8.setStretch(5, 1)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_8)
 
@@ -193,10 +208,10 @@ class Ui_Gragh_show(object):
         self.Senser_stableView.setObjectName(u"Senser_stableView")
         self.Senser_stableView.setMinimumSize(QSize(226, 0))
         self.Senser_stableView.setMaximumSize(QSize(500, 16777215))
-        font1 = QFont()
-        font1.setPointSize(8)
-        font1.setBold(False)
-        self.Senser_stableView.setFont(font1)
+        font2 = QFont()
+        font2.setPointSize(8)
+        font2.setBold(False)
+        self.Senser_stableView.setFont(font2)
 
         self.gridLayout_2.addWidget(self.Senser_stableView, 0, 0, 1, 1)
 
@@ -288,14 +303,15 @@ class Ui_Gragh_show(object):
         self.groupBox.setTitle(QCoreApplication.translate("Gragh_show", u"\u5b9e\u9a8c\u4fe1\u606f", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Gragh_show", u"\u4fdd\u5b58\u8def\u5f84", None))
         self.Folder_Button.setText(QCoreApplication.translate("Gragh_show", u"...", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u8bbe\u7f6e", None))
-        self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u6d17\u6c14\u65f6\u957f", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Gragh_show", u"\u65f6\u957f\u8bbe\u7f6e", None))
+        self.label_2.setText(QCoreApplication.translate("Gragh_show", u"\u6d17\u6c14:", None))
         self.label_34.setText(QCoreApplication.translate("Gragh_show", u"s", None))
-        self.label_4.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837\u65f6\u957f: ", None))
+        self.label_4.setText(QCoreApplication.translate("Gragh_show", u"\u91c7\u6837:", None))
         self.label_35.setText(QCoreApplication.translate("Gragh_show", u"s", None))
-        self.label_9.setText(QCoreApplication.translate("Gragh_show", u"\u57fa\u7ebf\u65f6\u957f", None))
+        self.label_9.setText(QCoreApplication.translate("Gragh_show", u"\u57fa\u7ebf:", None))
         self.label_36.setText(QCoreApplication.translate("Gragh_show", u"s", None))
-        self.label_14.setText(QCoreApplication.translate("Gragh_show", u"\u5de5\u4f5c\u65f6\u95f4", None))
+        self.label_14.setText(QCoreApplication.translate("Gragh_show", u"\u5de5\u4f5c:", None))
+        self.label_38.setText(QCoreApplication.translate("Gragh_show", u"s", None))
         self.Auto_Button.setText(QCoreApplication.translate("Gragh_show", u"\u81ea\u52a8\u6a21\u5f0f", None))
         self.InitPos_Button.setText(QCoreApplication.translate("Gragh_show", u"\u5f00\u59cb/\u521d\u59cb\u5316", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Gragh_show", u"\u4f20\u611f\u5668\u5217\u8868", None))

@@ -62,11 +62,11 @@
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>采样设置</string>
+           <string>时长设置</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,2,1,3,2,1">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,3,1,2,3,1">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -76,12 +76,20 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>洗气时长</string>
+                <string>洗气:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QSpinBox" name="Cleartime_spinBox">
+               <property name="font">
+                <font>
+                 <family>AcadEref</family>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
                </property>
@@ -115,12 +123,20 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>采样时长: </string>
+                <string>采样:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QSpinBox" name="Sample_spinBox">
+               <property name="font">
+                <font>
+                 <family>AcadEref</family>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
                </property>
@@ -151,7 +167,7 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,2,1,3,3">
+            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,3,1,2,3,1">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -161,23 +177,31 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>基线时长</string>
+                <string>基线:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QSpinBox" name="Basetime_spinBox">
+               <property name="font">
+                <font>
+                 <family>AcadEref</family>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
                <property name="minimum">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="maximum">
-                <number>60</number>
+                <number>256</number>
                </property>
                <property name="value">
-                <number>1</number>
+                <number>10</number>
                </property>
                <property name="displayIntegerBase">
                 <number>10</number>
@@ -200,12 +224,20 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="text">
-                <string>工作时间</string>
+                <string>工作:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QSpinBox" name="Worktime_spinBox">
+               <property name="font">
+                <font>
+                 <family>AcadEref</family>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
@@ -213,13 +245,23 @@
                 <number>1</number>
                </property>
                <property name="maximum">
-                <number>65535</number>
+                <number>256</number>
                </property>
                <property name="value">
                 <number>1</number>
                </property>
                <property name="displayIntegerBase">
                 <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_38">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>s</string>
                </property>
               </widget>
              </item>

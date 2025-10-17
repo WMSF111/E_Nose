@@ -68,6 +68,7 @@ class Serial_Init(QWidget):
         self.a = Action(self.ui)
         self.initMS()
         self.ports = []
+        self.ser = None
         self.Port_select = ""
         self.Com_Dict = {}
 
@@ -173,5 +174,4 @@ class Serial_Init(QWidget):
         #   例：self.worker_thread.quit(); self.worker_thread.wait()
         # 3. 结束 Qt 事件循环
         # QCoreApplication.quit()
-        event.accept()  # 允许窗口真正关闭
 

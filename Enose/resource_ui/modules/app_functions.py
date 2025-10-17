@@ -33,10 +33,3 @@ class AppFunctions(MainWindow):
          background-color: #215b5d;  /* 更深的蓝色背景 */
         """
 
-        # 设置其他控件的蓝色样式
-        self.ui.lineEdit.setStyleSheet("background-color: #215b5d;")  # 输入框背景蓝色
-        self.ui.pushButton.setStyleSheet("background-color: #215b5d;")  # 按钮背景蓝色
-        self.ui.plainTextEdit.setStyleSheet("background-color: #215b5d;")  # 纯文本框背景蓝色
-        self.ui.comboBox.setStyleSheet("background-color: #215b5d;")  # 下拉框背景蓝色
-        # 命令链接按钮文字色调设置为淡蓝色
-        self.ui.commandLinkButton.setStyleSheet("color: #215b5d;")  # 淡蓝色文字

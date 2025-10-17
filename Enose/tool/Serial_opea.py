@@ -172,6 +172,7 @@ class Serial1opea():
         self.ms._Collectbegin_Button.emit(False)
         text = ("21\n\r")
         num = 0
+        self.ms._ClearDraw.emit()  # 清除绘图界面
         while True:  # 没到回复
             if self._running == False:
                 break
@@ -229,7 +230,6 @@ class Serial1opea():
             if self.ser.getSignal == "32":
                 self.ms._statues_label.emit("洗气处理完成")
                 self.ms._print.emit(glo_var.gettime + num)
-
                 break
             if num >= glo_var.cleartime + 5:
                 self.ms._statues_label.emit("洗气时长超时")

@@ -48,9 +48,9 @@ class MainWindow(QMainWindow):
         # ///////////////////////////////////////////////////////////////
         UIFunctions.uiDefinitions(self)
 
-        # QTableWidget PARAMETERS
-        # ///////////////////////////////////////////////////////////////
-        widgets.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # # QTableWidget PARAMETERS
+        # # ///////////////////////////////////////////////////////////////
+        # widgets.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         # BUTTONS CLICK
         # ///////////////////////////////////////////////////////////////
@@ -61,10 +61,6 @@ class MainWindow(QMainWindow):
         widgets.btn_alg.clicked.connect(self.buttonClick)
         widgets.btn_ai.clicked.connect(self.buttonClick)
 
-        # EXTRA RIGHT BOX
-        def openCloseRightBox():
-            UIFunctions.toggleRightBox(self, True)
-        widgets.settingsTopBtn.clicked.connect(openCloseRightBox)
 
         # SHOW APP
         # ///////////////////////////////////////////////////////////////
@@ -99,6 +95,7 @@ class MainWindow(QMainWindow):
     # Post here your functions for clicked buttons
     # ///////////////////////////////////////////////////////////////
     def buttonClick(self):
+
         # GET BUTTON CLICKED
         btn = self.sender()
         btnName = btn.objectName()
@@ -112,6 +109,12 @@ class MainWindow(QMainWindow):
 
         # SHOW WIDGETS PAGE
         if btnName == "btn_test":
+            if self.serial_init:
+                if self.serial_init.ser:
+                    self.serial_init.ser.stop()
+            # 创建并测试窗口
+            self.test_show = GraphShowWindow()
+            widgets.stackedWidget.addWidget(self.test_show)  # 将串口界面添加到 stackedWidget
             widgets.stackedWidget.setCurrentWidget(self.test_show)
             UIFunctions.resetStyle(self, btnName)
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
@@ -166,12 +169,18 @@ class MainWindow(QMainWindow):
         if event.buttons() == Qt.RightButton:
             print('Mouse click: RIGHT CLICK')
 
+    def closeEvent(self, event):
+        print("关闭事件")
+        self.serial_init.closeEvent(event)
+        self.test_show.closeEvent(event)
+        self.alg_show.closeEvent(event)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon("icon.ico"))
     window = MainWindow()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 # if __name__ == "__main__":
 #     app = QApplication(sys.argv)
