@@ -166,9 +166,10 @@ class Serial_Init(QWidget):
     def closeEvent(self, event):
         """点击右上角 X 时调用"""
         # 1. 停止串口线程
-        if hasattr(self, 'ser') and self.ser.read_flag:
-            self.ser.stop()
-        event.accept()  # 允许窗口真正关闭
+        if self.ser:
+            if hasattr(self, 'ser') and self.ser.read_flag:
+                self.ser.stop()
+            event.accept()  # 允许窗口真正关闭
         # self.Gragh.serial_setting()
         # 2. 如果有额外线程，一并停止
         #   例：self.worker_thread.quit(); self.worker_thread.wait()

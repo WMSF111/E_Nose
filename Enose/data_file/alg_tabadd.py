@@ -64,7 +64,7 @@ class ALG_TAB_ADD():
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(lr.file_path)  # 读取txt转数组
                 train = regression.TRAIN(self.ui, DataFrame)
-                accuracy, confusion, classification, err_str = train.LG_train(lr.desize)
+                accuracy, confusion, classification, err_str = train.LG(lr.desize)
                 accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
                 confusion_str = "混淆矩阵:\n" + "\n".join(" ".join(map(str, row)) for row in confusion)
                 classification_str = "\n分类矩阵:\n  " + " ".join(map(str, classification))
@@ -81,7 +81,7 @@ class ALG_TAB_ADD():
                         unique_labels.append(label)
                 self.tabset.add_plot_tab(
                     title="线性回归混淆矩阵",
-                    plot_function = lr.plot_confusion,
+                    plot_function = alg_show.plot_confusion,
                     confusion = confusion,
                     labels_name = list(set(unique_labels)))
     def Classify_Combo_select(self, index):
@@ -91,29 +91,49 @@ class ALG_TAB_ADD():
             if svm_show.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(svm_show.file_path)  # 读取txt转数组
                 S_class = classify.TRAIN(self.ui, DataFrame)  # 创建预处理算法对象
-                X_combined_std, y_combined, svm, range = S_class.svm(svm_show.desize)
+                X_combine, y_combine, y_test, y_pred, svm, range = (
+                    S_class.svm(svm_show.desize, svm_show.linear, svm_show.C))
                 self.tabset.add_plot_tab(
                     title=f"SVM混淆矩阵",
                     plot_function=svm_show.plot_decision_regions,
-                    X = X_combined_std,
-                    y = y_combined,
+                    X = X_combine,
+                    y = y_combine,
                     classifier = svm,
                     test_idx = range
                     )
+                accuracy, confusion, classification, err_str = classify.check_accuray(y_test, y_pred)
+                # 反转映射字典，将数字标签转换为中文标签
+                labels = classify.reverse_transfer(S_class.target_map, list(S_class.target_map.values()))
+                self.tabset.add_plot_tab(
+                    title=f"SVM混淆矩阵",
+                    plot_function=alg_show.plot_confusion,
+                    confusion=confusion,
+                    labels_name=labels
+                )
         if selected_item == "KNN":
             knn_show = alg_show.KNNSHOW()  # SVM弹窗
             if knn_show.exec() == QDialog.Accepted:  # 等待弹窗关闭
                 DataFrame = transfo.UI_TXT_TO.read_files_to_dataframe(knn_show.file_path)  # 读取txt转数组
-                S_class = classify.TRAIN(self.ui, DataFrame)  # 创建预处理算法对象
-                X_combined_std, y_combined, svm, range = S_class.knn(knn_show.nb_num)
+                KNN_class = classify.TRAIN(self.ui, DataFrame)  # 创建预处理算法对象
+                y_pred, y_test = KNN_class.knn(knn_show.desize, knn_show.alg, knn_show.N) # 传入训练级比例级临数
+                accuracy, confusion, classification, err_str = classify.check_accuray(y_test, y_pred)
+                # 反转映射字典，将数字标签转换为中文标签
+                labels = classify.reverse_transfer(KNN_class.target_map, list(KNN_class.target_map.values()))
                 self.tabset.add_plot_tab(
-                    title=f"SVM混淆矩阵",
-                    plot_function=svm_show.plot_decision_regions,
-                    X = X_combined_std,
-                    y = y_combined,
-                    classifier = svm,
-                    test_idx = range
+                    title=f"KNN混淆矩阵",
+                    plot_function=alg_show.plot_confusion,
+                    confusion = confusion,
+                    labels_name = labels
                     )
+        accuracy_str = err_str + "模型准确率:" + str(accuracy) + '\n'
+        confusion_str = "混淆矩阵:\n" + "\n".join(" ".join(map(str, row)) for row in confusion)
+        classification_str = "\n分类矩阵:\n  " + " ".join(map(str, classification))
+        # 使用空格连接列表元素
+        self.tabset.add_text_tab(
+            finaldata=accuracy_str + confusion_str + classification_str,
+            title="预测性能",
+            html=False
+        )
 
 
     def process_data_and_plot(self, selected_item, dialog, transfo, plot_title, plot_function):

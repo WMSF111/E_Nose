@@ -437,7 +437,7 @@ QComboBox{
 	border: 1px solid #3ba4a7;
 	padding: 3px;
 	padding-left: 10px;
-    color: #ecf8f8;
+    color: #215b5d;
 }
 QComboBox:hover{
 	border: 2px solid #215b5d;
@@ -457,7 +457,7 @@ QComboBox::drop-down {
 	background-repeat: no-reperat;
  }
 QComboBox QAbstractItemView {
-	color: rgb(161,219,220);
+	color: #215b5d;
 	background-color: #3ba4a7;
 	padding: 10px;
 	selection-background-color: #3ba4a7;

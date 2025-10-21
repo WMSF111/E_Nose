@@ -2,7 +2,7 @@ import  sys, re, random
 import threading
 
 from PySide6.QtCore import (
-    Qt, QObject, Signal, QEvent
+    Qt, QObject, Signal, QEvent, QTimer
 )
 import pandas as pd
 import global_var
@@ -36,14 +36,12 @@ class Action():
         self.ms = ms
 
     def _draw_open(self):
-        print("继续绘图", self.ui.draw_flag)
         self.ui.draw_flag = True
-        print(self.ui.draw_flag)
+        print("继续绘图", self.ui.draw_flag)
 
     def _draw_close(self):
-        print("暂停绘图", self.ui.draw_flag)
         self.ui.draw_flag = False
-        print(self.ui.draw_flag)
+        print("暂停绘图", self.ui.draw_flag)
 
     def _Clear_Button(self, value: bool): # 清洗按钮
         self.ui.state_open(self.ui.Clear_Button, not value)
@@ -157,8 +155,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         # 完成串口信号初始化
         self.open_serial(self.process_data)
 
-        self.draw = SO.time_thread(self.ser)  # 创建绘图线程
-        self.draw.thread_draw(self.updata)
+        # self.draw = SO.time_thread(self.ser)  # 创建绘图线程
+        # self.draw.thread_draw(self.updata)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.updata)
+        self.timer.start(1000)  # 每秒更新一次
         # 开启线程
         self.time_th = SO.time_thread(self.ser)  # 创建串口信号线程
 
@@ -173,8 +174,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.SO1.stop("time_th调用函数")
             self.SO1._running = False
         self.ms._draw_close.emit()
-        if self.Auto_state == "auto":
-            self.button_init(False)
+        self.button_init(True)
 
     def Stra(self): # 暂停或者正式开始
         if self.time_th:
@@ -203,21 +203,23 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def Auto_Model(self):
         self.Stra()
         self.SO1._running = True
-        self.button_init(False)
+        self.button_init(True)
         # 启动串口
         self.time_th.thread_loopfun(self.SO1.auto)
 
     def clear_data(self): # 基线阶段
+        self.button_init(True)
         self.SO1._running = True
         # 启动串口
         self.time_th.thread_loopfun(self.SO1.base_clear)
 
     def start_serial(self): # 开始采集
-        print("start_serial")
+        self.button_init(True)
         self.SO1._running = True
         self.time_th.thread_loopfun(self.SO1.sample_collect)
 
     def clear_room(self): # 开始采集
+        self.button_init(True)
         self.SO1._running = True
         self.time_th.thread_loopfun(self.SO1.room_clear)
 
@@ -225,17 +227,17 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         if self.Auto_state == "idle": #选择了自动模式
             self.Auto_state = "auto"
             self.state_open(self.Auto_Button, True)
-            self.button_init(False)
             self.Auto_Model()
         else:
             self.Auto_state = "idle"
             self.state_open(self.Auto_Button, False)
-            self.button_init(True)
 
     def button_init(self, value):
-        self.Clear_Button.setEnabled(value)
-        self.Collectbegin_Button.setEnabled(value)
-        self.Clearroom_Button.setEnabled(value)
+        self.ms._Collectbegin_Button.emit(value)
+        self.ms._Collectbegin_Button.emit(value)
+        self.ms._Collectbegin_Button.emit(value)
+        self.state_open(self.Auto_Button, False)
+        self.Auto_state = "idle"
 
 
     def state_open(self, Button, state):
@@ -248,25 +250,22 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.now_data = 0
         # 解析数据
         if data != "" and (data[0] == "1"):
-            print(data)
             if(data == "11"):
                 self.ms._Clear_Button.emit(False)
             elif (data == "12"):
                 self.ms._Clear_Button.emit(True)
         if data != "" and data[0] == "2":
-            print(data)
+            self.ser.pause()
             if (data == "21"):
+                self.ms._Collectbegin_Button.emit(False)
+                self.draw_flag = True
                 self.data = [[] for _ in range(self.data_len)]
                 self.alldata = [[] for _ in range(self.data_len)]
-                self.Collectbegin_Button.setEnabled(False)
-                self.statues_label.setText("样品开始采集")
-                self.ms._draw_open.emit()
             elif (data == "22"):
-                self.Collectbegin_Button.setEnabled(True)
-                self.statues_label.setText("样品采集完成")
-                self.ms._draw_close.emit()
-        if data != "" and (data[0] == "3" or data[0] == "4" or data[0] == "0"):
-            print(data)
+                self.ms._Collectbegin_Button.emit(True)
+                self.draw_flag = False
+            self.ser.resume()
+        if data != "" and (data[0] == "1" or data[0] == "2" or data[0] == "3" or data[0] == "4" or data[0] == "0"):
             if (data == "31"):
                 self.ms._Clearroom_Button.emit(False)
             elif (data == "32"):
@@ -288,7 +287,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     self.alldata[i].append(value)
                 self.now_data = now_data
 
-    def updata(self, time):
+    def updata(self):
         if self.draw_flag == True and self.now_data != 0:
             now_data = self.now_data
             self.now_data = 0
@@ -388,28 +387,33 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                     self.plot_widget.repaint() # 手动更新
 
     def update_table(self):
+        # 先缓存所有的 QStandardItem 对象
+        items = [(QStandardItem(), QStandardItem()) for _ in range(len(g_var.sensors))]  # 列出所有 item 对象
         for i, sensor_name in enumerate(g_var.sensors):
             value = self.data[i][-1] if self.data[i] else 0
-            # color = self.get_currency_color(sensor_name)  # 获取传感器名称的颜色
 
-            item_name = QStandardItem()  # 创建一个item_name对象，用于表示传感器名称
+            item_name, item_value = items[i]  # 获取已创建的 item 对象
             item_name.setText(sensor_name)  # 设置传感器名称作为文本
-            # item_name.setForeground(QBrush(QColor("red")))
-            item_name.setForeground(QBrush(QColor(self.get_currency_color(sensor_name))))  # 设置传感器名称的前景色（文本颜色）
-            item_name.setCheckable(True)  # 设置该传感器名称项为可复选
-            item_name.setEditable(False)  # 设置传感器名称不可编辑
+            item_name.setForeground(QBrush(QColor(self.get_currency_color(sensor_name))))  # 设置传感器名称颜色
+            item_name.setCheckable(True)  # 设置为可复选框
+            item_name.setEditable(False)  # 设置为不可编辑
             if sensor_name in self._data_visible:
-                # 如果复选框当前不是选中状态，才修改为选中
+                # 设置复选框状态为选中
                 if item_name.checkState() != Qt.CheckState.Checked:
-                    item_name.setCheckState(Qt.CheckState.Checked)  # 如果传感器名称在默认显示列表中，则设置其复选框为选中状态
+                    item_name.setCheckState(Qt.CheckState.Checked)
 
-            item_value = QStandardItem(f"{value:.2f}")  # 创建一个item_value对象，用于表示传感器数据
-            item_value.setTextAlignment(
-                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)  # 设置传感器数据的文本对齐方式为右对齐且垂直居中
-            item_value.setEditable(False)  # 设置传感器数据不可编辑
-            self.model.setColumnCount(2)  # 设置模型的列数为 2（货币名称和对应的值）
+            item_value.setText(f"{value:.2f}")  # 设置传感器数据
+            item_value.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)  # 设置文本对齐
+            item_value.setEditable(False)  # 设置为不可编辑
+
+        # 一次性更新所有数据
+        for i, (item_name, item_value) in enumerate(items):
             self.model.setItem(i, 0, item_name)
             self.model.setItem(i, 1, item_value)
+
+        # 设置列数为固定的 2
+        if self.model.columnCount() != 2:
+            self.model.setColumnCount(2)
 
     def generate_random_color_list(self, length):
         """生成一个指定长度的随机十六进制颜色代码列表"""
@@ -439,8 +443,10 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
                         sop.thread.wait()
         if self.time_th:
             self.time_th.stop("time_th")
-        if self.draw:
-            self.draw.stop("draw")
+        # if self.draw:
+        #     self.draw.stop("draw")
+        if self.timer.isActive():
+            self.timer.stop()  # 停止计时器
 
         event.accept()  # 允许窗口真正关闭
 

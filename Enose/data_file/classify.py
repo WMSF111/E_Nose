@@ -3,7 +3,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
-import operator
+from sklearn.neighbors import KNeighborsClassifier
 import random
 
 
@@ -11,102 +11,33 @@ class TRAIN():
     # 输入： finalData=数据级 target =数据标签 test_size = 训练集数量（0.1-0.9）
     def __init__(self, ui, DataFrame):
         self.ui = ui
-        target = DataFrame.iloc[1:, 0]
-        # 将剩余的列作为数据 (features)
-        data = DataFrame.iloc[1:, 1:]
-        self.finalData = data  # 读取数据
-        self.target = target  # 读取标签
+        self.target_map, self.target, self.data = read(DataFrame)  # 训练数据级、预测数据级
+        self.num_target = transfer(self.target_map, self.target)  # 转化为数字target
 
-    def svm(self, test_size):
+    def svm(self, test_size, kernel_str, C):
         '''SVM 线性与非线性分类'''
         x_train, x_test, y_train, y_test = (  # 划分训练集与测试集
-            train_test_split(self.finalData, self.target, test_size=test_size, random_state=1, stratify=self.target))
-        """
-        train_test_split()函数: 用于将数据集划分为训练集train和测试集test
-        test_size: 0~1表示测试集样本占比、整数表示测试集样本数量
-        random_state: 随机数种子。在需要重复实验的时候保证得到一组一样的随机数据。每次填1(其他参数一样)，每次得到的随机数组一样；每次填0/不填，每次都不一样
-        stratify=y: 划分数据集时保证每个类别在训练集和测试集中的比例与原数据集中的比例相同
-        """
-        # ? 标准化训练集和测试集
-        sc = StandardScaler()  # 定义一个标准缩放器
-        sc.fit(x_train)  # 计算均值、标准差
-        X_train_std = sc.transform(x_train)  # 使用计算出的均值和标准差进行标准化
-        X_test_std = sc.transform(x_test)  # 使用计算出的均值和标准差进行标准化
-
-        X_combined_std = np.vstack((X_train_std, X_test_std))  # 竖直堆叠
-        y_combined = np.hstack((y_train, y_test))  # 水平拼接
-        """
-        np.vstack(tup): tup为一个元组，返回一个竖直堆叠后的数组
-        np.hstack(tup): tup为一个元组，返回一个水平拼接后的数组
-        """
-
+            train_test_split(self.data, self.target, test_size=test_size, random_state=1, stratify=self.target))
+        x_train, x_test = standart(x_train, x_test)
+        X_combine = np.vstack((x_train, x_test))  # 竖直堆叠数组
+        y_combine = np.hstack((y_train, y_test))  # 水平拼接数组
         # ? 训练线性支持向量机
-        svm = SVC(kernel='linear', C=1.0, random_state=1)  # 定义线性支持向量分类器 (linear为线性核函数)
-        svm.fit(X_train_std, y_train)  # 根据给定的训练数据拟合训练SVM模型
+        svm = SVC(kernel=kernel_str, C=C, random_state=1)  # 定义线性支持向量分类器 (linear为线性核函数)
+        svm.fit(x_train, y_train)  # 根据给定的训练数据拟合训练SVM模型
+        y_pred = svm.predict(x_test)# 用训练好的分类器svm预测数据X_test_std的标签
+        accuracy, confusion, classification, err_str = check_accuray(y_test,y_pred)
+        return X_combine, y_combine, y_test, y_pred, svm, range(105, 150)
 
-
-        y_pred = svm.predict(X_test_std)# 用训练好的分类器svm预测数据X_test_std的标签
-        y_pred[:20]
-        accuracy = accuracy_score(y_test, y_pred)  # 查看模型准确度
-        confusion = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
-        classification = classification_report(y_test, y_pred, zero_division=0)  # 提供分类报告，避免出现零分母警告
-
-        labels = sorted(set(y_test) | set(y_pred))  # 获取所有出现的类别
-        err_str = ""
-        for label in labels:
-            y_true_label = [1 if y == label else 0 for y in y_test]
-            y_pred_label = [1 if y == label else 0 for y in y_pred]
-            if sum(y_pred_label) == 0:
-                err_str += f"类别 {label} 没有被预测到，精度为 0\n"
-        return X_combined_std, y_combined, svm, range(105, 150)
-
-    def knn(self, test_size):
-        """
-        :param x_test: 测试集数据
-        :param x_train: 训练集数据
-        :param y_train: 测试集标签
-        :param k: 邻居数
-        :return: 返回一个列表包含预测结果
-        """
+    # KNN预测函数
+    def knn(self, test_size, alg, n_neighbors_num):
+        num_target = transfer(self.target_map, self.target)  # 转化为数字target
+        # 测试精度参数为n_neighbors
         x_train, x_test, y_train, y_test = (  # 划分训练集与测试集
-            train_test_split(self.finalData, self.target, test_size=test_size, random_state=1, stratify=self.target))
-
-        # 预测结果列表，用于存储测试集预测出来的结果
-        predict_result_set = []
-
-        # 训练集的长度
-        train_set_size = len(x_train)
-
-        # 创建一个全零的矩阵，长度为训练集的长度
-        distances = np.array(np.zeros(train_set_size))
-
-        # 计算每一个测试集与每一个训练集的距离
-        for i in x_test:
-            for indx in range(train_set_size):
-                # 计算数据之间的距离
-                distances[indx] = data_diatance(i, x_train[indx])
-
-            # 排序后的距离的下标
-            sorted_dist = np.argsort(distances)
-
-            class_count = {}
-
-            # 取出k个最短距离
-            for i in range(test_size):
-                # 获得下标所对应的标签值
-                sort_label = y_train[sorted_dist[i]]
-
-                # 将标签存入字典之中并存入个数
-                class_count[sort_label] = class_count.get(sort_label, 0) + 1
-
-            # 对标签进行排序
-            sorted_class_count = sorted(class_count.items(), key=operator.itemgetter(1), reverse=True)
-
-            # 将出现频次最高的放入预测结果列表
-            predict_result_set.append(sorted_class_count[0][0])
-
-        # 返回预测结果列表
-        return predict_result_set
+            train_test_split(self.data, num_target, test_size=test_size, random_state=1, stratify=num_target))
+        neigh = KNeighborsClassifier(n_neighbors=n_neighbors_num, algorithm = alg)
+        neigh.fit(x_train, y_train)
+        y_pred = neigh.predict(x_test)
+        return y_pred, y_test
 
 def data_diatance(x_test, x_train):
     """
@@ -137,3 +68,60 @@ def random_number(data_size):
     random.shuffle(number_set)
 
     return number_set
+
+
+# 读取文件函数，数据预处理，70%做训练集，30%做预测集
+def read(data):
+    target = data.iloc[:, 0]  # 第一列类别
+    # 将剩余的列作为数据 (features)
+    data = data.iloc[:, 1:]  # 所有数据
+    # 打乱顺序
+    data = data.sample(frac=1).reset_index(drop=True)
+    # 创建一个字典，将 target 中的每个元素映射到一个数字
+    target_map = make_map(target)
+    return target_map, target, data
+
+def make_map(target):
+    # 获取类别的排序列表，按照字母或其他顺序排序
+    sorted_target = sorted(set(target))  # 获取唯一类别并排序
+
+    # 创建一个字典，将 sorted_target 中的每个元素映射到一个数字，数字从0开始
+    target_map = {sorted_target[i]: i for i in range(len(sorted_target))}
+    return  target_map
+
+
+# 将字符类型数据转化为数字类型
+def transfer(target_map, array):
+    # 使用映射字典转换 array 中的种类标签为数字
+    num = [target_map[i] for i in array]
+    return num
+
+# 反转映射字典
+def reverse_transfer(target_map, array):
+    # 创建反向映射字典
+    reverse_map = {v: k for k, v in target_map.items()}
+    # 使用反向映射字典转换 array 中的数字标签为字符
+    char = [reverse_map[i] for i in array]
+    return char
+
+def standart(x_train, x_test,):
+    # ? 标准化训练集和测试集
+    sc = StandardScaler()  # 定义一个标准缩放器
+    sc.fit(x_train)  # 计算均值、标准差
+    x_train = sc.transform(x_train)  # 使用计算出的均值和标准差进行标准化
+    x_test = sc.transform(x_test)  # 使用计算出的均值和标准差进行标准化
+
+    return x_train, x_test
+
+def check_accuray(y_test, y_pred):
+    accuracy = accuracy_score(y_test, y_pred)  # 查看模型准确度
+    confusion = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
+    classification = classification_report(y_test, y_pred, zero_division=0)  # 提供分类报告，避免出现零分母警告
+    labels = sorted(set(y_test) | set(y_pred))  # 获取所有出现的类别
+    err_str = ""
+    for label in labels:
+        y_true_label = [1 if y == label else 0 for y in y_test]
+        y_pred_label = [1 if y == label else 0 for y in y_pred]
+        if sum(y_pred_label) == 0:
+            err_str += f"类别 {label} 没有被预测到，精度为 0\n"
+    return accuracy, confusion, classification, err_str

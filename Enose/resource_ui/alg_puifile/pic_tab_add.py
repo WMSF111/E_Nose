@@ -1,9 +1,10 @@
 '''算法显示'''
 from resource_ui.alg_puifile.Predict_uishow import Ui_Pre_show
-from resource_ui.alg_puifile.Classify_uishow import Ui_Classify as Classify_uishow  # 导入生成的 UI 类
+from resource_ui.alg_puifile.Dimension_uishow import Ui_Dimension_show
+from resource_ui.alg_puifile.SVM_uishow import Ui_SVM_UI # 导入生成的 UI 类
+from resource_ui.alg_puifile.KNN_uishow import Ui_Form as Ui_KNN_UI # 导入生成的 UI 类
 from resource_ui.alg_puifile.Regression_uishow import Ui_Regression as Regression_uishow  # 导入生成的 UI 类
 from PySide6.QtWidgets import QDialog, QTextEdit, QVBoxLayout, QWidget, QFileDialog, QHBoxLayout # 改为继承 QDialog
-from PySide6.QtGui import QKeySequence, QAction
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import global_var as global_var
 from matplotlib.figure import Figure
@@ -14,7 +15,7 @@ import matplotlib.pyplot as plt
 from io import StringIO
 from matplotlib.colors import ListedColormap
 from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
+import data_file.classify as classify
 from resource_ui.modules import *
 
 def type_set(a):
@@ -233,7 +234,7 @@ def draw_scatter(ax, name, num, target, finalData, data=None):
         # 添加图例
         ax.legend()
 
-class PCASHOW(QDialog, Classify_uishow):  # 继承 QDialog
+class PCASHOW(QDialog, Ui_Dimension_show):  # 继承 QDialog
     def __init__(self, parent=None):
         super(PCASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
@@ -275,7 +276,7 @@ class PCASHOW(QDialog, Classify_uishow):  # 继承 QDialog
         ax.grid()
 
 
-class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
+class LDASHOW(QDialog, Ui_Dimension_show):  # 继承 QDialog
     def __init__(self, parent=None):
         super(LDASHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
@@ -328,14 +329,21 @@ class LDASHOW(QDialog, Classify_uishow):  # 继承 QDialog
         ax.grid()
 
 
-class SVMSHOW(QDialog, Regression_uishow):
+class SVMSHOW(QDialog, Ui_SVM_UI):
     def __init__(self, parent=None):
         super(SVMSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
         type_set(self)
-        self.label.setText("SVM维度")
+        self.comboBox.addItems(["线性核", "多项式核", "RBF核", "Sigmoid核",
+                                    "预计算核"])
+        self.kernel_map = {
+            "线性核": "linear",
+            "多项式核": "poly",
+            "RBF核": "rbf",
+            "Sigmoid核": "sigmoid",
+            "预计算核": "precomputed"
+        }
         self.ButInit()
-        self.desize = self.doubleSpinBox.value()
 
     def ButInit(self):
         # 绑定按钮点击事件
@@ -345,6 +353,8 @@ class SVMSHOW(QDialog, Regression_uishow):
     def num_select(self):
         """选择了选择模型：关闭对话框"""
         self.desize = self.doubleSpinBox.value()
+        self.linear = self.kernel_map[self.comboBox.currentText()]
+        self.C = self.doubleSpinBox_C.value()
         self.accept()  # 关闭对话框并返回 QDialog.Accepted
 
     def select_file(self):
@@ -404,14 +414,19 @@ class SVMSHOW(QDialog, Regression_uishow):
                        s=150,  # 散点的面积【150】
                        label='test set')  # 散点的图例名称【test set】
 
-class KNNSHOW(QDialog, Regression_uishow):
+class KNNSHOW(QDialog, Ui_KNN_UI):
     def __init__(self, parent=None):
         super(KNNSHOW, self).__init__(parent)  # 设置父窗口
         self.setupUi(self)  # 设置 UI 界面
         type_set(self)
-        self.label.setText("邻居数")
+        self.comboBox.addItems(["自动", "Ball Tree 算法", "KD Tree 算法", "暴力计算"])
+        self.knn_map = {
+            "自动": "auto",
+            "Ball Tree 算法": "ball_tree",
+            "KD Tree 算法": "kd_tree",
+            "暴力计算": "brute"
+        }
         self.ButInit()
-        self.nb_num = self.doubleSpinBox.value()
 
     def ButInit(self):
         # 绑定按钮点击事件
@@ -420,7 +435,9 @@ class KNNSHOW(QDialog, Regression_uishow):
 
     def num_select(self):
         """选择了选择模型：关闭对话框"""
-        self.nb_num = self.doubleSpinBox.value()
+        self.desize = self.doubleSpinBox.value()
+        self.alg = self.knn_map[self.comboBox.currentText()]
+        self.N = self.N_spinBox.value()
         self.accept()  # 关闭对话框并返回 QDialog.Accepted
 
     def select_file(self):
@@ -458,34 +475,6 @@ class LRSHOW(QDialog, Regression_uishow):  # 继承 QDialog
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
             self.file_path = folder_path
 
-    def plot_confusion(self, ax, confusion , labels_name):
-        """绘制混淆矩阵"""
-        confusion = np.array(confusion)  # 将list类型转换成数组类型，如果已经是numpy数组类型，则忽略此步骤。
-        # 归一化，防止除以零
-        row_sums = confusion.sum(axis=1, keepdims=True)
-        confusion_normalized = confusion / row_sums if row_sums.all() != 0 else confusion
-        # 显示归一化后的混淆矩阵
-        im = ax.imshow(confusion_normalized, interpolation='nearest', cmap=plt.cm.Blues)
-
-        # 设置标题
-        ax.set_title("混淆矩阵")
-
-        # 添加颜色条
-        plt.colorbar(im, ax=ax)
-
-        # 获取标签的间隔数
-        num_class = np.arange(len(labels_name))
-
-        # 设置坐标轴
-        ax.set_xticks(num_class)
-        ax.set_xticklabels(labels_name, rotation=90)
-        ax.set_yticks(num_class)
-        ax.set_yticklabels(labels_name)
-
-        # 设置坐标轴标签
-        ax.set_ylabel('True label')
-        ax.set_xlabel('Predicted label')
-
 
 class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
     def __init__(self, parent=None):
@@ -521,7 +510,6 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
     def plot_data(self, ax, data, result):
         data = data.iloc[1:, 1:]
         data = data.apply(pd.to_numeric, errors='coerce')
-        # ax = data.plot()  # 直接使用 DataFrame 的 plot 方法,按列绘制
         data.plot(ax=ax)  # 在传入的 ax 上绘图
         ax.set_title("原始数据")
 
@@ -531,3 +519,35 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
         # ax = data.plot()  # 直接使用 DataFrame 的 plot 方法,按列绘制
         data.plot(ax=ax)  # 在传入的 ax 上绘图
         ax.set_title("滤波后数据")
+
+
+def plot_confusion(ax, confusion , labels_name, is_norm=True, colorbar = True):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    if is_norm == True:
+        confusion = np.around(confusion.astype('float') / confusion.sum(axis=1)[:, np.newaxis], 2)  # 横轴归一化并保留2位小数
+
+    """绘制混淆矩阵"""
+    confusion = np.array(confusion)  # 将list类型转换成数组类型，如果已经是numpy数组类型，则忽略此步骤。
+    # 显示归一化后的混淆矩阵
+    im = ax.imshow(confusion, interpolation='nearest', cmap=plt.cm.Blues)
+    for i in range(len(confusion)):
+        for j in range(len(confusion)):
+            ax.annotate(confusion[j, i], xy=(i, j), horizontalalignment='center', verticalalignment='center')  # 默认所有值均为黑色
+    if colorbar:
+        plt.colorbar(im, ax=ax)  # 创建颜色条
+    # 获取标签的间隔数
+    num_class = np.arange(len(labels_name))
+
+    # 设置坐标轴
+    ax.set_xticks(num_class)
+    ax.set_xticklabels(labels_name, rotation=90)
+    ax.set_yticks(num_class)
+    ax.set_yticklabels(labels_name)
+
+    # 设置坐标轴标签
+    ax.set_ylabel('真实标签')
+    ax.set_xlabel('预测标签')
+
+
+

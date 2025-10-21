@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PCA_show</class>
- <widget class="QWidget" name="PCA_show">
+ <class>Dimension_show</class>
+ <widget class="QWidget" name="Dimension_show">
   <property name="geometry">
    <rect>
     <x>0</x>

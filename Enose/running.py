@@ -1,17 +1,17 @@
 import sys
+
+import resource_ui.web_app
 from resource_ui.modules import *
 from resource_ui.widgets import *
+from resource_ui.web_app import run
 from PySide6.QtWidgets import QApplication
 import os
-
+import threading
 import tool.UI_show.serial_show as se
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from PySide6.QtCore import QUrl
-from PySide6.QtGui import QDesktopServices
 from tool.UI_show.Gragn_show_ui import GraphShowWindow
 from tool.UI_show.Alg_ui_show import AlgShow_Init
 
-The_url = "https://www.baidu.com" #要跳转的网页
 os.environ["QT_FONT_DPI"] = "150" # FIX Problem for High DPI and Scale above 100%
 widgets = None
 
@@ -126,8 +126,12 @@ class MainWindow(QMainWindow):
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet())) # SELECT MENU
 
         if btnName == "btn_ai":
-            url = QUrl(The_url)
-            if not QDesktopServices.openUrl(url):
+            try:
+                # 创建一个线程来启动 Flask 应用
+                self.flask_thread = threading.Thread(target=run)
+                self.flask_thread.start()
+                resource_ui.web_app.open_browser()
+            except:
                 self.show_error_message()
 
         # PRINT BTN NAME
@@ -143,7 +147,6 @@ class MainWindow(QMainWindow):
         # 设置消息框的标题和内容
         msg.setWindowTitle("错误")
         msg.setText("无法打开链接:")
-        msg.setInformativeText(The_url)  # 显示链接信息
 
         # 设置消息框的按钮
         msg.setStandardButtons(QMessageBox.Ok)
@@ -174,6 +177,12 @@ class MainWindow(QMainWindow):
         self.serial_init.closeEvent(event)
         self.test_show.closeEvent(event)
         self.alg_show.closeEvent(event)
+        # resource_ui.web_app.shutdown()
+        import os,signal
+
+        pid = os.getpid()  # 获取当前进程的PID
+        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
+
 
 
 if __name__ == "__main__":
