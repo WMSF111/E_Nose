@@ -153,7 +153,7 @@ np.hstack(tup): tup为一个元组，返回一个水平拼接后的数组
 svm = SVC(kernel='linear', C=1.0, random_state=1)  # 定义线性支持向量分类器 (linear为线性核函数)
 svm.fit(X_train_std, y_train)  # 根据给定的训练数据拟合训练SVM模型
 plot_decision_regions(X_combined_std, y_combined, classifier=svm, test_idx=range(105, 150))  # 绘制决策边界
-
+print(y_combined)
 plt.xlabel('petal length [standardized]')  # x轴标签
 plt.ylabel('petal width [standardized]')  # y轴标签
 plt.legend(loc='upper left')  # 图例位于左上方

@@ -41,7 +41,7 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         self.Reg_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         self.Reg_ComboBox.activated.connect(self.tabadd.Region_Combo_select)
         self.Pre_Button.clicked.connect(self.tabadd.Filter_Combo_select)
-        self.Classify_ComboBox.addItems(["无", "SVM", "KNN"])  # 添加选项
+        self.Classify_ComboBox.addItems(["无", "SVM", "KNN", "逻辑回归"])  # 添加选项
         self.Classify_ComboBox.setCurrentIndex(0)  # 设置默认选择为第一个选项（"无"）
         self.Classify_ComboBox.activated.connect(self.tabadd.Classify_Combo_select)
     def select_file(self):

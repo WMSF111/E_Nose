@@ -1,8 +1,10 @@
 import sys
 
+import global_var
 import resource_ui.web_app
 from resource_ui.modules import *
 from resource_ui.widgets import *
+import resource_ui.themes as theme
 from resource_ui.web_app import run
 from PySide6.QtWidgets import QApplication
 import os
@@ -69,7 +71,8 @@ class MainWindow(QMainWindow):
         # 设置主题颜色
         # ///////////////////////////////////////////////////////////////
         useCustomTheme = True
-        themeFile = "resource_ui\\themes\py_dracula_light.qss"
+        themeFile = global_var.themeFile
+
 
         # 设置主题
         if useCustomTheme:
@@ -187,15 +190,9 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("icon.ico"))
+    icon = os.path.join(os.path.dirname(__file__), "icon.ico")
+    app.setWindowIcon(QIcon(icon))
     window = MainWindow()
     sys.exit(app.exec())
-
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     app.setStyle("WindowsVista")  # 强制使用 WindowsVista 主题
-#     window = Main_Win.MianWindow_Init()
-#     window.show()
-#     sys.exit(app.exec())
 
 

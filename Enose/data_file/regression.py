@@ -1,45 +1,49 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
 class TRAIN():
     # 输入： finalData=数据级 target =数据标签 test_size = 训练集数量（0.1-0.9）
-    def __init__(self, ui, DataFrame):
+    def __init__(self, ui, data):
         self.ui = ui
-        target = DataFrame.iloc[1:, 0]
-        # 将剩余的列作为数据 (features)
-        data = DataFrame.iloc[1:, 1:]
-        self.finalData = data  # 读取数据
-        self.target = target  # 读取标签名
+        # 获取表头（列名）
+        columns = data.columns
+        self.y = columns[0]  # 目标变量（因变量）
+        self.x = columns[1:]  # 特征变量（自变量）
 
-    def LG(self, test_size):
-        x_train, x_test, y_train, y_test = (  # 划分训练集与测试集
-            train_test_split(self.finalData, self.target, test_size = test_size, random_state=0))
+    def LG(self, x, y):
+        # 初始化模型
+        model = LinearRegression()
+        # 训练模型
+        model.fit(x, y)
+        # 检验线性回归分析模型的拟合程度
+        score = model.score(x, y)
+        return model,score
 
-        # 搭建逻辑回归模型
-        lg = LogisticRegression()
-        x_train = np.asarray(x_train)
-        y_train = np.asarray(y_train)
-        x_test = np.asarray(x_test)
-        lg.fit(x_train, y_train)
 
-        # 预测数据结果及准确率
-        y_pred = lg.predict(x_test)
-        y_pred[:20]
-        accuracy = accuracy_score(y_test, y_pred)  # 查看模型准确度
-        confusion = confusion_matrix(y_test, y_pred)  # 混淆概率矩阵
-        classification = classification_report(y_test, y_pred, zero_division=0)  # 提供分类报告，避免出现零分母警告
+# 读取文件函数，数据预处理，70%做训练集，30%做预测集
+def read(data, Mix):
+    target = data.iloc[:, 0]  # 第一列类别
+    # 将剩余的列作为数据 (features)
+    data = data.iloc[:, 1:]  # 所有数据
+    if Mix == True:
+        # 打乱顺序
+        data = data.sample(frac=1).reset_index(drop=True)
+    # 创建一个字典，将 target 中的每个元素映射到一个数字
+    target_map = make_map(target)
+    return target_map, target, data
 
-        labels = sorted(set(y_test) | set(y_pred))  # 获取所有出现的类别
-        err_str = ""
-        for label in labels:
-            y_true_label = [1 if y == label else 0 for y in y_test]
-            y_pred_label = [1 if y == label else 0 for y in y_pred]
-            if sum(y_pred_label) == 0:
-                err_str += f"类别 {label} 没有被预测到，精度为 0\n"
-                # print(f"类别 {label} 没有被预测到，精度为 0")
-        return accuracy, confusion, classification, err_str
-        # print("模型准确率", accuracy_score(y_test, y_pred))
-        # print("混淆矩阵", confusion_matrix(y_test, y_pred))
-        # print("分类报告", classification_report(y_test, y_pred))
+def make_map(target):
+    # 获取类别的排序列表，按照字母或其他顺序排序
+    sorted_target = sorted(set(target))  # 获取唯一类别并排序
+
+    # 创建一个字典，将 sorted_target 中的每个元素映射到一个数字，数字从0开始
+    target_map = {sorted_target[i]: i for i in range(len(sorted_target))}
+    return  target_map
+
+# 将字符类型数据转化为数字类型
+def transfer(target_map, array):
+    # 使用映射字典转换 array 中的种类标签为数字
+    num = [target_map[i] for i in array]
+    return num

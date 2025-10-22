@@ -5,34 +5,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/data_file/test/svm/svm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resource_ui/web_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_file/test/LG.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/icon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/py_dracula_light.qss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/AI.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/ZHIPU/zhipuai_embedding.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/ZHIPU/zhipuai_llm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/chroma/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/data_level0.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/header.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/length.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/link_lists.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/create_data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在乳及其制品检测中的应用研究进展_廖美燕.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在果蔬及肉类检测中的应用进展_徐泽.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在果蔬贮藏保鲜中应用的研究进展_朱榕秋.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在食品掺假鉴定中的应用研究进展_张桂云.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻技术在果蔬病害检测中的研究进展_吴嘉雯.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻技术应用进展及在环境检测中的应用展望_董士霞.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/近五年电子鼻技术在食品安全的应用进展_李晶晶.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/data/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AI/test.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_file/alg_tabadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/alg_tabadd.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_file/classify.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/classify.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/kernel_func.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/svm/kernel_func.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/knn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/pca2.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/pca2.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_file/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_file/test/pca2_2.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/pca2_2.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_file/test/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/svm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/svm_smo_classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/svm/svm_smo_classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pca .txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pca2.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/pca2_2.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Classify.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Classify_ui.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Predict.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/Regression.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pca_show.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/global_var.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Classify.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_uifile/Classify_ui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_uifile/SVM.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/themes/py_dracula_light.qss" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/themes/py_dracula_light.qss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/serial_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/traintrainfile.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/www.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/背景颜色.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/背景颜色.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,34 +81,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.MainWindow_show.executor&quot;: &quot;Run&quot;,
-    &quot;Python.The_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.alg_tabadd.executor&quot;: &quot;Run&quot;,
-    &quot;Python.app_functions.executor&quot;: &quot;Run&quot;,
-    &quot;Python.app_settings.executor&quot;: &quot;Run&quot;,
-    &quot;Python.knn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running.executor&quot;: &quot;Run&quot;,
-    &quot;Python.running_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.svm.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ui_functions.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ui_main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.web_app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/study/Python/PyCharm_study/E_Nose/Enose/data_file/test&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.LG.executor": "Run",
+    "Python.MainWindow_show.executor": "Run",
+    "Python.The_main.executor": "Run",
+    "Python.alg_tabadd.executor": "Run",
+    "Python.app_functions.executor": "Run",
+    "Python.app_settings.executor": "Run",
+    "Python.knn.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.pic_tab_add.executor": "Run",
+    "Python.running.executor": "Run",
+    "Python.running_main.executor": "Run",
+    "Python.svm.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.ui_functions.executor": "Run",
+    "Python.ui_main.executor": "Run",
+    "Python.web_app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\data_file\test" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\train" />
-      <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui\modules" />
       <recent name="E:\study\Python\PyCharm_study\E_Nose\Enose\resource_ui" />
     </key>
