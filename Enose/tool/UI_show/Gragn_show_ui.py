@@ -1,19 +1,15 @@
-import  sys, re, random
-import threading
-
+import  sys, re, random, threading, logging
 from PySide6.QtCore import (
     Qt, QObject, Signal, QEvent, QTimer
 )
-import pandas as pd
-import global_var
-import tool.serial_thread as mythread
 from PySide6.QtWidgets import  QWidget, QHeaderView, QFileDialog, QApplication
 from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
+import pandas as pd
+import tool.serial_thread as mythread
 import pyqtgraph as pg
 from resource_ui.ui_pfile.ChooseAndShow import Ui_Gragh_show
 import global_var as g_var
 from itertools import cycle
-import logging, os
 import tool.Serial_opea as SO
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 import resource_ui.alg_puifile.pic_tab_add as Tab_add

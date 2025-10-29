@@ -5,45 +5,423 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/data_file/test/LG.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/py_dracula_light.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/AI.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/ZHIPU/zhipuai_embedding.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/ZHIPU/zhipuai_llm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/chroma/chroma.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/data_level0.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/header.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/length.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/9a03a421-7b1c-4449-96b6-35abc4879a8c/link_lists.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/chroma/chroma.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/create_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在乳及其制品检测中的应用研究进展_廖美燕.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在果蔬及肉类检测中的应用进展_徐泽.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在果蔬贮藏保鲜中应用的研究进展_朱榕秋.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻在食品掺假鉴定中的应用研究进展_张桂云.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻技术在果蔬病害检测中的研究进展_吴嘉雯.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/电子鼻技术应用进展及在环境检测中的应用展望_董士霞.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/knowledge_db/E_nose/近五年电子鼻技术在食品安全的应用进展_李晶晶.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/data/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AI/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/Elecnose.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/Form2.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/Show_pic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/The_2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/The_3.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/echart_P.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/figureCanvas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/Picture/get_color.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/TextEdit.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/The_main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/The_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/buttonchoose.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/config/config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/datafile.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/global_vars.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.srt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/easy_rl/强化学习入门指南.vtt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/1. 简介 Introduction.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/2. 提示原则 Guidelines.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/3. 迭代优化 Iterative.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/4. 文本概括 Summarizing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/5. 推断 Inferring.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/6. 文本转换 Transforming.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/7. 文本扩展 Expanding.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/8. 聊天机器人 Chatbot.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/prompt_engineering/9. 总结 Summary.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/knowledge_db/pumkin_book/pumpkin_book.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/vector_db/chroma/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/vector_db/chroma/d06adb59-dfe7-4f80-9453-356173b214de/data_level0.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/vector_db/chroma/d06adb59-dfe7-4f80-9453-356173b214de/header.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/vector_db/chroma/d06adb59-dfe7-4f80-9453-356173b214de/length.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/data_base/vector_db/chroma/d06adb59-dfe7-4f80-9453-356173b214de/link_lists.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/.nojekyll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/1.大语言模型 LLM 理论简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/2.检索增强生成 RAG 简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/3.LangChain 简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/4.开发 LLM 应用的整体流程.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/5.阿里云服务器的基本使用.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/6.GitHub Codespaces 的基本使用（选修）.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C1/7.环境配置.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C2/1. 基本概念.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C2/2. 使用 LLM API.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C2/3. Prompt Engineering.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C3/1.词向量及向量知识库介绍.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C3/2.使用 Embedding API.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C3/3.数据处理.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C3/4.搭建并使用向量数据库.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C3/附LangChain自定义Embedding封装讲解.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C4/1.LLM 接入 LangChain.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C4/2.构建检索问答链.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C4/3.部署知识库助手.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C5/1.如何评估 LLM 应用.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C5/2.评估并优化生成部分.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C5/3.评估并优化检索部分.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C6/案例1：个人知识库助手.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/C6/案例2：人情世故大模型系统-天机.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/_sidebar.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C0-0-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-AI_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_config0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_config1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_into.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_login1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_newbee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_student0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_student1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Aliyun_teacher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ChatGPT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Claude.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-GPT_series.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Gemini.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-LLM_developing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-LLM_developing_whole.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-LLM_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-LLMs_0623_final.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-RAG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Summary_of_Closed_Source_LLM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-Summary_of_Open_Source_LLM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-baichuan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-chatglm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-chatglm_vs_openai.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-flow_chart.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-github_ssh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-langchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-langchain_star_history.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-plug_market.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-qwen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ssh_concent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ssh_concent_option.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ssh_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ssh_open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-ssh_server_ip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-xinghuo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-xunfei.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-1-yiyan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-2-RAG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-3-langchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-3-langchain_star_history.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-4-AI_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-4-LLM_developing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-4-LLM_developing_whole.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-4-LLM_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-4-flow_chart.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_config0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_config1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_into.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_login1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_newbee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_rest_pass.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_student0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_student1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-Aliyun_teacher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_concent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_concent_option.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-5-ssh_server_ip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-GitHub_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace_connect.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace_limit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace_setting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-codespace_started.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-connect_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-connect_success.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-create_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-create_repository.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-new_repositories.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-restart_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-6-vscode_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-cd_root.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-clone.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-jupyter_env_list.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-jupyter_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-jupyter_python.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-pip_install.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C1-7-python_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-1-prompt_example.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-baidu_qianfan_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-baidu_qianfan_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-baidu_qianfan_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-baidu_qianfan_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-baidu_qianfan_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-ernie_bot_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-ernie_bot_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-openai-choose.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-openai-get-key.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-prompt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-spark_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-spark_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-spark_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-spark_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-zhipuai_api.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-zhipuai_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C2-2-zhipuai_overview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C3-1-embedding.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C3-2-similar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C3-3-example-splitter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C5-1-eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C5-3-rag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-QA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-Start.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-joyrl-book与joyrl是什么关系演示.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-rag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-structure.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-1-介绍下joyrl演示.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-Prompt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-人际交流.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-化解尴尬.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-应用框架.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-敬酒.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-模型训练.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-请客.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-送礼.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-2-送祝福.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-3-streamlit_app.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-3-streamlit_app2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/figures/C6-3-streamlit_app3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/docs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C0-0-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-AI_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_config0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_config1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_into.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_login1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_newbee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_student0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_student1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Aliyun_teacher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ChatGPT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Claude.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-GPT_series.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Gemini.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-LLM_developing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-LLM_developing_whole.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-LLM_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-LLMs_0623_final.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-RAG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Summary_of_Closed_Source_LLM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-Summary_of_Open_Source_LLM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-baichuan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-chatglm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-chatglm_vs_openai.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-flow_chart.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-github_ssh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-langchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-langchain_star_history.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-plug_market.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-qwen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ssh_concent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ssh_concent_option.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ssh_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ssh_open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-ssh_server_ip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-xinghuo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-xunfei.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-1-yiyan.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-2-RAG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-3-langchain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-3-langchain_star_history.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-4-AI_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-4-LLM_developing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-4-LLM_developing_whole.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-4-LLM_eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-4-flow_chart.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_config0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_config1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_into.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_login1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_newbee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_rest_pass.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_student0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_student1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-Aliyun_teacher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_concent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_concent_option.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-5-ssh_server_ip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-GitHub_login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace_connect.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace_limit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace_setting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-codespace_started.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-connect_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-connect_success.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-create_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-create_repository.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-new_repositories.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-restart_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-6-vscode_codespace.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-cd_root.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-clone.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-jupyter_env_list.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-jupyter_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-jupyter_python.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-pip_install.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C1-7-python_plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-1-prompt_example.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-baidu_qianfan_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-baidu_qianfan_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-baidu_qianfan_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-baidu_qianfan_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-baidu_qianfan_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-ernie_bot_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-ernie_bot_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-openai-choose.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-openai-get-key.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-prompt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-spark_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-spark_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-spark_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-spark_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-zhipuai_api.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-zhipuai_home.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C2-2-zhipuai_overview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C3-1-embedding.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C3-2-similar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C3-3-example-splitter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C5-1-eval.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/C5-3-rag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/streamlit_app.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/streamlit_app2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/figures/streamlit_app3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/1.大型语言模型 LLM 理论简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/2.检索增强生成 RAG 简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/3.LangChain 简介.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/4.开发 LLM 应用的整体流程.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/5.阿里云服务器的基本使用.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/6.GitHub Codespaces 的基本使用（选修）.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C1 大型语言模型 LLM 介绍/7.环境配置.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C2 使用 LLM API 开发应用/1. 基本概念.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C2 使用 LLM API 开发应用/2. 使用 LLM API.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C2 使用 LLM API 开发应用/3. Prompt Engineering.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/1.向量及向量知识库介绍.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/2.使用 Embedding API.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/3.数据处理.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/4.搭建并使用向量数据库.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/zhipuai_embedding.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C3 搭建知识库/附LangChain自定义Embedding封装讲解.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/1.LLM 接入 LangChain.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/2.构建检索问答链.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/3.部署知识库助手.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/streamlit_app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/wenxin_llm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/zhipuai_llm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C4 构建 RAG 应用/附1.LangChain自定义 LLM.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C5 系统评估与优化/1.如何评估 LLM 应用.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C5 系统评估与优化/2.评估并优化生成部分.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C5 系统评估与优化/3.评估并优化检索部分.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/1.多类型文档处理.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/2.分块优化.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/3.向量模型及其选择.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/4.微调向量模型.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/chunk_mode_recall.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/chunksize_recall.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/data/1. 简介 Introduction.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/data/AI视频.pptx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/data/Company.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/data/pumpkin_book.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/BERT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/FixedSizedChunk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/L.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/Loss.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/MTEB_Chinese_leaderboard.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/SBERT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/SBERT_SoftmaxLoss.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/Semantic_Chunker_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/model_name.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/point.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/figures/progress_bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/generate_qa_pairs.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/train_dataset.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/附分块方法评估.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/附分块长度评估.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/C7 高级 RAG 技巧/2. 数据处理/附损失函数浅析.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/notebook/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/llm-universe/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/putdownbutton.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/putdownchoose.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/222.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/ChatGPTClient.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form1.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form2.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form3.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form4.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Form5.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_ChatGPTClient.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form3.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form4.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/Ui_Form5.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/logo.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/setting.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/resource_ui/tab.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/serial_se/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/serial_se/core/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/serial_se/core/s.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/serial_se/mainwindow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/test/0507.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/test/algorithm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/test/datafile.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/test/filter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/test/trainfile.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/algorithm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/filter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/get_txt.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0507.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0510.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0513.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0516.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0519.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/b_0522.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/c_0510.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/c_0513.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/c_0516.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/c_0519.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/resource/c_0522.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/train.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/train/trainfile.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/train/trainfile.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Elecnose/train/trainfile.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/alg_tabadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/alg_tabadd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/classify.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/classify.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/pca2_2.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/pca2_2.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_file/test/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_file/test/svm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/global_var.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/alg_puifile/pic_tab_add.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/running.py" beforeDir="false" afterPath="$PROJECT_DIR$/running.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Alg_ui_show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_file/test/~$pca2_2.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +480,7 @@
     "Python.web_app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/Enose",
+    "last_opened_file_path": "E:/study/Python/PyCharm_study/E_Nose/auto_Enose",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
