@@ -26,9 +26,9 @@ draw_flag = False
 now_chan = 1
 now_Sam = 0
 target_Sam = 1
-gettime = 0
-cleartime = 0
-standtime = 0
+sample_time = 0
+exhaust_time = 0
+base_time = 0
 lock = threading.Lock()  # 创建一个锁
 Save_flag = 0
 

@@ -51,6 +51,15 @@ class Pre_Alg():
             # iloc[0] 用来选取第一个众数（如果有多个众数）
             df_new = (self.result.groupby(self.result.index).
                       agg(lambda x: x.mode().iloc[0]))
+        elif self.select == "极差":
+            df_new = self.result.groupby(self.result.index).agg(lambda x: x.max() - x.min())
+        elif self.select == "最大值":
+            df_new = self.result.groupby(self.result.index).agg(lambda x: x.max())
+        elif self.select == "最大斜率":
+            # 计算每组相邻数据点的斜率
+            df_new = self.result.groupby(self.result.index).apply(
+                self.calculate_slope
+            )
         # 确保返回的 DataFrame 与原始数据类型一致
         df_new = df_new.astype(self.result.iloc[:, 0].dtype)
 
@@ -58,6 +67,23 @@ class Pre_Alg():
         df_new.reset_index(inplace=True)
         return df_new
 
+    # 定义计算斜率的函数
+    def calculate_slope(self, group):
+        """
+        计算每组相邻数据点的斜率
+        group: DataFrame，包含一组数据
+        返回：一个包含斜率的 Series
+        """
+        # 计算相邻数据点的斜率
+        print(group)
+        # 假设 df 是你的原始数据
+        # 计算每列的差值
+        slope_df = group.diff()  # 计算相邻行之间的差值
 
+        # 计算每列的最大斜率
+        max_slope = slope_df.max()  # 找到每列的最大差值，即最大斜率
+        # 显示每列的最大斜率
+        print(max_slope)
+        return max_slope
 
 

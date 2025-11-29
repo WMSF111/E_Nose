@@ -121,14 +121,14 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         # 连接信号
         self.Auto_state = "idle"  # 初始状态为 "idle"
-        self.Auto_Button.clicked.connect(self.Auto_Model)
-        self.Autochoose_Button.clicked.connect(self.Autoinsample)
+        self.Auto_Button.clicked.connect(self.Auto_Model) #电子鼻自动模式
+        self.Autochoose_Button.clicked.connect(self.Autoinsample) # 自动进样器
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 采集阶段
         self.Clearroom_Button.clicked.connect(self.clear_room)
         self.InitPos_Button.clicked.connect(self.Stra) #初始化位置
         self.Folder_Button.clicked.connect(self.savefolder) # 确认保存路径
-        self.Stop_Button.clicked.connect(self.Stop)  # 确认保存路径
+        self.Stop_Button.clicked.connect(self.Stop)  # 全部暂停
 
     def initMS(self):
         self.ms._draw_open.connect(self.a._draw_open)
@@ -177,8 +177,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
     def Stop(self):
         self.ser.write("00")
         if self.time_th:
-            self.Serialopea.stop("time_th调用函数")
-            self.Serialopea._running = False
+            self.Serialopea.stop("Serialopea函数")
+            self.time_th.stop("time_th函数")
         self.ms._draw_close.emit()
         self.button_init(True)
 
@@ -196,11 +196,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ms._Clear_Button.emit(True)
         self.ms._Clearroom_Button.emit(True)
         print("继续采集")
-        g_var.gettime = (int)(self.Sample_spinBox.value())
-        g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
-        g_var.standtime = self.Basetime_spinBox.value() # 基线时长
+        g_var.sample_time = (int)(self.Sample_spinBox.value()) #采样时长
+        g_var.exhaust_time = self.Cleartime_spinBox.value() # 洗气时常
+        g_var.base_time = self.Basetime_spinBox.value() # 基线时长
         self.ser1.serialSend('0C', flag=True) #运动轴回到原点
-        text = ("base_time:" + str(g_var.standtime) +
+        text = ("base_time:" + str(g_var.base_time) +
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
                 ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
         self.ser.write(text)

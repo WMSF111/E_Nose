@@ -437,7 +437,7 @@ class PRESHOW(QDialog, Ui_Pre_show):  # 继承 QDialog
         self.ButInit()
         self.Pre_ComboBox.addItems(["不选", "算术平均滤波法", "递推平均滤波法", "中位值平均滤波法",
                            "一阶滞后滤波法", "加权递推平均滤波法", "消抖滤波法", "限幅消抖滤波法"])
-        self.Valchoose_ComboBox.addItems(["不选", "平均值", "中位数", "众数"])
+        self.Valchoose_ComboBox.addItems(["不选", "平均值", "中位数", "众数","极差", "最大值","最大斜率"])
         self.PreAlg = self.Pre_ComboBox.currentText()
         self.ValAlg = self.Valchoose_ComboBox.currentText()
         self.file_path = ' '
