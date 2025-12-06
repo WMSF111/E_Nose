@@ -160,6 +160,7 @@ class Serial1opea():
             self.now_Sam += 1
 
     def auto(self):
+        print("自动运行")
         self.base_clear()
         self.sample_collect()
         self.room_clear()

@@ -206,10 +206,19 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.Serialopea.stop("Serialopea函数")
             self.time_th.stop("time_th函数")
         self.ms._draw_close.emit()
-        time.sleep(1)
         self.button_init(True)
+        if g_var.Auto_falg == True:
+            self.ser.pause()
+            self.ser1.pause()
+        else:
+            self.ser.pause()
 
     def Stra(self): # 暂停或者正式开始
+        if g_var.Auto_falg == True:
+            self.ser.resume()
+            self.ser1.resume()
+        else:
+            self.ser.resume()
         # 1. 暂停串口采集和绘图
         if self.time_th:
             self.Serialopea.stop("time_th调用函数")

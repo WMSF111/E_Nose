@@ -5,6 +5,7 @@ import data_file.classify as classify
 import data_file.prealg as prealg
 import resource_ui.alg_puifile.pic_tab_add as alg_show
 import data_file.transfo as transfo
+#选择弹出界面
 
 class ALG_TAB_ADD():
     def __init__(self, ui):

@@ -76,6 +76,7 @@ class Serial_Init(QWidget):
         self.initMS()
         self.ports = []
         self.Port_select = ""
+        self.initallSerial()
         # self.set_initial_baud_rate(g_var.Bund_select)
         self.Com_Dict = {}
 

@@ -5,28 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/../auto_Enose/resource_ui/ui_file/ChooseAndShow_1.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../auto_Enose/resource_ui/ui_file/Serial_1.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../auto_Enose/resource_ui/ui_pfile/ChooseAndShow_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../auto_Enose/resource_ui/ui_pfile/Serial_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/ChooseAndShow_1.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_file/Serial.ui" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_file/Serial_1.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/ChooseAndShow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/ui_pfile/Serial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resource_ui/web_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/resource_ui/web_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ChooseAndShow/ChooseAndShow.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/ChooseAndShow/ChooseAndShow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ChooseAndShow/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/ChooseAndShow/Gragh_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ChooseAndShow/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/ChooseAndShow/Serial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Gragh_show/Gragh_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/Gragh_show/Gragh_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Serial_test/Serial.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/Serial_test/Serial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auto_Enose/global_var.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/global_var.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auto_Enose/resource_ui/web_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/resource_ui/web_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auto_Enose/data_file/alg_tabadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/data_file/alg_tabadd.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/Serial_opea.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/tool/Serial_opea.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/serial_show.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/serial_thread.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/tool/serial_thread.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/draw_class.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
