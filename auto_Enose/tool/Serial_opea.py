@@ -2,14 +2,6 @@ import tool.frame_data as frame_data
 import threading
 import time, copy
 import global_var as glo_var
-import tkinter as tk
-from tkinter import messagebox
-
-def show_error_message(message):
-    # 创建一个根窗口（不显示）
-    root = tk.Tk()
-    root.withdraw()  # 隐藏主窗口
-    messagebox.showerror("错误", message)  # 弹出错误提示框
 
 class time_thread(): # 时间相关的线程
     # 初始化输入两个串口， 停止时间与初始时间
@@ -109,7 +101,7 @@ posxyz = [
 ]
 class Serial1opea():
     # 一系列串口控制硬件的操作
-    def __init__(self, ms, ser, ser1):
+    def __init__(self, ms, ser, ser1 = None):
         self.ser = ser
         self.ser1 = ser1
         self.ms = ms
@@ -188,7 +180,7 @@ class Serial1opea():
                 break
             if num == 5:
                 self.ms._statues_label.emit("信号串口掉线")
-                show_error_message("信号串口掉线, 请重新操作")
+                self.ms._show_error_message.emit("信号串口掉线, 请重新操作")
                 self.stop()
                 break
         num = 0
@@ -203,9 +195,10 @@ class Serial1opea():
                 self.ms._print.emit(num)
                 break
             if num >= glo_var.base_time + 5:
-                show_error_message(str("基线处理时长超时", num, ", 请重新操作"))
+                self.ms._show_error_message.emit(str("基线处理时长超时", num, ", 请重新操作"))
                 self.stop()
                 break
+        self.ms._Clear_Button.emit(True)  # 允许继续
 
     def sample_collect(self): # 信号采集
         if self._running == True:
@@ -215,8 +208,8 @@ class Serial1opea():
         text = ("21\n\r")
         num = 0
         self.ms._ClearDraw.emit()  # 清除绘图界面
-
-        self.ser_opea(3, glo_var.sample_time, re="55 AA 03 00 01 00 00 00 00 0A") # 信号采集
+        if glo_var.Auto_falg == True:
+            self.ser_opea(3, glo_var.sample_time, re="55 AA 03 00 01 00 00 00 00 0A") # 信号采集
         while True:  # 没到回复
             if self._running == False:
                 break
@@ -230,7 +223,7 @@ class Serial1opea():
             if num == 5:
                 self.ms._statues_label.emit("信号串口掉线")
                 self.ms._draw_close.emit()
-                show_error_message("信号串口掉线, 请重新操作")
+                self.ms._show_error_message.emit("信号串口掉线, 请重新操作")
                 self.stop()
                 break
         num = 0
@@ -246,9 +239,10 @@ class Serial1opea():
             if num >= glo_var.sample_time + 5:
                 self.ms._statues_label.emit("采样时长超时")
                 self.ms._draw_close.emit()
-                show_error_message("采样时长超时", num, ", 请重新操作")
+                self.ms._show_error_message.emit(str("采样时长超时", num, ", 请重新操作"))
                 self.stop()
                 break
+        self.ms._Collectbegin_Button.emit(True)
 
 
     def room_clear(self):
@@ -256,7 +250,8 @@ class Serial1opea():
             self.ms._Clearroom_Button.emit(False)
         text = ("31\n\r")
         num = 0
-        self.ser_opea(4, glo_var.exhaust_time)
+        if glo_var.Auto_falg == True:
+            self.ser_opea(4, glo_var.exhaust_time)
         while True:  # 没到回复
             if self._running == False:
                 break
@@ -268,7 +263,7 @@ class Serial1opea():
                 break
             if num == 5:
                 self.ms._statues_label.emit("信号串口掉线")
-                show_error_message("信号串口掉线, 请重新操作")
+                self.ms._show_error_message.emit("信号串口掉线, 请重新操作")
                 self.stop()
                 break
         num = 0
@@ -284,9 +279,10 @@ class Serial1opea():
             if num >= glo_var.exhaust_time + 5:
                 self.ms._statues_label.emit("洗气时长超时")
                 self.ms._Clearroom_Button.emit(True)
-                show_error_message("洗气时长超时：", num, ", 请重新操作")
+                self.ms._show_error_message.emit(str("洗气时长超时：", num, ", 请重新操作"))
                 self.stop()
                 break
+        self.ms._Clearroom_Button.emit(True)
 
     def stop(self, name = "Serial1opea"):
         self._running = False  # 设置读取标志为 False
@@ -332,6 +328,5 @@ class Serial1opea():
                 self.ms._statues_label.emit("控制串口掉线")
                 self.ms._print.emit(glo_var.sample_time + num)
                 print("控制串口掉线")
-                self.ms._pause_serial.emit()
-                show_error_message("控制串口掉线, 请重新操作")
+                self.ms._show_error_message.emit("控制串口掉线, 请重新操作")
                 break

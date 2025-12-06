@@ -31,7 +31,7 @@ exhaust_time = 0
 base_time = 0
 lock = threading.Lock()  # 创建一个锁
 Save_flag = 0
-
+Auto_falg = False
 
 sensors = [
     "sensor1", "sensor2", "sensor3", "sensor4", "sensor5",

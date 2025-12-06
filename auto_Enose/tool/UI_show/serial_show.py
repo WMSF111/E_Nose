@@ -8,7 +8,10 @@ from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QWidget, QFileDialog, QApplication
 from PySide6.QtGui import QIcon, QTextCursor
 import tool.serial_thread as mythread
-from resource_ui.ui_pfile.Serial import Ui_Serial
+if g_var.Auto_falg == True:
+    from resource_ui.ui_pfile.Serial import Ui_Serial
+else:
+    from resource_ui.ui_pfile.Serial_1 import Ui_Serial
 
 
 class MySignals(QObject):
@@ -32,12 +35,14 @@ class Action():
     def _serialComboBoxResetItems(self, texts: list):
         self.ui.serialComboBox.clear()
         self.ui.serialComboBox.addItems(texts)
-        self.ui.serialComboBox2.clear()
-        self.ui.serialComboBox2.addItems(texts)
+        if g_var.Auto_falg == True:
+            self.ui.serialComboBox2.clear()
+            self.ui.serialComboBox2.addItems(texts)
 
     def _serialComboBoxclear(self):
         self.ui.serialComboBox.clear()
-        self.ui.serialComboBox2.clear()
+        if g_var.Auto_falg == True:
+            self.ui.serialComboBox2.clear()
 
     def _setButtonText(self, text: str):
         self.ui.connectButton.setText(text)
@@ -73,15 +78,6 @@ class Serial_Init(QWidget):
         self.Port_select = ""
         # self.set_initial_baud_rate(g_var.Bund_select)
         self.Com_Dict = {}
-        # sconfig = ["COM1", 115200, "COM3", 9600]  #
-        # self.smng = mythread.SerialsMng(sconfig)
-        # self.ser = self.smng.ser_arr[0]
-        # self.ser1 = self.smng.ser_arr[1]
-        # self.initComboBox(self.ui.serialComboBox, self.ui.statues)
-        # self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
-        # self.timer2 = QTimer()
-        # self.timer2.timeout.connect(self.initComboBox)
-        # self.timer2.start(100)
 
     def set_initial_baud_rate(self, baud_rate):
         """
@@ -110,9 +106,10 @@ class Serial_Init(QWidget):
         self.ui.serialComboBox.currentTextChanged.connect(
             lambda: self.initComboBox(self.ui.serialComboBox, self.ui.statues)
         )
-        self.ui.serialComboBox2.currentTextChanged.connect(
-            lambda: self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
-        )
+        if g_var.Auto_falg == True:
+            self.ui.serialComboBox2.currentTextChanged.connect(
+                lambda: self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
+            )
         self.ui.saveButton.clicked.connect(self.savefile)  # 保存文件按钮
         self.ui.clearButton.clicked.connect(self.ui.tb.clear)  # 清除按钮
 
@@ -128,12 +125,18 @@ class Serial_Init(QWidget):
             ms._serialComboBoxResetItems.emit([i.name for i in self.ports])  # 添加所有串口
 
     def initallSerial(self):
-        sconfig = [" ", 115200, " ", 9600]
-        self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser1 = self.smng.ser_arr[1]
-        self.initComboBox(self.ui.serialComboBox, self.ui.statues) # 初始化ser列表
-        self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3) # 初始化ser1列表
+        if g_var.Auto_falg == True:
+            sconfig = [" ", 115200, " ", 9600]
+            self.smng = mythread.SerialsMng(sconfig)
+            self.ser = self.smng.ser_arr[0]
+            self.ser1 = self.smng.ser_arr[1]
+            self.initComboBox(self.ui.serialComboBox, self.ui.statues)  # 初始化ser列表
+            self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3) # 初始化ser1列表
+        else:
+            sconfig = [" ", 115200,]
+            self.smng = mythread.SerialsMng(sconfig)
+            self.ser = self.smng.ser_arr[0]
+            self.initComboBox(self.ui.serialComboBox, self.ui.statues)  # 初始化ser列表
 
     def openPort(self):  # 打开串口
         print("read_flag:", str(self.ser.read_flag))
@@ -141,32 +144,36 @@ class Serial_Init(QWidget):
             ms._setButtonText.emit("断开状态")
             self.ser_open_look_ui(True)
             self.ser.stop()  # 关闭串口
-            self.ser1.stop()  # 关闭串口
+            if g_var.Auto_falg == True:
+                self.ser1.stop()  # 关闭串口
         else:
             ms._setButtonText.emit("连接状态")
             self.ser_open_look_ui(False)
             # 先重设串口设置
             g_var.Port_select = self.ui.serialComboBox.currentText()  # 串口选择
             self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率 重设
-            g_var.Port_select2 = self.ui.serialComboBox2.currentText()  # 串口选择
-            self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率 重设
+            if g_var.Auto_falg == True:
+                g_var.Port_select2 = self.ui.serialComboBox2.currentText()  # 串口选择
+                self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率 重设
 
 
             #再打开串口
             d = self.ser.open(ms.print.emit)  # 打开串口，成功返回0，失败返回1， + str信息
             print(d)
             ms.print.emit(d[1])
-            d = self.ser1.open(ms.print.emit, flag = 1)
-            print(d)
-            ms.print.emit(d[1])
+            if g_var.Auto_falg == True:
+                d = self.ser1.open(ms.print.emit, flag = 1)
+                print(d)
+                ms.print.emit(d[1])
 
     def send(self):
         text = self.ui.sendEdit.text()
         if not (text == "") or not (text is None):
             if self.ser.read_flag:
                 if text[0:2] == "55":
-                    self.ser1.write(text)
-                    ms.print.emit(text + '\n')
+                    if g_var.Auto_falg == True:
+                        self.ser1.write(text)
+                        ms.print.emit(text + '\n')
                 else:
                     self.ser.write(text)
                     ms.print.emit(text)
@@ -202,15 +209,17 @@ class Serial_Init(QWidget):
 
     def ser_open_look_ui(self, status):
         self.ui.serialComboBox.setEnabled(status)
-        self.ui.serialComboBox2.setEnabled(status)
+        if g_var.Auto_falg == True:
+            self.ui.serialComboBox2.setEnabled(status)
 
     def closeEvent(self, event = None):
         """点击右上角 X 时调用"""
         # 1. 停止串口线程
         if hasattr(self, 'ser') and self.ser.read_flag:
             self.ser.stop()
-        if hasattr(self, 'ser1') and self.ser1.read_flag:
-            self.ser1.stop()
+        if g_var.Auto_falg == True:
+            if hasattr(self, 'ser1') and self.ser1.read_flag:
+                self.ser1.stop()
         if event != None:
             event.accept()  # 允许窗口真正关闭
 

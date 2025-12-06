@@ -44,9 +44,9 @@ class myserial():
         try:
             # 创建串口对象
             if stock == 0:
-                self.ser = serial.Serial(self.port, self.bund, timeout=timeout)
+                self.ser = serial.Serial(self.port, self.bund, timeout=timeout, write_timeout=2)
             else:
-                self.ser = serial.Serial(self.port, self.bund)
+                self.ser = serial.Serial(self.port, self.bund, write_timeout=2)
             if self.ser.is_open:
                 print("创建串口成功")
                 # 如果串口成功打开

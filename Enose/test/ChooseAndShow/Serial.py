@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Serial.ui'
+## Form generated from reading UI file 'Serial_1.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##

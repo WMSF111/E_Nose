@@ -1,4 +1,6 @@
 import  sys, re, random, threading, logging
+import time
+
 from PySide6.QtCore import (
     Qt, QObject, Signal, QEvent, QTimer
 )
@@ -7,13 +9,17 @@ from PySide6.QtGui import QColor, QStandardItemModel, QStandardItem, QBrush
 import pandas as pd
 import tool.serial_thread as mythread
 import pyqtgraph as pg
-from resource_ui.ui_pfile.ChooseAndShow import Ui_Gragh_show
 import global_var as g_var
 from itertools import cycle
 import tool.Serial_opea as SO
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 import resource_ui.alg_puifile.pic_tab_add as Tab_add
-
+import tkinter as tk
+from tkinter import messagebox
+if g_var.Auto_falg == True:
+    from resource_ui.ui_pfile.ChooseAndShow import Ui_Gragh_show
+else:
+    from resource_ui.ui_pfile.ChooseAndShow_1 import Ui_Gragh_show
 class MySignals(QObject):
     _draw_open = Signal()
     _draw_close = Signal()
@@ -25,6 +31,7 @@ class MySignals(QObject):
     _print = Signal(int)
     _attendtime_spinBox = Signal(int)
     _Currtem_spinBox = Signal(float)  # 更新当前温度
+    _show_error_message = Signal(str)
 
 class Action():
     def __init__(self, ui: QWidget, ms) -> None:
@@ -69,6 +76,12 @@ class Action():
 
     def _Currtem_spinBox(self, value: float):
         self.ui.Currtem_spinBox.setValue(value) #不断更新现在温度
+
+    def _show_error_message(self, message):
+        # 创建一个根窗口（不显示）
+        root = tk.Tk()
+        root.withdraw()  # 隐藏主窗口
+        messagebox.showerror("错误", message)  # 弹出错误提示框
 
 
 # 主窗口类
@@ -122,13 +135,14 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         # 连接信号
         self.Auto_state = "idle"  # 初始状态为 "idle"
         self.Auto_Button.clicked.connect(self.Auto_Model) #电子鼻自动模式
-        self.Autochoose_Button.clicked.connect(self.Autoinsample) # 自动进样器
         self.Clear_Button.clicked.connect(self.clear_data) # 基线清理阶段
         self.Collectbegin_Button.clicked.connect(self.start_serial) # 采集阶段
         self.Clearroom_Button.clicked.connect(self.clear_room)
         self.InitPos_Button.clicked.connect(self.Stra) #初始化位置
         self.Folder_Button.clicked.connect(self.savefolder) # 确认保存路径
         self.Stop_Button.clicked.connect(self.Stop)  # 全部暂停
+        if g_var.Auto_falg == True:
+            self.Autochoose_Button.clicked.connect(self.Autoinsample)  # 自动进样器
 
     def initMS(self):
         self.ms._draw_open.connect(self.a._draw_open)
@@ -141,26 +155,38 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ms._print.connect(self.a._print)
         self.ms._attendtime_spinBox.connect(self.a._attendtime_spinBox)
         self.ms._Currtem_spinBox.connect(self.a._Currtem_spinBox)
+        self.ms._show_error_message.connect(self.a._show_error_message)
 
     def serial_setting(self):
-        if (g_var.Port_select2 == "" or g_var.Port_select == ""):
-            self.statues_label.setText("串口初始化有问题")
+        if g_var.Auto_falg == True:
+            if (g_var.Port_select2 == "" or g_var.Port_select == ""):
+                self.statues_label.setText("串口初始化有问题")
+            else:
+                self.statues_label.setText("串口初始化成功")
+            sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
+            self.smng = mythread.SerialsMng(sconfig)
+            self.ser = self.smng.ser_arr[0]
+            self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
+            self.ser1 = self.smng.ser_arr[1]
+            self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
+            # 初始化操作对象
+            self.Serialopea = SO.Serial1opea(self.ms, self.ser, self.ser1)
+            self.open_serial1(self.Serialopea.GetSigal1)
         else:
-            self.statues_label.setText("串口初始化成功")
-        sconfig = [g_var.Port_select, g_var.Bund_select, g_var.Port_select2, g_var.Bund_select2]
-        self.smng = mythread.SerialsMng(sconfig)
-        self.ser = self.smng.ser_arr[0]
-        self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
-        self.ser1 = self.smng.ser_arr[1]
-        self.ser1.setSer(sconfig[2], sconfig[3])  # 设置串口及波特率
-        # 初始化操作对象
-        self.Serialopea = SO.Serial1opea(self.ms, self.ser, self.ser1)
+            if (g_var.Port_select == ""):
+                self.statues_label.setText("串口初始化有问题")
+            else:
+                self.statues_label.setText("串口初始化成功")
+            sconfig = [g_var.Port_select, g_var.Bund_select]
+            self.smng = mythread.SerialsMng(sconfig)
+            self.ser = self.smng.ser_arr[0]
+            self.ser.setSer(sconfig[0], sconfig[1])  # 设置串口及波特率
+            self.Serialopea = SO.Serial1opea(self.ms, self.ser)
         # 完成串口信号初始化
         self.open_serial(self.process_data)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.updata)
         self.timer.start(1000)  # 每秒更新一次
-        self.open_serial1(self.Serialopea.GetSigal1)
         # 开启线程
         self.time_th = SO.time_thread()  # 创建时间线程信号
 
@@ -180,6 +206,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.Serialopea.stop("Serialopea函数")
             self.time_th.stop("time_th函数")
         self.ms._draw_close.emit()
+        time.sleep(1)
         self.button_init(True)
 
     def Stra(self): # 暂停或者正式开始
@@ -199,7 +226,8 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         g_var.sample_time = (int)(self.Sample_spinBox.value()) #采样时长
         g_var.exhaust_time = self.Cleartime_spinBox.value() # 洗气时常
         g_var.base_time = self.Basetime_spinBox.value() # 基线时长
-        self.ser1.serialSend('0C', flag=True) #运动轴回到原点
+        if g_var.Auto_falg == True:
+            self.ser1.serialSend('0C', flag=True) #运动轴回到原点
         text = ("base_time:" + str(g_var.base_time) +
                 ",sample_time:" + str(self.Sample_spinBox.value()) +
                 ",exhaust_time:" + str(self.Cleartime_spinBox.value()) + ",flow_velocity:10\r\n")
@@ -225,10 +253,11 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
         g_var.standtime = self.Standtime_spinBox.value() # 保持温度时常
         g_var.target_Sam = self.Simnum_spinBox.value() #样品个数
-
+        time.sleep(1)
         # 到达1号位置
         self.ser1.serialSend("0A", g_var.posxyz[g_var.now_Sam + 1][0], g_var.posxyz[g_var.now_Sam + 1][1],
                              (int)(g_var.posxyz[g_var.now_Sam + 1][2] * 0.1), flag=True)  # 切换到下一个样品位置
+        time.sleep(1)
         # 加热通道1
         self.ser1.serialSend(1, g_var.channal[1], int(self.Heattep_SpinBox.value()), flag=True)
         # 启动自动线程
@@ -253,9 +282,10 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.time_th.thread_loopfun(self.Serialopea.room_clear)
 
     def button_init(self, value):
+        print("按钮初始化")
+        self.ms._Clear_Button.emit(value)
         self.ms._Collectbegin_Button.emit(value)
-        self.ms._Collectbegin_Button.emit(value)
-        self.ms._Collectbegin_Button.emit(value)
+        self.ms._Clearroom_Button.emit(value)
         self.state_open(self.Auto_Button, False)
         self.Auto_state = "idle"
 
@@ -355,7 +385,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def savefile(self):
         try:
-            with global_var.lock:
+            with g_var.lock:
                 # 筛选出选中的传感器数据
                 selected_data = [self.alldata[g_var.sensors.index(sensor)] for sensor in self._data_visible]
             # 转置筛选后的数据
