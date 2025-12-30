@@ -53,8 +53,7 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         )
         if folder_path:  # 如果用户选择了文件夹（而不是取消）
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
-            glov.folder_path = folder_path
-            textEdit_DataFrame = transfo.UI_TXT_TO.merge_files_to_dataframe(glov.folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
+            textEdit_DataFrame = transfo.UI_TXT_TO.merge_files_to_dataframe(folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
             self.tabadd.tabset.add_text_tab(textEdit_DataFrame, "原始数据", html=True)
 
 

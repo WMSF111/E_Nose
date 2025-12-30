@@ -185,7 +185,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.ms._Clear_Button.emit(True)
         self.ms._Clearroom_Button.emit(True)
         print("继续采集")
-        with global_var.lock:
+        with g_var.lock:
             g_var.gettime = (int)(self.Sample_spinBox.value())
             g_var.cleartime = self.Cleartime_spinBox.value() # 洗气时常
             g_var.standtime = self.Basetime_spinBox.value() # 基线时长

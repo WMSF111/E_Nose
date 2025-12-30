@@ -55,8 +55,7 @@ class AlgShow_Init(QWidget, Ui_Alg_show):
         )
         if folder_path:  # 如果用户选择了文件夹（而不是取消）
             self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
-            glov.folder_path = folder_path
-            transfo.UI_TXT_TO.unit_traintxt(glov.folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
+            transfo.UI_TXT_TO.unit_traintxt(folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
             textEdit_DataFrame = transfo.UI_TXT_TO.txt_to_dataframe(glov.trainfile_txt_path) # 读取trainfile.txt并显示到数据源看板
             self.DataBroad.append(textEdit_DataFrame.to_string(index=False))
 

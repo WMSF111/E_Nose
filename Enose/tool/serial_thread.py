@@ -37,7 +37,7 @@ class myserial():
         self.port = port
         self.bund = bund
 
-    def open(self, fun, flag = 0, stock = 0, timeout=1000):
+    def open(self, fun, slip = None, flag = 0, stock = 0, timeout=1000):
         # flag == 1, 16进制
         self.hex_flag = flag
         # 打开串口
@@ -53,7 +53,7 @@ class myserial():
                 with self.lock:
                     self.read_flag = True  # 设置读取标志为 True
                     self.pause_flag = False  # 设置暂停标志为 False
-                rt = threading.Thread(target=self.loopRead, args=(fun,))  # 创建读取线程
+                rt = threading.Thread(target=self.loopRead, args=(fun,slip))  # 创建读取线程
                 # rt.setDaemon(True)  # 设置为守护线程，确保主线程结束时子线程也会结束
                 # rt.setTerminationEnabled(True)
                 rt.start()  # 启动读取线程
@@ -97,7 +97,7 @@ class myserial():
                 except serial.serialutil.SerialException:
                     self.no_error = False
 
-    def loopRead(self, fun):
+    def loopRead(self, fun, slip):
         """
         自动识别数据类型：
           - 纯可打印 ASCII → utf-8 文本
@@ -106,6 +106,8 @@ class myserial():
         """
         buffer = bytearray()  # 创建可变字节数组
         slip_n = b'\n\r'  # 用于按行切帧
+        if slip != None:
+            slip_n = slip.encode()  # 将分隔符转换为字节串
 
         while True:
             with self.lock:
@@ -131,7 +133,7 @@ class myserial():
                                 text[0] == "1" or text[0] == "2" or text[0] == "3" or text[0] == "4"or text[0] == "0"):
                             # 打印当前接收到的信号与预期信号的比较
                             self.getSignal = text.strip()
-                            # print("self.getSignal: ", self.getSignal)
+                            print("self.getSignal: ", self.getSignal)
                             self.sameSignal = (self.getSignal == self.sendSignal)
                             # print("是否相等：", self.sameSignal)
                 else:  # 十六进制接收模式

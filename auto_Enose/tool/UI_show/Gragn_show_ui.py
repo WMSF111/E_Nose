@@ -1,6 +1,8 @@
 import  sys, re, random, threading, logging
 import time
-
+from io import StringIO
+from datetime import datetime
+import os
 from PySide6.QtCore import (
     Qt, QObject, Signal, QEvent, QTimer
 )
@@ -112,6 +114,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
         self.plot_widget.installEventFilter(self)
 
         self.curves = []
+        self.file_count = 1  # 用于追踪文件序号
         self.draw = None
         self.time_th = None
         self.draw_flag = False
@@ -131,7 +134,6 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
         # 初始化串口
         self.serial_setting()
-
         # 连接信号
         self.Auto_state = "idle"  # 初始状态为 "idle"
         self.Auto_Button.clicked.connect(self.Auto_Model) #电子鼻自动模式
@@ -212,6 +214,12 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             self.ser1.pause()
         else:
             self.ser.pause()
+
+    def SerStop(self):
+        self.ser.stop()
+        print("Gragn_show的ser 已关闭")
+        if g_var.Auto_falg == True:
+            self.ser1.stop()
 
     def Stra(self): # 暂停或者正式开始
         if g_var.Auto_falg == True:
@@ -386,9 +394,9 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             return []  # 或者返回一个空列表或其他处理逻辑
 
     def savefolder(self):
-        foldername = QFileDialog.getExistingDirectory(None, "Select Folder", "/")
-        if foldername:  # 如果用户选择了文件夹
-            self.Folder_lineEdit.setText(foldername)  # 设置 QLineEdit 的文本为选择的文件夹路径
+        folder_path = QFileDialog.getExistingDirectory(None, "Select Folder", "/")
+        if folder_path:  # 如果用户选择了文件夹
+            self.Folder_lineEdit.setText(folder_path)  # 设置 QLineEdit 的文本为选择的文件夹路径
         else:  # 如果用户取消了操作
             print("用户取消了选择")
 
@@ -401,7 +409,25 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
             transposed_data = list(map(list, zip(*selected_data)))
             # 假设 selected_data 是一个包含多个传感器数据的二维列表或数组
             selected_data_df = pd.DataFrame(transposed_data, columns=self._data_visible)  # 将数据转换为 DataFrame
-            Tab_add.ADDTAB.save_text(selected_data_df)
+            if self.Folder_lineEdit.text() == "":
+                Tab_add.ADDTAB.save_text(selected_data_df)
+            else:
+                # 获取当前时间
+                current_time = datetime.now()
+                base_filename = current_time.strftime("%Y_%m_%d")  # 格式化为 YYYY_MM_DD
+                file_path = os.path.join(self.Folder_lineEdit.text(), f"{base_filename}_{self.file_count}.txt")
+
+                # 检查文件是否存在，并增加计数器
+                while os.path.exists(file_path):
+                    self.file_count += 1
+                    file_path = os.path.join(self.Folder_lineEdit.text(), f"{base_filename}_{self.file_count}.txt")
+
+                # 将 DataFrame 转换为文本字符串
+                text_str = selected_data_df.to_csv(index=False, sep=' ')
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(text_str)  # 保存为 TXT 文件
+
+                print(f"Text file saved to {file_path}")
 
         except Exception as e:
             print("保存失败: " + str(e))
@@ -490,7 +516,7 @@ class GraphShowWindow(QWidget, Ui_Gragh_show):
 
     def closeEvent(self, event):
         # 1. 停所有串口线程
-        if hasattr(self, 'smng'):
+        if hasattr(self, 'smng'): # 关闭所有串口
             for sop in self.smng.ser_arr:
                 if hasattr(sop, 'read_flag'):
                     sop.read_flag = False

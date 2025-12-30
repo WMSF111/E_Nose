@@ -20,9 +20,6 @@ class DATAFRAME_TO():
         header = self.df.columns.tolist()  # 获取Dataframe的列名，并转换为列表
         return header  # 返回结果，一个字典和一个列表
 
-    def csv(self, folders):
-        if global_var.folders != ' ':
-            self.df.to_csv(folders,index=False) # 不保存dataframe索引
 
 class READ_FILE():
     def read_allfile(script_dir): # 读取所有文件并返回文件名列表
@@ -221,53 +218,6 @@ class UI_TXT_TO():
             # 将从第二列开始的数据转换为浮动数，并存入 remaining_columns
             remaining_columns.append([float(x) for x in row_data[1:]])  # 转换为浮动数
         return first_column, remaining_columns
-
-
-    def Choose_Filter_Alg(self, filter_preprocess):
-        # data = global_var.textEdit_DataFrame.iloc[1:, 1:].copy()  # 获取数据部分（去除列头和行头）
-        data = global_var.textEdit_DataFrame
-        for column in data.columns: # 按列处理, column 是当前列的列名
-            column_data = data[column].astype(int).tolist()
-            if filter_preprocess == "算术平均滤波法":
-                # window_size: 窗口大小，用于计算中位值，输入整数，越小越接近原数据
-                result = filter.ArithmeticAverage(column_data.copy(), 2)
-            elif filter_preprocess == "递推平均滤波法":
-                result = filter.SlidingAverage(column_data.copy(), 2)
-            elif filter_preprocess == "中位值平均滤波法":
-                result = filter.MedianAverage(column_data.copy(), 2)
-            elif filter_preprocess == "一阶滞后滤波法":
-                # 滞后程度决定因子，0~1（越大越接近原数据）
-                result = filter.FirstOrderLag(column_data.copy(), 0.9)
-            elif filter_preprocess == "加权递推平均滤波法":
-                # 平滑系数，范围在0到1之间（越大越接近原数据）
-                result = filter.WeightBackstepAverage(column_data.copy(), 0.9)
-            elif filter_preprocess == "消抖滤波法":
-                # N:消抖上限,范围在2以上。
-                result = filter.ShakeOff(column_data.copy(), 4)
-            elif filter_preprocess == "限幅消抖滤波法":
-                # Amplitude:限制最大振幅,范围在0 ~ ∞ 建议设大一点
-                # N:消抖上限,范围在0 ~ ∞
-                result = filter.AmplitudeLimitingShakeOff(column_data.copy(), 200, 3)
-            # data.iloc[1:, data.columns.get_loc(column)] = result
-            data[column] = result #将滤波后的数据替换原数据
-
-        # 将处理结果放回到原数据中
-        global_var.textEdit_DataFrame.iloc[1:, 1:] = data
-        global_var.textEdit_nolc_DataFrame = global_var.textEdit_DataFrame.iloc[1:, 1:]
-        # # 删除第一行(获取无列头数据):无header数据
-        # global_var.file_text_nolc_DataFrame = global_var.textEdit_DataFrame.drop(0)  # 0 是第一行的索引
-        # # 删除第一列
-        # global_var.file_text_nolc_DataFrame = global_var.textEdit_DataFrame.drop(
-        #     global_var.file_text_nolc_DataFrame.columns[0], axis=1)  # df.columns[0] 是第一列的名称
-        self.ui.tab1.textEdit.clear()
-        self.ui.tab1.textEdit.append(global_var.textEdit_DataFrame.to_string(index=False))
-        self.text = self.ui.tab1.textEdit.toPlainText()
-        pl.title(global_var.filter_preprocess)
-        pl.subplot(2, 1, 1)
-        pl.plot(column_data)
-        pl.subplot(2, 1, 2)
-        pl.plot(result)
-        pl.show()
 
     # 提取第一个文件的扩展名
     def get_file_extension(file_path):

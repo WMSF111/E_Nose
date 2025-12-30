@@ -105,6 +105,8 @@ class MainWindow(QMainWindow):
 
         # SHOW HOME PAGE
         if btnName == "btn_serial":
+            if self.test_show.ser:
+                self.test_show.SerStop()
             widgets.stackedWidget.setCurrentWidget(self.serial_init)
             UIFunctions.resetStyle(self, btnName)
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
@@ -112,10 +114,11 @@ class MainWindow(QMainWindow):
 
         # SHOW WIDGETS PAGE
         if btnName == "btn_test":
-            self.serial_init.closeEvent()
-            if self.serial_init:
+            try:
                 if self.serial_init.ser:
-                    self.serial_init.ser.stop()
+                    self.serial_init.openPort()
+            except:
+                self.show_error_message("请先选择串口")
             # 创建并测试窗口
             self.test_show = GraphShowWindow()
             widgets.stackedWidget.addWidget(self.test_show)  # 将串口界面添加到 stackedWidget
@@ -136,12 +139,12 @@ class MainWindow(QMainWindow):
                 self.flask_thread.start()
                 resource_ui.web_app.open_browser()
             except:
-                self.show_error_message()
+                self.show_error_message("无法打开链接")
 
         # PRINT BTN NAME
         print(f'Button "{btnName}" pressed!')
 
-    def show_error_message(self):
+    def show_error_message(self, text):
         # 创建一个QMessageBox实例
         msg = QMessageBox()
 
@@ -150,7 +153,7 @@ class MainWindow(QMainWindow):
 
         # 设置消息框的标题和内容
         msg.setWindowTitle("错误")
-        msg.setText("无法打开链接:")
+        msg.setText(text)
 
         # 设置消息框的按钮
         msg.setStandardButtons(QMessageBox.Ok)
