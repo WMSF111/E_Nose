@@ -119,12 +119,11 @@ class MainWindow(QMainWindow):
         UIFunctions.resetStyle(self, 'btn_serial')
         button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
-    def _handle_test_button(self, button):
-        """处理测试按钮点击 - 切换到图表显示页面"""
-        self._stop_serial_connection()
-        WIDGETS.stackedWidget.setCurrentWidget(self.test_show)
-        UIFunctions.resetStyle(self, 'btn_test')
-        button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
+        # SHOW HOME PAGE
+        if btnName == "btn_serial":
+            widgets.stackedWidget.setCurrentWidget(self.serial_init)
+            UIFunctions.resetStyle(self, btnName)
+            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
 
     def _handle_algorithm_button(self, button):
         """处理算法按钮点击 - 切换到算法配置页面"""
@@ -132,23 +131,30 @@ class MainWindow(QMainWindow):
         UIFunctions.resetStyle(self, 'btn_alg')
         button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
-    def _handle_webapp_button(self, button):
-        """处理Web应用按钮点击 - 启动Flask Web服务器"""
-        try:
-            self.flask_thread = threading.Thread(target=run, daemon=True)
-            self.flask_thread.start()
-            resource_ui.web_app.open_browser()
-            UIFunctions.resetStyle(self, 'btn_ai')
-            button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
+        # SHOW WIDGETS PAGE
+        if btnName == "btn_test":
+            self.serial_init.closeEvent()
+            if self.serial_init:
+                if self.serial_init.ser:
+                    self.serial_init.ser.stop()
+            # 创建并测试窗口
+            self.test_show = GraphShowWindow()
+            widgets.stackedWidget.addWidget(self.test_show)  # 将串口界面添加到 stackedWidget
+            widgets.stackedWidget.setCurrentWidget(self.test_show)
+            UIFunctions.resetStyle(self, btnName)
+            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
 
         except Exception:
             self._show_error_message()
 
-    def _stop_serial_connection(self):
-        """停止串口连接，确保资源正确释放"""
-        try:
-            if hasattr(self.serial_init, 'closeEvent'):
-                self.serial_init.closeEvent()
+        if btnName == "btn_ai":
+            try:
+                # 创建一个线程来启动 Flask 应用
+                self.flask_thread = threading.Thread(target=run)
+                self.flask_thread.start()
+                resource_ui.web_app.open_browser()
+            except:
+                self.show_error_message()
 
             if hasattr(self.serial_init, 'ser') and self.serial_init.ser:
                 if hasattr(self.serial_init.ser, 'stop'):
@@ -156,15 +162,25 @@ class MainWindow(QMainWindow):
         except Exception:
             pass
 
-    def _show_error_message(self):
-        """显示错误消息对话框"""
-        message_box = QMessageBox()
-        message_box.setIcon(QMessageBox.Icon.Critical)
-        message_box.setWindowTitle("错误")
-        message_box.setText("无法打开链接:")
-        message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-        message_box.exec()
+    def show_error_message(self):
+        # 创建一个QMessageBox实例
+        msg = QMessageBox()
 
+        # 设置消息框的类型为错误
+        msg.setIcon(QMessageBox.Critical)
+
+        # 设置消息框的标题和内容
+        msg.setWindowTitle("错误")
+        msg.setText("无法打开链接:")
+
+        # 设置消息框的按钮
+        msg.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg.exec()
+
+    # RESIZE EVENTS
+    # ///////////////////////////////////////////////////////////////
     def resizeEvent(self, event):
         """窗口大小调整事件处理"""
         super().resizeEvent(event)

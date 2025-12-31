@@ -112,7 +112,10 @@ class AlgInit(QWidget, Ui_Form):
             "",  # 默认打开的目录（空表示当前目录）
         )
         if folder_path:  # 如果用户选择了文件夹（而不是取消）
-            self.lineEdit_Dir.setText(folder_path)  # 显示到 QLineEdit
+            self.FilePath_lineEdit.setText(folder_path)  # 显示到 QLineEdit
+            glov.folder_path = folder_path
+            textEdit_DataFrame = transfo.UI_TXT_TO.merge_files_to_dataframe(glov.folder_path) # 遍历文件夹中的.txt合并成trainfile.txt
+            self.tabadd.tabset.add_text_tab(textEdit_DataFrame, "原始数据", html=True)
 
             # 从末尾开始移除行
             for row in reversed(range(self.table_FileList.rowCount())):
