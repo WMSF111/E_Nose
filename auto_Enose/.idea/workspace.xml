@@ -69,7 +69,11 @@
     "Python.knn.executor": "Run",
     "Python.main.executor": "Run",
     "Python.pic_tab_add.executor": "Run",
+<<<<<<< HEAD
     "Python.running.executor": "Debug",
+=======
+    "Python.running.executor": "Run",
+>>>>>>> parent of bede0b5 (111)
     "Python.running_main.executor": "Run",
     "Python.svm.executor": "Run",
     "Python.test.executor": "Run",
