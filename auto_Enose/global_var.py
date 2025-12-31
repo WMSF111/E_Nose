@@ -1,7 +1,16 @@
 import threading, os
 
+headers_list = [] # 列头列表
+textEdit_DataFrame = ' ' # 编辑框的文字
+textEdit_nolc_DataFrame = ' ' # 编辑框内无列头行头数据
+folders = ' '
+trainfile_txt_path = ' ' # 训练集路径
+header_trainfile_txt_path = ' ' # 训练集路径
+folder_path = ' '
 # 算法
+filter_preprocess = ' '
 themeFile = os.path.join(os.path.dirname(__file__), "py_dracula_light.qss")
+
 
 Com_select = " "
 Port_select = ""

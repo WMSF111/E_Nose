@@ -13,7 +13,9 @@
 # https://doc.qt.io/qtforpython/licenses.html
 #
 # ///////////////////////////////////////////////////////////////
+from PySide6.QtGui import QIcon
 
+from resource_ui.widgets import CustomGrip
 # MAIN FILE
 # ///////////////////////////////////////////////////////////////
 from running import *

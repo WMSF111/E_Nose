@@ -7,7 +7,102 @@ from sklearn.neighbors import KNeighborsClassifier
 import random
 from sklearn.linear_model import LogisticRegression
 
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis  # LDA
+from sklearn.svm import SVC  # SVM分类
+from sklearn.ensemble import RandomForestClassifier  # RF
 
+class Classify:
+    """
+    分类模型：LDA、SVM、RF（随机森林）
+    """
+    def __init__(self, DataFrame, test_size, random_state=42, mix=True):
+        """ LDA算法模型
+            Args:
+                DataFrame:  数据集
+                test_size:  测试集占总数据集的比例
+                random_state: 数据分割的随机性种子（random_state=42 结果可复现， random_state=None 每次运行结果不同）
+                Mix： True打乱顺序
+        """
+        self.target_map, self.target, self.data = read(DataFrame, mix)  # 训练数据级、预测数据级
+        self.num_target = transfer(self.target_map, self.target)  # 转化为数字target
+
+        self.random_state = random_state
+
+        # stratify-保持分割后训练集和测试集中类别的比例与原数据集一致(这里取y，表示按标签的分布进行分层抽样)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
+            self.data, self.target, test_size=test_size, random_state=random_state, stratify=self.target)
+        print(f"训练集: {self.X_train.shape}, 测试集: {self.X_test.shape}")
+
+        self.X_train, self.X_test = standart(self.X_train, self.X_test)     # 标准化训练集和测试集
+        self.X_combine = np.vstack((self.X_train, self.X_test))        # 竖直堆叠数组
+        self.y_combine = np.hstack((self.y_train, self.y_test))        # 水平拼接数组
+
+    def lda(self):
+        """ LDA算法模型 """
+
+        print("分类模型LDA......")
+        lda = LinearDiscriminantAnalysis(
+            solver='svd',  # 奇异值分解，适用于特征数较多的情况
+            # solver='lsqr',  # 最小二乘解，可以用于收缩
+            # solver='eigen',  # 特征值分解
+            shrinkage=None,  # 可选: 'auto' 或 0-1之间的值，用于正则化
+            priors=None,  # 可选: 各类别的先验概率
+            n_components=None  # 可选: 要保留的组件数
+        )
+        lda.fit(self.X_train, self.y_train)         # 训练
+        y_pred = lda.predict(self.X_test)           # 预测
+        accuracy = accuracy_score(self.y_test, y_pred)
+        print(f"准确率: {accuracy:.4f}")
+
+        return self.X_combine, self.y_combine, self.y_test, y_pred, lda    #返回
+
+    def svm(self):
+        """ SVM算法模型 """
+
+        base_svc = SVC(
+            C=1.0,  # 正则化参数
+            kernel='rbf',  # 核函数：'linear', 'poly', 'rbf', 'sigmoid'
+            gamma='scale',  # 核系数：'scale', 'auto', 或具体数值
+            degree=3,  # 多项式核的阶数
+            probability=True,  # 是否启用概率估计（会减慢训练）
+            random_state=self.random_state,
+            verbose=False  # 是否输出详细日志
+        )
+        base_svc.fit(self.X_train, self.y_train)        # 训练
+        y_pred = base_svc.predict(self.X_test)          # 预测
+        accuracy = accuracy_score(self.y_test, y_pred)
+        print(f"准确率: {accuracy:.4f}")
+
+        return self.X_combine, self.y_combine, self.y_test, y_pred, base_svc    # 返回
+
+    def rf(self):
+        """ RF算法模型(基础随机森林模型) """
+
+        base_rf = RandomForestClassifier(
+            n_estimators=100,  # 树的数量
+            criterion='gini',  # 分割标准：'gini'或'entropy'
+            max_depth=None,  # 树的最大深度
+            min_samples_split=2,  # 内部节点再划分所需最小样本数
+            min_samples_leaf=1,  # 叶节点最少样本数
+            min_weight_fraction_leaf=0.0,
+            max_features='sqrt',  # 寻找最佳分割时考虑的特征数量
+            max_leaf_nodes=None,
+            min_impurity_decrease=0.0,
+            bootstrap=True,  # 是否使用bootstrap采样
+            oob_score=False,  # 是否使用袋外样本评估
+            n_jobs=-1,  # 并行作业数（-1表示使用所有核心）
+            random_state=self.random_state,
+            verbose=0,
+            warm_start=False,
+            class_weight=None,  # 类别权重
+            ccp_alpha=0.0
+        )
+        base_rf.fit(self.X_train, self.y_train)     # 训练
+        y_pred = base_rf.predict(self.X_test)       # 预测
+        accuracy = accuracy_score(self.y_test, y_pred)
+        print(f"准确率: {accuracy:.4f}")
+
+        return self.X_combine, self.y_combine, self.y_test, y_pred, base_rf  # 返回
 
 class TRAIN():
     # 输入： finalData=数据级 target =数据标签 test_size = 训练集数量（0.1-0.9）

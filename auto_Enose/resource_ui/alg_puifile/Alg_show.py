@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Alg_show.ui'
+## Form generated from reading UI file 'Alg_showriTkcR.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.1
+## Created by: Qt User Interface Compiler version 6.7.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -94,7 +94,7 @@ class Ui_Alg_show(object):
 
         self.label_4 = QLabel(self.groupBox_3)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setLayoutDirection(Qt.LeftToRight)
+        self.label_4.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.gridLayout_4.addWidget(self.label_4, 1, 0, 1, 1)
 
@@ -105,13 +105,13 @@ class Ui_Alg_show(object):
 
         self.label_3 = QLabel(self.groupBox_3)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setLayoutDirection(Qt.LeftToRight)
+        self.label_3.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.gridLayout_4.addWidget(self.label_3, 5, 0, 1, 1)
 
         self.label_2 = QLabel(self.groupBox_3)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setLayoutDirection(Qt.LeftToRight)
+        self.label_2.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.gridLayout_4.addWidget(self.label_2, 3, 0, 1, 1)
 

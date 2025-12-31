@@ -21,7 +21,7 @@
     </size>
    </property>
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,4">
     <item>
@@ -43,7 +43,7 @@
       </item>
       <item>
        <property name="text">
-        <string>算法选择</string>
+        <string>模型计算</string>
        </property>
       </item>
       <item>

@@ -102,6 +102,7 @@ class ALG_TAB_ADD():
                 X_combine, y_combine, y_test, y_pred, model = A_class.knn(knn_show.desize, knn_show.alg, knn_show.N) # 传入训练级比例级临数
 
         if (selected_item == "逻辑回归"):
+
             lr = alg_show.LRSHOW() # LR弹窗
             self.ui.Reg_ComboBox.setCurrentIndex(0)
             if lr.exec() == QDialog.Accepted:  # 等待弹窗关闭

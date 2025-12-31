@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'MianWindow.ui'
+## Form generated from reading UI file 'MianWindoweDiZvh.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.1
+## Created by: Qt User Interface Compiler version 6.7.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QHeaderView,
     QMainWindow, QSizePolicy, QStatusBar, QTreeWidget,
     QTreeWidgetItem, QWidget)
-
+import icon_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setMinimumSize(QSize(1077, 630))
-        self.centralwidget.setLayoutDirection(Qt.LeftToRight)
+        self.centralwidget.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.horizontalLayout_3 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.treeWidget = QTreeWidget(self.centralwidget)
@@ -92,7 +92,7 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem2 = self.treeWidget.topLevelItem(1)
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"\u6d4b\u8bd5\u9636\u6bb5", None));
         ___qtreewidgetitem3 = self.treeWidget.topLevelItem(2)
-        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u7b97\u6cd5\u9009\u62e9", None));
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u6a21\u578b\u8ba1\u7b97", None));
         ___qtreewidgetitem4 = self.treeWidget.topLevelItem(3)
         ___qtreewidgetitem4.setText(0, QCoreApplication.translate("MainWindow", u"\u5927\u6a21\u578b\u5206\u6790", None));
         self.treeWidget.setSortingEnabled(__sortingEnabled)

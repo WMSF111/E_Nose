@@ -168,6 +168,7 @@ class Ui_MainWindow(object):
         self.btn_alg.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.btn_alg.setLayoutDirection(Qt.LeftToRight)
         self.btn_alg.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-file.png);")
+        self.btn_alg.setText("模型算法")
 
         self.verticalLayout_8.addWidget(self.btn_alg)
 
@@ -182,6 +183,7 @@ class Ui_MainWindow(object):
         self.btn_ai.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-save.png)")
 
         self.verticalLayout_8.addWidget(self.btn_ai)
+
 
 
         self.verticalMenuLayout.addWidget(self.topMenu, 0, Qt.AlignTop)
@@ -609,6 +611,7 @@ class Ui_MainWindow(object):
         self.btn_serial.setText(QCoreApplication.translate("MainWindow", u"\u4e32\u53e3\u8bbe\u7f6e", None))
         self.btn_test.setText(QCoreApplication.translate("MainWindow", u"\u6d4b\u8bd5\u9636\u6bb5", None))
         self.btn_alg.setText(QCoreApplication.translate("MainWindow", u"\u7b97\u6cd5\u9009\u62e9", None))
+
         self.btn_ai.setText(QCoreApplication.translate("MainWindow", u"\u5927\u6a21\u578b", None))
         self.extraLabel.setText(QCoreApplication.translate("MainWindow", u"Left Box", None))
         self.btn_share.setText(QCoreApplication.translate("MainWindow", u"Share", None))

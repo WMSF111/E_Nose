@@ -1,202 +1,223 @@
-import sys
-
 import global_var
+import os
+import sys
+import threading
+import signal
 import resource_ui.web_app
 from resource_ui.modules import *
-from resource_ui.widgets import *
-import resource_ui.themes as theme
 from resource_ui.web_app import run
-from PySide6.QtWidgets import QApplication
-import os
-import threading
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import tool.UI_show.serial_show as se
-from PySide6.QtWidgets import QMainWindow, QMessageBox
 from tool.UI_show.Gragn_show_ui import GraphShowWindow
-from tool.UI_show.Alg_ui_show import AlgShow_Init
+from tool.UI_show.alg.form.AlgUi import AlgUIFrame # 第三版界面
 
-os.environ["QT_FONT_DPI"] = "150" # FIX Problem for High DPI and Scale above 100%
-widgets = None
+# 高DPI支持 - 确保在高分辨率显示器上正确显示
+#os.environ["QT_FONT_DPI"] = "150"
+
+# 全局变量替换为模块级常量
+WIDGETS = None  # UI组件全局引用，用于外部访问
+APP_TITLE = "实验平台"  # 应用程序标题
+APP_DESCRIPTION = "智能电子鼻实验及算法平台"  # 应用程序描述
+
 
 class MainWindow(QMainWindow):
-    def __init__(self):
-        QMainWindow.__init__(self)
+    """主窗口类，负责应用程序的UI和功能管理"""
 
-        # SET AS GLOBAL WIDGETS
-        # ///////////////////////////////////////////////////////////////
+    def __init__(self):
+        """初始化主窗口"""
+        super().__init__()
+        self._init_ui()
+        self._setup_window()
+        self._init_modules()
+        # 连接信号和槽
+        self._connect_signals()
+        self._apply_theme()
+        self.showMaximized() #.showNormal()  # 可以切换为 showMaximized() 以全屏显示
+        self._set_initial_page()
+
+    def _init_ui(self):
+        """初始化UI组件"""
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        global widgets
-        widgets = self.ui
+        UIFunctions.uiDefinitions(self)
+        # 设置全局UI引用，便于其他模块访问
+        global WIDGETS
+        WIDGETS = self.ui
 
+    def _setup_window(self):
+        """设置窗口基本属性"""
+        # 设置窗口标题
+        self.setWindowTitle(APP_TITLE)
 
-        # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
-        # ///////////////////////////////////////////////////////////////
+        WIDGETS.titleLeftApp.setText(APP_TITLE)
+        WIDGETS.titleRightInfo.setText(APP_DESCRIPTION)
+
+        # 启用自定义标题栏（Mac/Linux可能需要设为False）
         Settings.ENABLE_CUSTOM_TITLE_BAR = True
 
-        # APP NAME
-        # ///////////////////////////////////////////////////////////////
-        title = "实验平台"
-        description = "智能电子鼻实验及算法平台"
-        # APPLY TEXTS
-        self.setWindowTitle(title)
-        widgets.titleLeftApp.setText(title)
-        widgets.titleRightInfo.setText(description)
+    def _init_modules(self):
+        """初始化所有功能模块"""
+        # 串口设置
+        self.serial_init = se.Serial_Init()
+        WIDGETS.stackedWidget.addWidget(self.serial_init)
 
-        # TOGGLE MENU
-        # ///////////////////////////////////////////////////////////////
-        widgets.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
+        # 测试阶段
+        self.test_show = GraphShowWindow()
+        WIDGETS.stackedWidget.addWidget(self.test_show)
 
-        # SET UI DEFINITIONS
-        # ///////////////////////////////////////////////////////////////
-        UIFunctions.uiDefinitions(self)
+        # 算法选择
+        self.alg_show = AlgUIFrame() #AlgInit()#AlgUiFrame()#AlgUIFrame()
+        WIDGETS.stackedWidget.addWidget(self.alg_show)
 
-        # # QTableWidget PARAMETERS
-        # # ///////////////////////////////////////////////////////////////
-        # widgets.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # Flask线程变量，用于启动Web应用
+        self.flask_thread = None
 
-        # BUTTONS CLICK
-        # ///////////////////////////////////////////////////////////////
+    def _connect_signals(self):
+        """连接所有信号和槽函数"""
+        WIDGETS.toggleButton.clicked.connect(
+            lambda: UIFunctions.toggleMenu(self, True)
+        )
 
-        # 左侧菜单栏按钮初始化
-        widgets.btn_serial.clicked.connect(self.buttonClick)
-        widgets.btn_test.clicked.connect(self.buttonClick)
-        widgets.btn_alg.clicked.connect(self.buttonClick)
-        widgets.btn_ai.clicked.connect(self.buttonClick)
+        WIDGETS.btn_serial.clicked.connect(self._on_button_click)  # 串口页面
+        WIDGETS.btn_test.clicked.connect(self._on_button_click)  # 测试页面
+        WIDGETS.btn_alg.clicked.connect(self._on_button_click)  # 算法页面
+        WIDGETS.btn_ai.clicked.connect(self._on_button_click)  # AI/Web页面
 
+    def _apply_theme(self):
+        """应用主题样式到应用程序"""
+        use_custom_theme = True
 
-        # SHOW APP
-        # ///////////////////////////////////////////////////////////////
-        self.show()
-
-        # 设置主题颜色
-        # ///////////////////////////////////////////////////////////////
-        useCustomTheme = True
-        themeFile = global_var.themeFile
-
-
-        # 设置主题
-        if useCustomTheme:
-            # 下载并应用主题
-            UIFunctions.theme(self, themeFile, True)
+        if use_custom_theme:
+            theme_file = global_var.themeFile
+            UIFunctions.theme(self, theme_file, True)
             AppFunctions.setThemeHack(self)
 
-        # 设置按钮界面
-        # 初始化串口界面
-        self.serial_init = se.Serial_Init()  # 创建Serial_Init实例
-        widgets.stackedWidget.addWidget(self.serial_init)  # 将串口界面添加到 stackedWidget
-        # 创建并测试窗口
-        self.test_show = GraphShowWindow()
-        widgets.stackedWidget.addWidget(self.test_show)  # 将串口界面添加到 stackedWidget
-        # 创建并显示算法设置窗口
-        self.alg_show = AlgShow_Init()
-        widgets.stackedWidget.addWidget(self.alg_show)  # 将串口界面添加到 stackedWidget
+    def _set_initial_page(self):
+        """设置应用程序启动时的默认页面"""
+        WIDGETS.stackedWidget.setCurrentWidget(self.serial_init)
+        WIDGETS.btn_serial.setStyleSheet(UIFunctions.selectMenu(WIDGETS.btn_serial.styleSheet()))
 
-        widgets.btn_serial.setStyleSheet(UIFunctions.selectMenu(widgets.btn_serial.styleSheet()))
+    def _on_button_click(self):
+        """处理所有按钮的点击事件"""
+        button = self.sender()
+        button_name = button.objectName()
 
+        button_handlers = {
+            'btn_serial': self._handle_serial_button,  # 串口设置
+            'btn_test': self._handle_test_button,  # 测试阶段
+            'btn_alg': self._handle_algorithm_button,  # 算法选择
+            'btn_ai': self._handle_webapp_button,  # 大模型
+        }
 
-    # BUTTONS CLICK
-    # Post here your functions for clicked buttons
-    # ///////////////////////////////////////////////////////////////
-    def buttonClick(self):
+        handler = button_handlers.get(button_name)
+        if handler:
+            handler(button)
 
-        # GET BUTTON CLICKED
-        btn = self.sender()
-        btnName = btn.objectName()
+    def _handle_serial_button(self, button):
+        """处理串口按钮点击 - 切换到串口页面"""
+        WIDGETS.stackedWidget.setCurrentWidget(self.serial_init)
+        UIFunctions.resetStyle(self, 'btn_serial')
+        button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
-        # SHOW HOME PAGE
-        if btnName == "btn_serial":
-            if self.test_show.ser:
-                self.test_show.SerStop()
-            widgets.stackedWidget.setCurrentWidget(self.serial_init)
-            UIFunctions.resetStyle(self, btnName)
-            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
+    def _handle_test_button(self, button):
+        """处理测试按钮点击 - 切换到图表显示页面"""
+        self._stop_serial_connection()
+        WIDGETS.stackedWidget.setCurrentWidget(self.test_show)
+        UIFunctions.resetStyle(self, 'btn_test')
+        button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
+    def _handle_algorithm_button(self, button):
+        """处理算法按钮点击 - 切换到算法配置页面"""
+        WIDGETS.stackedWidget.setCurrentWidget(self.alg_show)
+        UIFunctions.resetStyle(self, 'btn_alg')
+        button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
-        # SHOW WIDGETS PAGE
-        if btnName == "btn_test":
-            try:
-                if self.serial_init.ser:
-                    self.serial_init.openPort()
-            except:
-                self.show_error_message("请先选择串口")
-            # 创建并测试窗口
-            self.test_show = GraphShowWindow()
-            widgets.stackedWidget.addWidget(self.test_show)  # 将串口界面添加到 stackedWidget
-            widgets.stackedWidget.setCurrentWidget(self.test_show)
-            UIFunctions.resetStyle(self, btnName)
-            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
+    def _handle_webapp_button(self, button):
+        """处理Web应用按钮点击 - 启动Flask Web服务器"""
+        try:
+            self.flask_thread = threading.Thread(target=run, daemon=True)
+            self.flask_thread.start()
+            resource_ui.web_app.open_browser()
+            UIFunctions.resetStyle(self, 'btn_ai')
+            button.setStyleSheet(UIFunctions.selectMenu(button.styleSheet()))
 
-        # SHOW NEW PAGE
-        if btnName == "btn_alg":
-            widgets.stackedWidget.setCurrentWidget(self.alg_show) # SET PAGE
-            UIFunctions.resetStyle(self, btnName) # RESET ANOTHERS BUTTONS SELECTED
-            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet())) # SELECT MENU
+        except Exception:
+            self._show_error_message()
 
-        if btnName == "btn_ai":
-            try:
-                # 创建一个线程来启动 Flask 应用
-                self.flask_thread = threading.Thread(target=run)
-                self.flask_thread.start()
-                resource_ui.web_app.open_browser()
-            except:
-                self.show_error_message("无法打开链接")
+    def _stop_serial_connection(self):
+        """停止串口连接，确保资源正确释放"""
+        try:
+            if hasattr(self.serial_init, 'closeEvent'):
+                self.serial_init.closeEvent()
 
-        # PRINT BTN NAME
-        print(f'Button "{btnName}" pressed!')
+            if hasattr(self.serial_init, 'ser') and self.serial_init.ser:
+                if hasattr(self.serial_init.ser, 'stop'):
+                    self.serial_init.ser.stop()
+        except Exception:
+            pass
 
-    def show_error_message(self, text):
-        # 创建一个QMessageBox实例
-        msg = QMessageBox()
+    def _show_error_message(self):
+        """显示错误消息对话框"""
+        message_box = QMessageBox()
+        message_box.setIcon(QMessageBox.Icon.Critical)
+        message_box.setWindowTitle("错误")
+        message_box.setText("无法打开链接:")
+        message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        message_box.exec()
 
-        # 设置消息框的类型为错误
-        msg.setIcon(QMessageBox.Critical)
-
-        # 设置消息框的标题和内容
-        msg.setWindowTitle("错误")
-        msg.setText(text)
-
-        # 设置消息框的按钮
-        msg.setStandardButtons(QMessageBox.Ok)
-
-        # 显示消息框
-        msg.exec()
-
-    # RESIZE EVENTS
-    # ///////////////////////////////////////////////////////////////
     def resizeEvent(self, event):
-        # Update Size Grips
+        """窗口大小调整事件处理"""
+        super().resizeEvent(event)
         UIFunctions.resize_grips(self)
 
-    # MOUSE CLICK EVENTS
-    # ///////////////////////////////////////////////////////////////
     def mousePressEvent(self, event):
-        # SET DRAG POS WINDOW
+        """鼠标按下事件处理"""
+        super().mousePressEvent(event)
         self.dragPos = event.globalPos()
 
-        # PRINT MOUSE EVENTS
-        if event.buttons() == Qt.LeftButton:
-            print('Mouse click: LEFT CLICK')
-        if event.buttons() == Qt.RightButton:
-            print('Mouse click: RIGHT CLICK')
-
     def closeEvent(self, event):
+        """窗口关闭事件处理"""
         print("关闭事件")
-        self.serial_init.closeEvent(event)
-        self.test_show.closeEvent(event)
-        self.alg_show.closeEvent(event)
-        # resource_ui.web_app.shutdown()
-        import os,signal
+        self._close_modules(event)
+        self._graceful_shutdown()
+        event.accept()
 
-        pid = os.getpid()  # 获取当前进程的PID
-        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
+    def _close_modules(self, event):
+        """关闭所有功能模块，确保资源正确释放"""
+        modules_to_close = [
+            self.serial_init,
+            self.test_show,
+            self.alg_show,
+        ]
 
+        for module in modules_to_close:
+            if module and hasattr(module, 'closeEvent'):
+                try:
+                    module.closeEvent(event)
+                except Exception as e:
+                    print(f"关闭模块时出错: {e}")
+
+    def _graceful_shutdown(self):
+        """关闭应用程序，先尝试正常关闭，失败则强制结束"""
+        try:
+            if hasattr(resource_ui.web_app, 'shutdown'):
+                resource_ui.web_app.shutdown()
+        except Exception:
+            pid = os.getpid()
+            os.kill(pid, signal.SIGTERM)
+
+
+def main():
+    """应用程序主函数"""
+    app = QApplication(sys.argv)
+    icon_path = os.path.join(os.path.dirname(__file__), "icon.ico")
+    if os.path.exists(icon_path):
+        app.setWindowIcon(QIcon(icon_path))
+
+    window = MainWindow()
+    return app.exec()
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    icon = os.path.join(os.path.dirname(__file__), "icon.ico")
-    app.setWindowIcon(QIcon(icon))
-    window = MainWindow()
-    sys.exit(app.exec())
-
-
+    # 程序入口
+    sys.exit(main())

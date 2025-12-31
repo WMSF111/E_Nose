@@ -76,6 +76,8 @@ class Serial_Init(QWidget):
         self.initMS()
         self.ports = []
         self.Port_select = ""
+        self.initallSerial()
+        # self.set_initial_baud_rate(g_var.Bund_select)
         self.Com_Dict = {}
 
     def set_initial_baud_rate(self, baud_rate):
@@ -102,12 +104,10 @@ class Serial_Init(QWidget):
         self.ui.connectButton.clicked.connect(self.openPort)  # 链接按钮选择
         self.ui.sendButton.clicked.connect(self.send)  # sendButton联系
         # 串口信息显示
-        self.ui.serialComboBox.setEnabled(False)
         self.ui.serialComboBox.currentTextChanged.connect(
             lambda: self.initComboBox(self.ui.serialComboBox, self.ui.statues)
         )
         if g_var.Auto_falg == True:
-            self.ui.serialComboBox2.setEnabled(False)
             self.ui.serialComboBox2.currentTextChanged.connect(
                 lambda: self.initComboBox(self.ui.serialComboBox2, self.ui.statues_3)
             )
@@ -126,9 +126,7 @@ class Serial_Init(QWidget):
             ms._serialComboBoxResetItems.emit([i.name for i in self.ports])  # 添加所有串口
 
     def initallSerial(self):
-        self.ui.serialComboBox.setEnabled(True)
         if g_var.Auto_falg == True:
-            self.ui.serialComboBox2.setEnabled(True)
             sconfig = [" ", 115200, " ", 9600]
             self.smng = mythread.SerialsMng(sconfig)
             self.ser = self.smng.ser_arr[0]
@@ -143,19 +141,23 @@ class Serial_Init(QWidget):
 
     def openPort(self):  # 打开串口
         print("read_flag:", str(self.ser.read_flag))
-        if self.ser.read_flag: # 打开状态则关闭串口
+        if self.ser.read_flag:
+            ms._setButtonText.emit("断开状态")
+            self.ser_open_look_ui(True)
             self.ser.stop()  # 关闭串口
             if g_var.Auto_falg == True:
                 self.ser1.stop()  # 关闭串口
-            ms._setButtonText.emit("断开状态")
-            self.ser_open_look_ui(True)
-        else: # 关闭状态则连接串口
+        else:
+            ms._setButtonText.emit("连接状态")
+            self.ser_open_look_ui(False)
             # 先重设串口设置
             g_var.Port_select = self.ui.serialComboBox.currentText()  # 串口选择
             self.ser.setSer(g_var.Port_select, g_var.Bund_select)  # 设置串口及波特率 重设
             if g_var.Auto_falg == True:
                 g_var.Port_select2 = self.ui.serialComboBox2.currentText()  # 串口选择
                 self.ser1.setSer(g_var.Port_select2, g_var.Bund_select2)  # 设置串口及波特率 重设
+
+
             #再打开串口
             d = self.ser.open(ms.print.emit)  # 打开串口，成功返回0，失败返回1， + str信息
             print(d)
@@ -164,10 +166,6 @@ class Serial_Init(QWidget):
                 d = self.ser1.open(ms.print.emit, flag = 1)
                 print(d)
                 ms.print.emit(d[1])
-            if d[0] == 0:
-                ms._setButtonText.emit("连接状态")
-                self.ser_open_look_ui(False)
-
 
     def send(self):
         text = self.ui.sendEdit.text()
@@ -210,7 +208,7 @@ class Serial_Init(QWidget):
 
         # 锁定和解锁ui 无法点击串口信息及波特率
 
-    def ser_open_look_ui(self, status): #禁止读取列表
+    def ser_open_look_ui(self, status):
         self.ui.serialComboBox.setEnabled(status)
         if g_var.Auto_falg == True:
             self.ui.serialComboBox2.setEnabled(status)

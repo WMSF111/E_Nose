@@ -37,23 +37,23 @@ class myserial():
         self.port = port
         self.bund = bund
 
-    def open(self, fun, slip = None, flag = 0, stock = 0, timeout=1000):
+    def open(self, fun, flag = 0, stock = 0, timeout=1000):
         # flag == 1, 16进制
         self.hex_flag = flag
         # 打开串口
         try:
             # 创建串口对象
             if stock == 0:
-                self.ser = serial.Serial(self.port, self.bund, timeout=timeout)
+                self.ser = serial.Serial(self.port, self.bund, timeout=timeout, write_timeout=2)
             else:
-                self.ser = serial.Serial(self.port, self.bund)
+                self.ser = serial.Serial(self.port, self.bund, write_timeout=2)
             if self.ser.is_open:
                 print("创建串口成功")
                 # 如果串口成功打开
                 with self.lock:
                     self.read_flag = True  # 设置读取标志为 True
                     self.pause_flag = False  # 设置暂停标志为 False
-                rt = threading.Thread(target=self.loopRead, args=(fun,slip))  # 创建读取线程
+                rt = threading.Thread(target=self.loopRead, args=(fun,))  # 创建读取线程
                 # rt.setDaemon(True)  # 设置为守护线程，确保主线程结束时子线程也会结束
                 # rt.setTerminationEnabled(True)
                 rt.start()  # 启动读取线程
@@ -97,7 +97,7 @@ class myserial():
                 except serial.serialutil.SerialException:
                     self.no_error = False
 
-    def loopRead(self, fun, slip):
+    def loopRead(self, fun):
         """
         自动识别数据类型：
           - 纯可打印 ASCII → utf-8 文本
@@ -106,8 +106,6 @@ class myserial():
         """
         buffer = bytearray()  # 创建可变字节数组
         slip_n = b'\n\r'  # 用于按行切帧
-        if slip != None:
-            slip_n = slip.encode()  # 将分隔符转换为字节串
 
         while True:
             with self.lock:
@@ -152,7 +150,7 @@ class myserial():
 
                             # 打印当前接收到的信号与预期信号的比较
                             self.getSignal = text.strip()
-                            # print("self.getSignal: ", self.getSignal)
+                            print("self.getSignal: ", self.getSignal)
 
                             # 比较接收到的信号与发送信号是否一致
                             self.sameSignal = (self.getSignal == self.sendSignal)
