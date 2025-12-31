@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a8dbbb2e-a419-44f4-b540-24a66012a7d8" name="更改" comment="">
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 <<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/UI_show/Gragn_show_ui.py" afterDir="false" />
@@ -24,6 +25,9 @@
       <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/serial_show.py" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/tool/UI_show/serial_show.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auto_Enose/tool/draw_class.py" beforeDir="false" />
 >>>>>>> parent of bede0b5 (111)
+=======
+      <change beforePath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" afterDir="false" />
+>>>>>>> parent of d5d4d88 (完成优化)
 =======
       <change beforePath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../auto_Enose/.idea/workspace.xml" afterDir="false" />
 >>>>>>> parent of d5d4d88 (完成优化)
